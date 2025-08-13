@@ -45,7 +45,7 @@ public class ExceptionHandlingBehavior<TRequest, TResponse> : IPipelineBehavior<
         response.IsSuccess = false;
         response.StatusCode = ex switch
         {
-            _ => 500
+            _ => 400
         };
 
         response.Error = ex.Message;
