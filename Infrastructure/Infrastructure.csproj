@@ -5,21 +5,13 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
-
     <ItemGroup>
-      <Folder Include="Core\" />
-    </ItemGroup>
-    <ItemGroup>
+        <PackageReference Include="EdjCase.JsonRpc.Client" Version="6.1.0" />
         <PackageReference Include="Grpc.Net.Client" Version="2.71.0" />
         <PackageReference Include="Grpc.Tools" Version="2.71.0">
             <PrivateAssets>All</PrivateAssets>
         </PackageReference>
         <PackageReference Include="Google.Protobuf" Version="3.21.12" />
-    </ItemGroup>
-    <ItemGroup>
-      <Protobuf Include="Core\protos\auth.proto">
-        <Generator>MSBuild:Compile</Generator>
-      </Protobuf>
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\Application\Application.csproj" />

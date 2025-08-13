@@ -1,5 +1,5 @@
-using Application.Interfaces.GrpcClients;
-using Infrastructure.GrpcClients;
+using Application.Interfaces.RpcClients;
+using Infrastructure.RpcClients;
 
 namespace vohnisca_api_gateway.Core.ServicesConfiguration.Infrastructure;
 
@@ -7,7 +7,7 @@ public static class ApplicationConfig
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        services.AddScoped<IAuthGrpcClient, AuthGrpcClient>();
+        services.AddTransient<IAuthRpcClient, AuthRpcClient>();
         return services;
     }
 }

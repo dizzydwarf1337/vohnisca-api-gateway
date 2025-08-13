@@ -1,6 +1,6 @@
-namespace Application.Interfaces.GrpcClients;
+namespace Application.Interfaces.RpcClients;
 
-public interface IAuthGrpcClient
+public interface IAuthRpcClient
 {
     Task<LoginResult> LoginAsync(string email, string password);
     Task<SignUpResult> SignUpAsync(string email, string password, string password_confimation, string name);

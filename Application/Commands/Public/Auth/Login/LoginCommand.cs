@@ -1,5 +1,5 @@
 using Application.Core.Mediatr.Requests.PublicRequest;
-using Application.Interfaces.GrpcClients;
+using Application.Interfaces.RpcClients;
 
 namespace Application.Commands.Public.Auth.Login;
 

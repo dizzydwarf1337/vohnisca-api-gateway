@@ -1,18 +1,20 @@
 using Application.Core.ApiResponse;
-using Application.Interfaces.GrpcClients;
+using Application.Interfaces.RpcClients;
 using MediatR;
 
 namespace Application.Commands.Public.Auth.SignUp;
 
 public class SignUpCommandHandler : IRequestHandler<SignUpCommand, ApiResponse<SignUpResult>>
 {
-    private readonly IAuthGrpcClient _authGrpcClient;
+    private readonly IAuthRpcClient _authGrpcClient;
     
-    public SignUpCommandHandler(IAuthGrpcClient authGrpcClient)
+    public SignUpCommandHandler(IAuthRpcClient authGrpcClient)
         => _authGrpcClient = authGrpcClient;
     
     public async Task<ApiResponse<SignUpResult>> Handle(SignUpCommand request, CancellationToken cancellationToken)
     {
-       return ApiResponse<SignUpResult>.Success(await _authGrpcClient.SignUpAsync(request.Email, request.Password, request.Password_confimation, request.name));
+        var result = await _authGrpcClient.SignUpAsync(request.Email, request.Password, request.Password_confimation,
+            request.name);
+        return ApiResponse<SignUpResult>.Success(result);
     }
 }
