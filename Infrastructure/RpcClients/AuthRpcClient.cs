@@ -22,7 +22,7 @@ public class AuthRpcClient : IAuthRpcClient
         });
         var response = await _rpcClient.SendAsync<LoginResult>(
                 new RpcRequest(
-                    "AuthService.Login",
+                    "Login",
                     parameters
                 )
         );
@@ -40,7 +40,7 @@ public class AuthRpcClient : IAuthRpcClient
         });
         var response = await _rpcClient.SendAsync<SignUpResult>(
             new RpcRequest(
-            "AuthService.SignUp",
+            "SignUp",
             parameters
             )
         );

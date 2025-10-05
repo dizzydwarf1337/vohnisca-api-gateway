@@ -7,11 +7,6 @@
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="EdjCase.JsonRpc.Client" Version="6.1.0" />
-        <PackageReference Include="Grpc.Net.Client" Version="2.71.0" />
-        <PackageReference Include="Grpc.Tools" Version="2.71.0">
-            <PrivateAssets>All</PrivateAssets>
-        </PackageReference>
-        <PackageReference Include="Google.Protobuf" Version="3.21.12" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\Application\Application.csproj" />

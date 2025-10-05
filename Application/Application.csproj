@@ -7,7 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Commands\Admin\" />
       <Folder Include="Commands\Superadmin\" />
       <Folder Include="Commands\User\" />
       <Folder Include="Queries\Admin\" />

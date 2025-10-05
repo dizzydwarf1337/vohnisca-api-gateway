@@ -6,8 +6,12 @@ public static class CorsPolicies
     {
         services.AddCors(opt =>
         {
-            opt.AddPolicy("CorsPolicy",
-                policy => { policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin(); });
+            opt.AddPolicy("CorsPolicy", policy =>
+            {
+                policy.SetIsOriginAllowed(origin => origin.StartsWith("http://localhost") || origin.StartsWith("https://localhost"))
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
         });
 
         return services;

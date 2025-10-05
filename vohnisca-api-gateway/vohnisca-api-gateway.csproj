@@ -6,16 +6,15 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>vohnisca_api_gateway</RootNamespace>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <UserSecretsId>1eafaa29-c02d-4ff5-9807-b8f9013c95a3</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="EdjCase.JsonRpc.Client" Version="6.1.0" />
         <PackageReference Include="FluentValidation" Version="12.0.0" />
         <PackageReference Include="MediatR" Version="13.0.0" />
-        <PackageReference Include="Grpc.Core.Api" Version="2.71.0" />
-        <PackageReference Include="Google.Protobuf" Version="3.22.0" />
-        <PackageReference Include="Grpc.Net.ClientFactory" Version="2.71.0" />
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.7"/>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.7" />
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
     </ItemGroup>
 
     <ItemGroup>
@@ -29,7 +28,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers\Admin\" />
       <Folder Include="Controllers\Superadmin\" />
       <Folder Include="Controllers\User\" />
     </ItemGroup>
