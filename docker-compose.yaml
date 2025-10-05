@@ -1,0 +1,30 @@
+services:
+  vohnisca-api-gateway:
+    image: vohnisca-api-gateway
+    build:
+      context: .
+      dockerfile: vohnisca-api-gateway.Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - RpcServices__MailService=http://vohnisca-mail-service:5001
+      - RpcServices__AuthService=http://auth-service:8876
+      - RpcServices__UserService=http://user-service:8877
+
+    networks:
+      - vohnisca-net
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - vohnisca-net
+
+networks:
+  vohnisca-net:
+    external: true

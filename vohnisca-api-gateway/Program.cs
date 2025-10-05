@@ -5,7 +5,12 @@ using vohnisca_api_gateway.Core.ServicesConfiguration.rpcClient;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAppServices()
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables();
+
+builder.Services
+    .AddAppServices()
     .AddHttpRpcClients(builder.Configuration)
     .AddCorsPolicy()
     .AddCoreServices()
