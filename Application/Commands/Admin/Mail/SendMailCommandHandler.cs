@@ -13,6 +13,8 @@ public class SendMailCommandHandler : IRequestHandler<SendMailCommand, ApiRespon
     public async Task<ApiResponse<Unit>> Handle(SendMailCommand request, CancellationToken cancellationToken)
     {
         var result = await _mailRpcClient.SendMail(request.Email, request.Subject, request.Content);
-        return result.IsSuccess ? ApiResponse<Unit>.Success(Unit.Value) : ApiResponse<Unit>.Failure("error");
+        return result.IsSuccess 
+            ? ApiResponse<Unit>.Success(Unit.Value) 
+            : ApiResponse<Unit>.Failure(result.Error ?? "Unknown error");
     }
 }

@@ -26,16 +26,16 @@ public class AuthRpcClient : IAuthRpcClient
                     parameters
                 )
         );
-        return new LoginResult(response.Result.access_token, response.Result.token_type, response.Result.expires_in);
+        return response.Result with { IsSuccess = response.HasError, Error = response.Error?.Message };
     }
 
-    public async Task<SignUpResult> SignUpAsync(string email, string password, string password_confirmation, string name)
+    public async Task<SignUpResult> SignUpAsync(string email, string password, string passwordConfirmation, string name)
     {
         var parameters = new RpcParameters(new Dictionary<string, object>
         {
             { "email", email },
             { "password", password },
-            { "password_confirmation", password_confirmation },
+            { "passwordConfirmation", passwordConfirmation },
             { "name", name }
         });
         var response = await _rpcClient.SendAsync<SignUpResult>(
@@ -44,7 +44,7 @@ public class AuthRpcClient : IAuthRpcClient
             parameters
             )
         );
-        return new SignUpResult(response.Result.token);
+        return new SignUpResult(response.HasError, response.Result.Token, response.Error?.Message);
     }
     
 }

@@ -8,8 +8,9 @@ namespace vohnisca_api_gateway.Controllers;
 [ApiController]
 public class BaseController : Controller
 {
-    private IMediator _mediator;
-    protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
+    private IMediator? _mediator;
+    protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetRequiredService<IMediator>();
+
 
 
     protected IActionResult HandleResponse<T>(ApiResponse<T> result)

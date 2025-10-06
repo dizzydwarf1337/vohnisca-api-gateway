@@ -13,19 +13,12 @@
         { "name": "content", "schema": { "type": "string" } }
       ],
       "result": {
-        "name": "ApiResponse",
+        "name": "result",
         "schema": {
           "type": "object",
           "properties": {
-            "isSuccess": {
-              "type": "boolean"
-            },
-            "errors": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
+            "isSuccess": { "type": "boolean" },
+            "error": { "type": "string" }
           }
         }
       }
