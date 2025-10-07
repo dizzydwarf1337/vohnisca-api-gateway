@@ -10,7 +10,7 @@ public class MailRpcClient : IMailRpcClient
     
     public MailRpcClient(RpcClient rpcClient) => _rpcClient = rpcClient;
     
-    public async Task<RpcResult<Unit>> SendMail(string email, string subject, string content)
+    public async Task<RpcResult<SendMailResult>> SendMail(string email, string subject, string content)
     {
         var parameters = new RpcParameters(new Dictionary<string, object>()
         {
@@ -27,8 +27,8 @@ public class MailRpcClient : IMailRpcClient
         var response = await _rpcClient.SendAsync<SendMailResult>(request);
         
         if (response.HasError || !response.Result.IsSuccess)
-            return new RpcResult<Unit>(false, Unit.Value, response.Result.Error ?? response.Error?.Message ?? "Unknown error");
+            return  RpcResult<SendMailResult>.Failure(response.Error?.Message);
 
-        return new RpcResult<Unit>(true, Unit.Value, null);
+        return RpcResult<SendMailResult>.Success(response.Result);
     }
 }

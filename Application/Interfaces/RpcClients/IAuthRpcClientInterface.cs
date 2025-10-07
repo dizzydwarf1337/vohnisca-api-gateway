@@ -2,9 +2,9 @@ namespace Application.Interfaces.RpcClients;
 
 public interface IAuthRpcClient
 {
-    Task<LoginResult> LoginAsync(string email, string password);
-    Task<SignUpResult> SignUpAsync(string email, string password, string passwordConfirmation, string name);
+    Task<RpcResult<LoginResult>> LoginAsync(string email, string password);
+    Task<RpcResult<SignUpResult>> SignUpAsync(string email, string password, string passwordConfirmation, string name);
 }
 
-public record LoginResult(bool IsSuccess, string? AccessToken, string? TokenType, string? ExpiresIn, string? Error = null);
-public record SignUpResult(bool IsSuccess, string? Token, string? Error = null);
+public record LoginResult(string? AccessToken = null, string? TokenType = null, int? ExpiresIn = null, string? Message = null);
+public record SignUpResult(string? Token, string? Message);

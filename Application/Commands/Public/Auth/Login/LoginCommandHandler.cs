@@ -13,8 +13,8 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, ApiResponse<Log
     public async Task<ApiResponse<LoginCommand.Result>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
         var result = await _authGrpcClient.LoginAsync(request.Email, request.Password);
-        return result is { IsSuccess: true, AccessToken: not null, TokenType: not null, ExpiresIn: not null }
-            ? ApiResponse<LoginCommand.Result>.Success(new LoginCommand.Result(result.AccessToken, result.TokenType, result.ExpiresIn))
+        return result.Data is { AccessToken: not null, TokenType: not null, ExpiresIn: not null }
+            ? ApiResponse<LoginCommand.Result>.Success(new LoginCommand.Result(result.Data.AccessToken, result.Data.TokenType, (result.Data.ExpiresIn ?? 0).ToString()))
             : ApiResponse<LoginCommand.Result>.Failure(result.Error ?? "Unknow error");
     }
 }

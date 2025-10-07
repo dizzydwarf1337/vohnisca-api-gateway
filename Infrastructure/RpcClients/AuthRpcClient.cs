@@ -13,7 +13,7 @@ public class AuthRpcClient : IAuthRpcClient
         _rpcClient = rpcClient;
     }
 
-    public async Task<LoginResult> LoginAsync(string email, string password)
+    public async Task<RpcResult<LoginResult>> LoginAsync(string email, string password)
     {
         var parameters = new RpcParameters(new Dictionary<string, object>
         {
@@ -22,14 +22,23 @@ public class AuthRpcClient : IAuthRpcClient
         });
         var response = await _rpcClient.SendAsync<LoginResult>(
                 new RpcRequest(
+                    id: Guid.NewGuid().ToString(),
                     "Login",
                     parameters
                 )
         );
-        return response.Result with { IsSuccess = response.HasError, Error = response.Error?.Message };
+        
+        if(response.HasError)
+            return RpcResult<LoginResult>.Failure(response.Error?.Message);
+
+        if (!string.IsNullOrWhiteSpace(response.Result.Message))
+            return RpcResult<LoginResult>.Failure(response.Result.Message);
+
+        return RpcResult<LoginResult>.Success(response.Result);
+
     }
 
-    public async Task<SignUpResult> SignUpAsync(string email, string password, string passwordConfirmation, string name)
+    public async Task<RpcResult<SignUpResult>> SignUpAsync(string email, string password, string passwordConfirmation, string name)
     {
         var parameters = new RpcParameters(new Dictionary<string, object>
         {
@@ -44,7 +53,14 @@ public class AuthRpcClient : IAuthRpcClient
             parameters
             )
         );
-        return new SignUpResult(response.HasError, response.Result.Token, response.Error?.Message);
+        
+        if(response.HasError)
+            return RpcResult<SignUpResult>.Failure(response.Error?.Message);
+
+        return string.IsNullOrEmpty(response.Result.Message)
+            ? RpcResult<SignUpResult>.Failure(response.Result.Message)
+            : RpcResult<SignUpResult>.Success(response.Result);
+
     }
     
 }

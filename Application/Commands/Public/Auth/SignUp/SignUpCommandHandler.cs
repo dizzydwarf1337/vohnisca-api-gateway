@@ -15,8 +15,8 @@ public class SignUpCommandHandler : IRequestHandler<SignUpCommand, ApiResponse<S
     {
         var result = await _authGrpcClient.SignUpAsync(request.Email, request.Password, request.PasswordConfirmation,
             request.Name);
-        return result is { IsSuccess: true, Token: not null }
-            ? ApiResponse<SignUpCommand.Result>.Success(new SignUpCommand.Result(result.Token))
+        return result is { IsSuccess: true, Data.Token: not null }
+            ? ApiResponse<SignUpCommand.Result>.Success(new SignUpCommand.Result(result.Data.Token))
             : ApiResponse<SignUpCommand.Result>.Failure(result.Error ?? "Unknown error");
     }
 }
