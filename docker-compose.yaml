@@ -9,7 +9,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - RpcServices__MailService=http://vohnisca-mail-service:5001
-      - RpcServices__AuthService=http://auth-service:80/jrpc
+      - RpcServices__AuthService=http://auth-service:80
       - RpcServices__UserService=http://user-service:8877
 
     networks:
