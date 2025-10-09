@@ -30,10 +30,9 @@ public class AuthRpcClient : IAuthRpcClient
         if(response.HasError)
             return RpcResult<LoginResult>.Failure(response.Error?.Message);
 
-        if (!string.IsNullOrWhiteSpace(response.Result.Message))
-            return RpcResult<LoginResult>.Failure(response.Result.Message);
-
-        return RpcResult<LoginResult>.Success(response.Result);
+        return string.IsNullOrWhiteSpace(response.Result.Message)
+            ? RpcResult<LoginResult>.Success(response.Result)
+            : RpcResult<LoginResult>.Failure(response.Result.Message);
 
     }
 
