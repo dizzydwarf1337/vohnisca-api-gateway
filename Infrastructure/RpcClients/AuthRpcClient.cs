@@ -56,10 +56,31 @@ public class AuthRpcClient : IAuthRpcClient
         if(response.HasError)
             return RpcResult<SignUpResult>.Failure(response.Error?.Message);
 
-        return !response.Result.IsSuccess
-            ? RpcResult<SignUpResult>.Failure(string.IsNullOrEmpty(response.Result.Message) ? response.Result.Message : "Error while signing up.")
-            : RpcResult<SignUpResult>.Success(response.Result);
+        return string.IsNullOrEmpty(response.Result.Message)
+            ? RpcResult<SignUpResult>.Success(response.Result)
+            : RpcResult<SignUpResult>.Failure(response.Result.Message);
 
     }
-    
+
+    public async Task<RpcResult<ConfirmEmailResult>> ConfirmEmailAsync(string userMail, string token)
+    {
+        var parameters = new RpcParameters(new Dictionary<string, object>
+        {
+            { "userMail", userMail },
+            { "token", token }
+        });
+
+        var response = await _rpcClient.SendAsync<ConfirmEmailResult>(
+            new RpcRequest(
+                "ConfirmMail",
+                parameters)
+            );
+        
+        if(response.HasError)
+            return RpcResult<ConfirmEmailResult>.Failure(response.Error?.Message);
+        
+        return string.IsNullOrEmpty(response.Result.Message)
+            ? RpcResult<ConfirmEmailResult>.Success(response.Result)
+            : RpcResult<ConfirmEmailResult>.Failure(response.Result.Message);
+    }
 }

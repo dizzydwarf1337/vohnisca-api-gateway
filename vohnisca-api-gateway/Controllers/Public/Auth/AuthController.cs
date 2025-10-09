@@ -1,3 +1,4 @@
+using Application.Commands.Public.Auth.ConfirmEmail;
 using Application.Commands.Public.Auth.Login;
 using Application.Commands.Public.Auth.SignUp;
 using Microsoft.AspNetCore.Mvc;
@@ -11,8 +12,14 @@ public class AuthController : BaseController
     [Route("login")]
     public async Task<IActionResult> Login(LoginCommand command)
         => HandleResponse(await Mediator.Send(command));
+
     [HttpPost]
     [Route("sign-up")]
     public async Task<IActionResult> SignUp(SignUpCommand command)
+        => HandleResponse(await Mediator.Send(command));
+
+    [HttpPost]
+    [Route("confirm-email")]
+    public async Task<IActionResult> ConfirmEmail(ConfirmEmailCommand command)
         => HandleResponse(await Mediator.Send(command));
 }
