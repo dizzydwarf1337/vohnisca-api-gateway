@@ -1,5 +1,4 @@
 using Application.Core.Mediatr.Requests.PublicRequest;
-using Application.Interfaces.RpcClients;
 
 namespace Application.Commands.Public.Auth.SignUp;
 
@@ -10,5 +9,5 @@ public class SignUpCommand : PublicRequest<SignUpCommand.Result>
     public required string PasswordConfirmation { get; set; }
     public required string Name { get; set; }
 
-    public record Result(string Token);
+    public record Result(string? Message = null);
 }

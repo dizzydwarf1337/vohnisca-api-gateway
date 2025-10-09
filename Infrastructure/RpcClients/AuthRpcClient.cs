@@ -1,4 +1,3 @@
-
 using Application.Interfaces.RpcClients;
 using EdjCase.JsonRpc.Client;
 
@@ -57,8 +56,8 @@ public class AuthRpcClient : IAuthRpcClient
         if(response.HasError)
             return RpcResult<SignUpResult>.Failure(response.Error?.Message);
 
-        return string.IsNullOrEmpty(response.Result.Message)
-            ? RpcResult<SignUpResult>.Failure(response.Result.Message)
+        return !response.Result.IsSuccess
+            ? RpcResult<SignUpResult>.Failure(string.IsNullOrEmpty(response.Result.Message) ? response.Result.Message : "Error while signing up.")
             : RpcResult<SignUpResult>.Success(response.Result);
 
     }

@@ -7,4 +7,4 @@ public interface IAuthRpcClient
 }
 
 public record LoginResult(string? AccessToken = null, string? TokenType = null, int? ExpiresIn = null, string? Message = null);
-public record SignUpResult(string? Token, string? Message);
+public record SignUpResult(bool IsSuccess, string? Message);
