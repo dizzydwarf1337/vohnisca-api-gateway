@@ -1,5 +1,6 @@
 using Application.Interfaces.RpcClients;
 using EdjCase.JsonRpc.Client;
+using EdjCase.JsonRpc.Common;
 
 namespace Infrastructure.RpcClients;
 
@@ -21,7 +22,7 @@ public class AuthRpcClient : IAuthRpcClient
         });
         var response = await _rpcClient.SendAsync<LoginResult>(
                 new RpcRequest(
-                    id: Guid.NewGuid().ToString(),
+                    id: new RpcId(Guid.NewGuid().ToString()),
                     "Login",
                     parameters
                 )
