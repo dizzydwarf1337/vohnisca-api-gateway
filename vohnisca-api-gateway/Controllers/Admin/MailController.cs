@@ -1,4 +1,4 @@
-using Application.Commands.Admin.Mail;
+using Application.Commands.Admin.Mail.SendMail;
 using Microsoft.AspNetCore.Mvc;
 
 namespace vohnisca_api_gateway.Controllers.Admin;

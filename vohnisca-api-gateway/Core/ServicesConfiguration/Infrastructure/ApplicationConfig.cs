@@ -1,5 +1,3 @@
-using Application.Interfaces.RpcClients;
-using Infrastructure.RpcClients;
 
 namespace vohnisca_api_gateway.Core.ServicesConfiguration.Infrastructure;
 

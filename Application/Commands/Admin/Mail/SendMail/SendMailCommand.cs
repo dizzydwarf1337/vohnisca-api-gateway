@@ -1,7 +1,7 @@
 using Application.Core.Mediatr.Requests.AdminRequest;
 using MediatR;
 
-namespace Application.Commands.Admin.Mail;
+namespace Application.Commands.Admin.Mail.SendMail;
 
 public class SendMailCommand : AdminRequest<Unit>
 {
