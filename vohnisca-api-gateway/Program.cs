@@ -11,7 +11,7 @@ builder.Configuration
 
 builder.Services
     .AddAppServices()
-    .AddHttpRpcClients(builder.Configuration)
+    .AddHttpRpcClients()
     .AddCorsPolicy()
     .AddCoreServices()
     .AddApplicationServices();

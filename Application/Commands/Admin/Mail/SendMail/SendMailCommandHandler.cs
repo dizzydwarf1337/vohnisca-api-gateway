@@ -2,7 +2,7 @@ using Application.Core.ApiResponse;
 using Application.Interfaces.RpcClients;
 using MediatR;
 
-namespace Application.Commands.Admin.Mail;
+namespace Application.Commands.Admin.Mail.SendMail;
 
 public class SendMailCommandHandler : IRequestHandler<SendMailCommand, ApiResponse<Unit>>
 {
@@ -12,7 +12,7 @@ public class SendMailCommandHandler : IRequestHandler<SendMailCommand, ApiRespon
     
     public async Task<ApiResponse<Unit>> Handle(SendMailCommand request, CancellationToken cancellationToken)
     {
-        var result = await _mailRpcClient.SendMail(request.Email, request.Subject, request.Content);
+        var result = await _mailRpcClient.SendMail(request.Email, request.Subject, request.Content, request.Token);
         return result.IsSuccess 
             ? ApiResponse<Unit>.Success(Unit.Value) 
             : ApiResponse<Unit>.Failure(result.Error ?? "Unknown error");

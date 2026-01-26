@@ -1,33 +1,38 @@
 using Application.Interfaces.RpcClients;
 using EdjCase.JsonRpc.Client;
-using MediatR;
+using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.RpcClients;
 
-public class MailRpcClient : IMailRpcClient
+public class MailRpcClient : BaseRpcClient, IMailRpcClient
 {
-    private readonly RpcClient _rpcClient;
+    public MailRpcClient(IConfiguration configuration) 
+        : base(configuration["RpcServices:MailService"] ?? throw new Exception("MailService URI not set")) { }
     
-    public MailRpcClient(RpcClient rpcClient) => _rpcClient = rpcClient;
-    
-    public async Task<RpcResult<SendMailResult>> SendMail(string email, string subject, string content)
+    public async Task<RpcResult<SendMailResult>> SendMail(string email, string subject, string content, string token)
     {
-        var parameters = new RpcParameters(new Dictionary<string, object>()
+        var rpcClient = CreateRpcClient(token);
+        
+        var parameters = new RpcParameters(new Dictionary<string, object>
         {
             { "email", email },
             { "subject", subject },
-            { "content", content },
+            { "content", content }
         });
         
         var request = new RpcRequest(
             id: Guid.NewGuid().ToString(),
             method: "SendMail",
-            parameters: parameters);
+            parameters: parameters
+        );
         
-        var response = await _rpcClient.SendAsync<SendMailResult>(request);
+        var response = await rpcClient.SendAsync<SendMailResult>(request);
         
-        if (response.HasError || !response.Result.IsSuccess)
-            return  RpcResult<SendMailResult>.Failure(response.Error?.Message);
+        if (response.HasError)
+            return RpcResult<SendMailResult>.Failure(response.Error?.Message ?? "Unknown RPC error");
+        
+        if (!response.Result.IsSuccess)
+            return RpcResult<SendMailResult>.Failure(response.Result.Error ?? "Operation failed");
 
         return RpcResult<SendMailResult>.Success(response.Result);
     }

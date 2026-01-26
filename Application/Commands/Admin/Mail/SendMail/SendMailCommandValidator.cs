@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.Commands.Admin.Mail;
+namespace Application.Commands.Admin.Mail.SendMail;
 
 public class SendMailCommandValidator : AbstractValidator<SendMailCommand>
 {
