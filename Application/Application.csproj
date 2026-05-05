@@ -9,11 +9,9 @@
     <ItemGroup>
       <Folder Include="Commands\Public\User\" />
       <Folder Include="Commands\Superadmin\" />
-      <Folder Include="Commands\User\" />
       <Folder Include="Queries\Admin\" />
       <Folder Include="Queries\Public\" />
       <Folder Include="Queries\Superadmin\" />
-      <Folder Include="Queries\User\" />
     </ItemGroup>
 
     <ItemGroup>

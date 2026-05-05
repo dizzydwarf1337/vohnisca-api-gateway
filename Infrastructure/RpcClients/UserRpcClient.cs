@@ -1,38 +1,32 @@
 using Application.Interfaces.RpcClients;
-using EdjCase.JsonRpc.Client;
 using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.RpcClients;
 
 public class UserRpcClient : BaseRpcClient, IUserRpcClient
 {
-    public UserRpcClient(IConfiguration configuration) 
+    public UserRpcClient(IConfiguration configuration)
         : base(configuration["RpcServices:UserService"] ?? throw new Exception("UserService URI not set")) { }
 
-    public async Task<RpcResult<UpdateUserDataResult>> UpdateUserData(string userName, string bio, string token)
-    {
-        var rpcClient = CreateRpcClient("user/update-user-data", token);
-        
-        var parameters = new RpcParameters(new Dictionary<string, object>
-        {
-            { "UserName", userName },
-            { "Bio", bio }
-        });
+    public Task<RpcResult<DefaultRpcResponse>> UpdateUserData(string userName, string bio, string token)
+        => SendRpcRequest<DefaultRpcResponse>("User.UpdateUserData",
+            new Dictionary<string, object> { { "UserName", userName }, { "Bio", bio } }, token);
 
-        var request = new RpcRequest(
-            id: Guid.NewGuid().ToString(),
-            method: "UserUpdateUserData",
-            parameters: parameters
-        );
-        
-        var response = await rpcClient.SendAsync<UpdateUserDataResult>(request);
-        
-        if (response.HasError)
-            return RpcResult<UpdateUserDataResult>.Failure(response.Error?.Message ?? "Unknown RPC error");
-        
-        if (!response.Result.IsSuccess)
-            return RpcResult<UpdateUserDataResult>.Failure(response.Result.Error ?? "Operation failed");
+    public Task<RpcResult<GetMeResult>> GetMe(string token)
+        => SendRpcRequest<GetMeResult>("GetMe", null, token);
 
-        return RpcResult<UpdateUserDataResult>.Success(response.Result);
-    }
+    public Task<RpcResult<DefaultRpcResponse>> SendFriendRequest(string userName, string token)
+        => SendRpcRequest<DefaultRpcResponse>("FriendRequest.Send",
+            new Dictionary<string, object> { { "UserName", userName } }, token);
+
+    public Task<RpcResult<DefaultRpcResponse>> AcceptFriendRequest(Guid id, string token)
+        => SendRpcRequest<DefaultRpcResponse>("FriendRequest.Accept", new Dictionary<string, object> { { "Id", id } },
+            token);
+
+    public Task<RpcResult<DefaultRpcResponse>> RejectFriendRequest(Guid id, string token)
+        => SendRpcRequest<DefaultRpcResponse>("FriendRequest.Reject", new Dictionary<string, object> { { "Id", id } },
+            token);
+
+    public Task<RpcResult<GetFriendRequestsResult>> GetFriendRequests(string token)
+        => SendRpcRequest<GetFriendRequestsResult>("FriendRequest.ReceivedRequests",  null, token);
 }

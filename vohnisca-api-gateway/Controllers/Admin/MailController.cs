@@ -9,5 +9,5 @@ public class MailController : BaseController
     [HttpPost]
     [Route("send")]
     public async Task<IActionResult> SendMail(SendMailCommand command)
-        => HandleResponse(await Mediator.Send(command));
+        => await HandleResponse(command);
 }

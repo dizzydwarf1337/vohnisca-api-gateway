@@ -14,8 +14,6 @@ public class ConfirmEmailCommandHandler : IRequestHandler<ConfirmEmailCommand, A
     public async Task<ApiResponse<Unit>> Handle(ConfirmEmailCommand request, CancellationToken cancellationToken)
     {
         var result = await _rpcClient.ConfirmEmailAsync(request.UserMail, request.Token);
-        return result.IsSuccess 
-            ? ApiResponse<Unit>.Success(Unit.Value)
-            : ApiResponse<Unit>.Failure(result.Error ?? "Error while confirming email");
+        return result.ToApiResponse(_ => Unit.Value);
     }
 }

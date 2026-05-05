@@ -10,11 +10,10 @@ public class BaseController : Controller
 {
     private IMediator? _mediator;
     protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetRequiredService<IMediator>();
-
-
-
-    protected IActionResult HandleResponse<T>(ApiResponse<T> result)
+    
+    protected async Task<IActionResult> HandleResponse<T>(IRequest<ApiResponse<T>> command)
     {
+        var result = await Mediator.Send(command);
         return StatusCode(result.StatusCode, result);
     }
 }

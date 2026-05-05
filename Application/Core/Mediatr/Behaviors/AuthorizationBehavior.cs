@@ -1,4 +1,5 @@
 using Application.Core.Mediatr.Requests;
+using Application.Core.Mediatr.Requests.UserRequest;
 using Application.Interfaces.Behavior;
 using MediatR;
 
@@ -16,10 +17,10 @@ public class AuthorizationBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
-        if (request is AuthorizedRequest<TResponse> authorizedRequest)
+        if (request is IUserRequest userRequest)
         {
-            authorizedRequest.Token = _currentUserService.Token ?? string.Empty;
-            authorizedRequest.UserId = _currentUserService.UserId;
+            userRequest.Token = _currentUserService.Token ?? string.Empty;
+            userRequest.UserId = _currentUserService.UserId;
         }
 
         return await next(cancellationToken);

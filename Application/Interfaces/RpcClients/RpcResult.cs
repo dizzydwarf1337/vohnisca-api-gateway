@@ -20,3 +20,5 @@ public class RpcResult<T>
             Error = error
         };
 };
+
+public record DefaultRpcResponse(bool IsSuccess = true, string? Error = null);
