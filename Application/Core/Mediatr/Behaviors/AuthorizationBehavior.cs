@@ -1,3 +1,4 @@
+using Application.Core.ApiResponse;
 using Application.Core.Mediatr.Requests;
 using Application.Core.Mediatr.Requests.UserRequest;
 using Application.Interfaces.Behavior;
@@ -15,13 +16,22 @@ public class AuthorizationBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
         _currentUserService = currentUserService;
     }
 
-    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next,
+        CancellationToken cancellationToken)
     {
-        if (request is IUserRequest userRequest)
+        if (request is not IUserRequest userRequest)
+            return await next(cancellationToken);
+
+        var token = _currentUserService.Token;
+        if (string.IsNullOrEmpty(token))
         {
-            userRequest.Token = _currentUserService.Token ?? string.Empty;
-            userRequest.UserId = _currentUserService.UserId;
+            if (ApiResponse<object>.Failure("Unauthorized", 401) is TResponse r)
+                return r;
+            throw new InvalidOperationException("Unauthorized but cannot create response");
         }
+
+        userRequest.Token = token;
+        userRequest.UserId = _currentUserService.UserId;
 
         return await next(cancellationToken);
     }

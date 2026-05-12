@@ -39,7 +39,8 @@ public abstract class BaseRpcClient
         Dictionary<string, object>? parameters = null,
         string? token = null,
         string? route = null,
-        Func<T, string?>? getErrorMessage = null)
+        Func<T, string?>? getErrorMessage = null,
+        Func<T, int>? getStatusCode = null)
     {
         try
         {
@@ -50,21 +51,25 @@ public abstract class BaseRpcClient
             var response = await rpcClient.SendAsync<T>(request);
 
             if (response.HasError)
-                return RpcResult<T>.Failure(response.Error?.Message ?? "Unknown RPC error");
+                return RpcResult<T>.Failure(
+                    response.Error?.Message ?? "Unknown RPC error",
+                    response.Error?.Code ?? 500);
+
+            if (response.Result is DefaultRpcResponse rpcResp && !rpcResp.IsSuccess)
+                return RpcResult<T>.Failure(rpcResp.Error ?? "Unknown error", rpcResp.StatusCode);
 
             if (getErrorMessage != null)
             {
                 var errorMsg = getErrorMessage(response.Result);
                 if (!string.IsNullOrEmpty(errorMsg))
-                    return RpcResult<T>.Failure(errorMsg);
+                    return RpcResult<T>.Failure(errorMsg, getStatusCode?.Invoke(response.Result) ?? 400);
             }
-            
 
             return RpcResult<T>.Success(response.Result);
         }
         catch (Exception ex)
         {
-            return RpcResult<T>.Failure(ex.Message);
+            return RpcResult<T>.Failure(ex.Message, 500);
         }
     }
 }

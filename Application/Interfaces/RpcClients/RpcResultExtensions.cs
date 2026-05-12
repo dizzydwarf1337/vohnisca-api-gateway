@@ -1,13 +1,21 @@
 using Application.Core.ApiResponse;
-
-namespace Application.Interfaces.RpcClients;
+using Application.Interfaces.RpcClients;
 
 public static class RpcResultExtensions
 {
-    public static ApiResponse<TOut> ToApiResponse<TIn, TOut>(this RpcResult<TIn> result, Func<TIn, TOut> mapper, string? defaultError = null)
+    public static ApiResponse<TOut> ToApiResponse<TIn, TOut>(
+        this RpcResult<TIn> result,
+        Func<TIn, TOut> mapper,
+        string? defaultError = null)
     {
-        return result.IsSuccess
-            ? ApiResponse<TOut>.Success(mapper(result.Data!))
-            : ApiResponse<TOut>.Failure(result.Error ?? defaultError ?? "Unknown error");
+        if (!result.IsSuccess || result.Data is null)
+            return ApiResponse<TOut>.Failure(
+                result.Error ?? defaultError ?? "Unknown error",
+                result.StatusCode);
+
+        var mapped = mapper(result.Data);
+        return mapped is null
+            ? ApiResponse<TOut>.Failure(defaultError ?? "Unknown error", 500)
+            : ApiResponse<TOut>.Success(mapped);
     }
 }

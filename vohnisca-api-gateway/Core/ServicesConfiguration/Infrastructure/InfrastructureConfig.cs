@@ -15,6 +15,7 @@ public static class InfrastructureConfig
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+            cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
             cfg.AddOpenBehavior(typeof(AuthorizationBehavior<,>));
             cfg.AddOpenBehavior(typeof(ExceptionHandlingBehavior<,>));
         });

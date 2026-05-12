@@ -10,8 +10,12 @@ public interface IUserRpcClient
     Task<RpcResult<GetFriendRequestsResult>> GetFriendRequests(string token);
 }
 
-public record GetMeResult(bool IsSuccess, UserData Data,  string? Error);
+public record GetMeResult(UserData Data, bool IsSuccess = true, string? Error = null, int StatusCode = 200)
+    : DefaultRpcResponse(IsSuccess, Error, StatusCode);
+
 public record UserData(string UserName, string Email, string Bio, DateTime CreatedAt, int UnreadNotificationsCount, int UnreadMessagesCount, int FriendsOnline);
 
-public record GetFriendRequestsResult(FriendRequest[] FriendRequests) : DefaultRpcResponse;
+public record GetFriendRequestsResult(FriendRequest[] FriendRequests, bool IsSuccess = true, string? Error = null, int StatusCode = 200)
+    : DefaultRpcResponse(IsSuccess, Error, StatusCode);
+
 public record FriendRequest(Guid Id, string UserName, string Status, DateTime SentAt);

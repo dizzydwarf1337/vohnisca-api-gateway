@@ -9,8 +9,8 @@ namespace vohnisca_api_gateway.Controllers;
 public class BaseController : Controller
 {
     private IMediator? _mediator;
-    protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetRequiredService<IMediator>();
-    
+    private IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetRequiredService<IMediator>();
+
     protected async Task<IActionResult> HandleResponse<T>(IRequest<ApiResponse<T>> command)
     {
         var result = await Mediator.Send(command);
