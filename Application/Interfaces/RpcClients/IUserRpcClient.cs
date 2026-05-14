@@ -19,7 +19,7 @@ public record UserData(
     string Bio,
     DateTime CreatedAt,
     bool HasUnreadNotifications,
-    int HasUnreadMessages,
+    bool HasUnreadMessages,
     int FriendsOnline);
 
 public record GetFriendRequestsResult(
