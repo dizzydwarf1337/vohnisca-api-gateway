@@ -1,5 +1,4 @@
 using Application.Core.ApiResponse;
-using Application.Core.Mediatr.Requests;
 using Application.Core.Mediatr.Requests.UserRequest;
 using Application.Interfaces.Behavior;
 using MediatR;
