@@ -18,17 +18,17 @@ public class UserRpcClient : BaseRpcClient, IUserRpcClient
         => SendRpcRequest<GetMeResult>("GetMe", token: token);
 
     public Task<RpcResult<DefaultRpcResponse>> SendFriendRequest(string userName, string token)
-        => SendRpcRequest<DefaultRpcResponse>("FriendRequest.Send",
+        => SendRpcRequest<DefaultRpcResponse>("SendFriendRequest",
             new Dictionary<string, object> { { "UserName", userName } }, token: token);
 
     public Task<RpcResult<DefaultRpcResponse>> AcceptFriendRequest(Guid id, string token)
-        => SendRpcRequest<DefaultRpcResponse>("FriendRequest.Accept", new Dictionary<string, object> { { "Id", id } },
+        => SendRpcRequest<DefaultRpcResponse>("AcceptFriendRequest", new Dictionary<string, object> { { "Id", id } },
             token: token);
 
     public Task<RpcResult<DefaultRpcResponse>> RejectFriendRequest(Guid id, string token)
-        => SendRpcRequest<DefaultRpcResponse>("FriendRequest.Reject", new Dictionary<string, object> { { "Id", id } },
+        => SendRpcRequest<DefaultRpcResponse>("RejectFriendRequest", new Dictionary<string, object> { { "Id", id } },
             token: token);
 
     public Task<RpcResult<GetFriendRequestsResult>> GetFriendRequests(string token)
-        => SendRpcRequest<GetFriendRequestsResult>("FriendRequest.ReceivedRequests", token: token);
+        => SendRpcRequest<GetFriendRequestsResult>("ReceivedFriendRequests", token: token);
 }
