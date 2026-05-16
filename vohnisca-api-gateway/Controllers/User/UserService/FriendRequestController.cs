@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace vohnisca_api_gateway.Controllers.User.UserService;
 
-[Microsoft.AspNetCore.Components.Route("friend-request")]
+[Route("friend-requests")]
 public class FriendRequestController : BaseController
 {
     [HttpPost]
