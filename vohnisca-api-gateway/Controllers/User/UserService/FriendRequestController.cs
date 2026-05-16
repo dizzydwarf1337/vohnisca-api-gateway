@@ -13,8 +13,8 @@ public class FriendRequestController : BaseController
     [Route("send")]
     public async Task<IActionResult> SendFriendRequest(SendFriendRequestCommand command)
         => await HandleResponse(command);
-    
-    [HttpPost]
+
+    [HttpPut]
     [Route("{id:guid}/accept")]
     public async Task<IActionResult> AcceptFriendRequest(Guid id)
     {
@@ -22,8 +22,8 @@ public class FriendRequestController : BaseController
             return BadRequest();
         return await HandleResponse(new AcceptFriendRequestCommand { Id = id });
     }
-    
-    [HttpPost]
+
+    [HttpPut]
     [Route("{id:guid}/reject")]
     public async Task<IActionResult> RejectFriendRequest(Guid id)
     {
