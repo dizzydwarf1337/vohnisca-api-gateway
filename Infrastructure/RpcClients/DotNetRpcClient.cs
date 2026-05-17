@@ -9,5 +9,5 @@ public abstract class DotnetRpcClient : BaseRpcClient
     protected override RpcParameters BuildParams(Dictionary<string, object>? parameters) =>
         parameters == null
             ? RpcParameters.Empty
-            : new RpcParameters(new Dictionary<string, object> { { "command", parameters } });
+            : new RpcParameters(new Dictionary<string, object> { { "request", parameters } });
 }
