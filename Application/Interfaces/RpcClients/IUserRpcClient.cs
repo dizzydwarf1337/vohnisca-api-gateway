@@ -29,4 +29,4 @@ public record GetFriendRequestsResult(
     int StatusCode = 200)
     : DefaultRpcResponse(IsSuccess, Error, StatusCode);
 
-public record FriendRequest(Guid Id, string UserName, string Status, DateTime SentAt);
+public record FriendRequest(Guid Id, string UserName, string Status, DateTime SentAt, DateTime? StatusChangedAt);
