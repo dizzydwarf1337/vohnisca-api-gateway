@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.RpcClients;
 
-public class MailRpcClient : BaseRpcClient, IMailRpcClient
+public class MailRpcClient : DotnetRpcClient, IMailRpcClient
 {
     public MailRpcClient(IConfiguration configuration) 
         : base(configuration["RpcServices:MailService"] ?? throw new Exception("MailService URI not set")) { }
