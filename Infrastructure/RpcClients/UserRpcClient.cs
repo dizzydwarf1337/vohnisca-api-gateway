@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.RpcClients;
 
-public class UserRpcClient : BaseRpcClient, IUserRpcClient
+public class UserRpcClient : DotnetRpcClient, IUserRpcClient
 {
     public UserRpcClient(IConfiguration configuration)
         : base(configuration["RpcServices:UserService"] ?? throw new Exception("UserService URI not set"))

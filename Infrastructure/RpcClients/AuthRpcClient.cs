@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.RpcClients;
 
-public class AuthRpcClient : BaseRpcClient, IAuthRpcClient
+public class AuthRpcClient : LaravelRpcClient, IAuthRpcClient
 {
     public AuthRpcClient(IConfiguration configuration)
         : base(configuration["RpcServices:AuthService"] ?? throw new Exception("AuthService URI not set")) { }

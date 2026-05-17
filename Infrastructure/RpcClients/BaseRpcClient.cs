@@ -1,5 +1,4 @@
 using System.Net.Http.Headers;
-using System.Text.Json;
 using Application.Interfaces.RpcClients;
 using EdjCase.JsonRpc.Client;
 
@@ -23,7 +22,8 @@ public abstract class BaseRpcClient
         var builder = new HttpRpcClientBuilder(new Uri(url))
             .ConfigureHttp(opt =>
             {
-                opt.Headers = new List<(string, string)>() { new ValueTuple<string, string>("Accept", "application/json") };
+                opt.Headers = new List<(string, string)>()
+                    { new ValueTuple<string, string>("Accept", "application/json") };
             });
 
         if (!string.IsNullOrEmpty(token))
@@ -33,7 +33,7 @@ public abstract class BaseRpcClient
 
         return builder.Build();
     }
-    
+
     protected async Task<RpcResult<T>> SendRpcRequest<T>(
         string method,
         Dictionary<string, object>? parameters = null,
@@ -45,7 +45,7 @@ public abstract class BaseRpcClient
         try
         {
             var rpcClient = CreateRpcClient(route, token);
-            var rpcParams = parameters != null ? new RpcParameters(parameters) : RpcParameters.Empty;
+            var rpcParams = BuildParams(parameters);
             var request = new RpcRequest(Guid.NewGuid().ToString(), method, rpcParams);
 
             var response = await rpcClient.SendAsync<T>(request);
@@ -72,4 +72,7 @@ public abstract class BaseRpcClient
             return RpcResult<T>.Failure(ex.Message, 500);
         }
     }
+
+    protected virtual RpcParameters BuildParams(Dictionary<string, object>? parameters) =>
+        parameters == null ? RpcParameters.Empty : new RpcParameters(parameters);
 }
