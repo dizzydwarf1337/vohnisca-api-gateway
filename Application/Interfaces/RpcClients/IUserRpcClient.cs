@@ -23,7 +23,7 @@ public record UserData(
     int FriendsOnline);
 
 public record GetFriendRequestsResult(
-    FriendRequest[] FriendRequests,
+    FriendRequest[] Data,
     bool IsSuccess = true,
     string? Error = null,
     int StatusCode = 200)
