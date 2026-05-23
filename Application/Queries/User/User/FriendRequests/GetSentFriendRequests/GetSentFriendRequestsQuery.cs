@@ -3,9 +3,9 @@ using Application.Core.Requests;
 using Application.Core.Responses;
 using Application.Interfaces.RpcClients;
 
-namespace Application.Queries.User.User.FriendRequests.GetFriendRequests;
+namespace Application.Queries.User.User.FriendRequests.GetSentFriendRequests;
 
-public class GetFriendRequestsQuery : UserRequest<PaginationResponse<FriendRequest>>
+public class GetSentFriendRequestsQuery : UserRequest<PaginationResponse<FriendRequest>>
 {
     public PaginationSpecification Pagination { get; set; }
 }

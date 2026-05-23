@@ -16,12 +16,12 @@ public class CurrentUserService : ICurrentUserService
     {
         get
         {
-            var userIdClaim = _httpContextAccessor.HttpContext?.User.FindFirst("sub") 
+            var userIdClaim = _httpContextAccessor.HttpContext?.User.FindFirst("sub")
                               ?? _httpContextAccessor.HttpContext?.User.FindFirst("userId")
                               ?? _httpContextAccessor.HttpContext?.User.FindFirst("id");
-            
-            return userIdClaim != null && Guid.TryParse(userIdClaim.Value, out var userId) 
-                ? userId 
+
+            return userIdClaim != null && Guid.TryParse(userIdClaim.Value, out var userId)
+                ? userId
                 : null;
         }
     }
@@ -35,6 +35,7 @@ public class CurrentUserService : ICurrentUserService
             {
                 return authHeader.Substring("Bearer ".Length).Trim();
             }
+
             return null;
         }
     }

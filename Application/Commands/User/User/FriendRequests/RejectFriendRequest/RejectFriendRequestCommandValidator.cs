@@ -6,6 +6,6 @@ public class RejectFriendRequestCommandValidator : AbstractValidator<RejectFrien
 {
     public RejectFriendRequestCommandValidator()
     {
-        RuleFor(x => x.Id).NotEmpty();
+        RuleFor(x => x.Id).NotEmpty().WithName("Request id");
     }
 }

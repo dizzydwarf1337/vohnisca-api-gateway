@@ -1,3 +1,4 @@
+using Application.Core.Requests;
 using Application.Interfaces.RpcClients;
 using Microsoft.Extensions.Configuration;
 
@@ -29,6 +30,28 @@ public class UserRpcClient : DotnetRpcClient, IUserRpcClient
         => SendRpcRequest<DefaultRpcResponse>("RejectFriendRequest", new Dictionary<string, object> { { "Id", id } },
             token: token);
 
-    public Task<RpcResult<GetFriendRequestsResult>> GetFriendRequests(string token)
-        => SendRpcRequest<GetFriendRequestsResult>("ReceivedFriendRequests", token: token);
+    public Task<RpcResult<DefaultRpcResponse>> CancelFriendRequest(Guid id, string token)
+        => SendRpcRequest<DefaultRpcResponse>("CancelFriendRequest", new Dictionary<string, object> { { "Id", id } },
+            token: token);
+
+    public Task<RpcResult<DefaultRpcResponse>> DeleteFriendRequest(Guid id, string token)
+        => SendRpcRequest<DefaultRpcResponse>("DeleteFriendRequest", new Dictionary<string, object> { { "Id", id } },
+            token: token);
+
+    public Task<RpcResult<DefaultRpcResponse>> DeleteFriend(Guid id, string token)
+        => SendRpcRequest<DefaultRpcResponse>("DeleteFriend", new Dictionary<string, object> { { "Id", id } },
+            token: token);
+
+    public Task<RpcResult<GetFriendRequestsResult>> GetFriendRequests(PaginationSpecification pagination, string token)
+        => SendRpcRequest<GetFriendRequestsResult>("ReceivedFriendRequests",
+            new Dictionary<string, object> { { "Pagination", pagination } }, token: token);
+
+    public Task<RpcResult<GetFriendRequestsResult>> GetSentFriendRequests(PaginationSpecification pagination,
+        string token)
+        => SendRpcRequest<GetFriendRequestsResult>("SentFriendRequests",
+            new Dictionary<string, object> { { "Pagination", pagination } }, token: token);
+
+    public Task<RpcResult<GetFriendsResult>> GetFriends(PaginationSpecification pagination, string token)
+        => SendRpcRequest<GetFriendsResult>("GetFriends",
+            new Dictionary<string, object> { { "Pagination", pagination } }, token: token);
 }
