@@ -13,7 +13,7 @@ public abstract class BaseRpcClient
         _baseUrl = baseUrl;
     }
 
-    protected RpcClient CreateRpcClient(string? route = null, string? token = null)
+    protected RpcClient CreateRpcClient(string? route = null, string? token = null, string? userId = null)
     {
         var url = string.IsNullOrEmpty(route)
             ? _baseUrl
@@ -22,8 +22,11 @@ public abstract class BaseRpcClient
         var builder = new HttpRpcClientBuilder(new Uri(url))
             .ConfigureHttp(opt =>
             {
-                opt.Headers = new List<(string, string)>()
+                var headers = new List<(string, string)>
                     { new ValueTuple<string, string>("Accept", "application/json") };
+                if (!string.IsNullOrEmpty(userId))
+                    headers.Add(new ValueTuple<string, string>("X-User-Id", userId));
+                opt.Headers = headers;
             });
 
         if (!string.IsNullOrEmpty(token))
@@ -39,12 +42,13 @@ public abstract class BaseRpcClient
         Dictionary<string, object>? parameters = null,
         string? token = null,
         string? route = null,
+        string? userId = null,
         Func<T, string?>? getErrorMessage = null,
         Func<T, int>? getStatusCode = null)
     {
         try
         {
-            var rpcClient = CreateRpcClient(route, token);
+            var rpcClient = CreateRpcClient(route, token, userId);
             var rpcParams = BuildParams(parameters);
             var request = new RpcRequest(Guid.NewGuid().ToString(), method, rpcParams);
 

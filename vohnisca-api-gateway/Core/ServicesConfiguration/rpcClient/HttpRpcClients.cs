@@ -9,6 +9,7 @@ public static class HttpRpcClients
         services.AddScoped<IAuthRpcClient, AuthRpcClient>();
         services.AddScoped<IMailRpcClient, MailRpcClient>();
         services.AddScoped<IUserRpcClient, UserRpcClient>();
+        services.AddScoped<ICampaignRpcClient, CampaignRpcClient>();
         
         return services;
     }
