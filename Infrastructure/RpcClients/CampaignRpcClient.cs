@@ -1,4 +1,5 @@
 using Application.Core.Requests;
+using Application.Core.Responses;
 using Application.Interfaces.RpcClients;
 using Microsoft.Extensions.Configuration;
 
@@ -48,7 +49,7 @@ public class CampaignRpcClient : LaravelRpcClient, ICampaignRpcClient
     public Task<RpcResult<DefaultRpcResponse>> DeleteCampaign(string campaignId, string token)
         => Send<DefaultRpcResponse>("DeleteCampaign", new() { { "campaignId", campaignId } }, token);
 
-    public Task<RpcResult<PaginatedCampaignsResponse>> ListMyCampaigns(PaginationSpecification pagination, SortingSpecification sorting, IFilterSpecification filters, string token)
+    public Task<RpcResult<PaginationResponse<CampaignData>>> ListMyCampaigns(PaginationSpecification pagination, SortingSpecification sorting, IFilterSpecification filters, string token)
     {
         var p = new Dictionary<string, object>
         {
@@ -59,7 +60,7 @@ public class CampaignRpcClient : LaravelRpcClient, ICampaignRpcClient
         if (sorting.SortBy != null) p["sortBy"] = sorting.SortBy;
         foreach (var (key, value) in filters.ToParameters())
             p[key] = value;
-        return Send<PaginatedCampaignsResponse>("ListMyCampaigns", p, token);
+        return Send<PaginationResponse<CampaignData>>("ListMyCampaigns", p, token);
     }
 
     public Task<RpcResult<DefaultRpcResponse>> AddMember(string campaignId, string targetUserId, string role, string token)
