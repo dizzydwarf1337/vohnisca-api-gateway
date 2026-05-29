@@ -18,65 +18,97 @@ namespace vohnisca_api_gateway.Controllers.User.CampaignService;
 public class ChapterController : BaseController
 {
     [HttpPost("")]
-    public Task<IActionResult> CreateChapter(CreateChapterCommand command)
-        => HandleResponse(command);
-
-    [HttpGet("{id}")]
-    public Task<IActionResult> GetChapter(string id)
-        => HandleResponse(new GetChapterQuery { ChapterId = id });
-
-    [HttpPut("{id}")]
-    public Task<IActionResult> UpdateChapter(string id, UpdateChapterCommand command)
+    public Task<IActionResult> CreateChapter(CreateChapterCommand? command)
     {
-        command.ChapterId = id;
+        if (command is null) return Task.FromResult<IActionResult>(BadRequest());
         return HandleResponse(command);
     }
 
-    [HttpDelete("{id}")]
-    public Task<IActionResult> DeleteChapter(string id)
-        => HandleResponse(new DeleteChapterCommand { ChapterId = id });
-
-    [HttpPut("{id}/move")]
-    public Task<IActionResult> MoveChapter(string id, MoveChapterCommand command)
+    [HttpGet("{id:guid}")]
+    public Task<IActionResult> GetChapter(Guid id)
     {
-        command.ChapterId = id;
+        if (id == Guid.Empty) return Task.FromResult<IActionResult>(BadRequest());
+        return HandleResponse(new GetChapterQuery { ChapterId = id.ToString() });
+    }
+
+    [HttpPut("{id:guid}")]
+    public Task<IActionResult> UpdateChapter(Guid id, UpdateChapterCommand? command)
+    {
+        if (id == Guid.Empty) return Task.FromResult<IActionResult>(BadRequest());
+        if (command is null) return Task.FromResult<IActionResult>(BadRequest());
+        command.ChapterId = id.ToString();
+        return HandleResponse(command);
+    }
+
+    [HttpDelete("{id:guid}")]
+    public Task<IActionResult> DeleteChapter(Guid id)
+    {
+        if (id == Guid.Empty) return Task.FromResult<IActionResult>(BadRequest());
+        return HandleResponse(new DeleteChapterCommand { ChapterId = id.ToString() });
+    }
+
+    [HttpPut("{id:guid}/move")]
+    public Task<IActionResult> MoveChapter(Guid id, MoveChapterCommand? command)
+    {
+        if (id == Guid.Empty) return Task.FromResult<IActionResult>(BadRequest());
+        if (command is null) return Task.FromResult<IActionResult>(BadRequest());
+        command.ChapterId = id.ToString();
         return HandleResponse(command);
     }
 
     [HttpPut("reorder")]
-    public Task<IActionResult> ReorderChapters(ReorderChaptersCommand command)
-        => HandleResponse(command);
-
-    [HttpPut("{id}/visibility")]
-    public Task<IActionResult> SetChapterVisibility(string id, SetChapterVisibilityCommand command)
+    public Task<IActionResult> ReorderChapters(ReorderChaptersCommand? command)
     {
-        command.ChapterId = id;
+        if (command is null) return Task.FromResult<IActionResult>(BadRequest());
         return HandleResponse(command);
     }
 
-    [HttpPost("{id}/access")]
-    public Task<IActionResult> GrantChapterAccess(string id, GrantChapterAccessCommand command)
+    [HttpPut("{id:guid}/visibility")]
+    public Task<IActionResult> SetChapterVisibility(Guid id, SetChapterVisibilityCommand? command)
     {
-        command.ChapterId = id;
+        if (id == Guid.Empty) return Task.FromResult<IActionResult>(BadRequest());
+        if (command is null) return Task.FromResult<IActionResult>(BadRequest());
+        command.ChapterId = id.ToString();
         return HandleResponse(command);
     }
 
-    [HttpDelete("{id}/access/{targetUserId}")]
-    public Task<IActionResult> RevokeChapterAccess(string id, string targetUserId)
-        => HandleResponse(new RevokeChapterAccessCommand { ChapterId = id, TargetUserId = targetUserId });
-
-    [HttpPut("{id}/current")]
-    public Task<IActionResult> SetCurrentChapter(string id, SetCurrentChapterCommand command)
+    [HttpPost("{id:guid}/access")]
+    public Task<IActionResult> GrantChapterAccess(Guid id, GrantChapterAccessCommand? command)
     {
-        command.ChapterId = id;
+        if (id == Guid.Empty) return Task.FromResult<IActionResult>(BadRequest());
+        if (command is null) return Task.FromResult<IActionResult>(BadRequest());
+        command.ChapterId = id.ToString();
         return HandleResponse(command);
     }
 
-    [HttpGet("{id}/notes")]
-    public Task<IActionResult> ListChapterNotes(string id)
-        => HandleResponse(new ListChapterNotesQuery { ChapterId = id });
+    [HttpDelete("{id:guid}/access/{targetUserId}")]
+    public Task<IActionResult> RevokeChapterAccess(Guid id, string targetUserId)
+    {
+        if (id == Guid.Empty || string.IsNullOrEmpty(targetUserId))
+            return Task.FromResult<IActionResult>(BadRequest());
+        return HandleResponse(new RevokeChapterAccessCommand { ChapterId = id.ToString(), TargetUserId = targetUserId });
+    }
 
-    [HttpGet("/campaigns/{campaignId}/chapters")]
-    public Task<IActionResult> ListCampaignChapters(string campaignId)
-        => HandleResponse(new ListCampaignChaptersQuery { CampaignId = campaignId });
+    [HttpPut("{id:guid}/current")]
+    public Task<IActionResult> SetCurrentChapter(Guid id, SetCurrentChapterCommand? command)
+    {
+        if (id == Guid.Empty) return Task.FromResult<IActionResult>(BadRequest());
+        if (command is null) return Task.FromResult<IActionResult>(BadRequest());
+        command.ChapterId = id.ToString();
+        return HandleResponse(command);
+    }
+
+    [HttpGet("{id:guid}/notes")]
+    public Task<IActionResult> ListChapterNotes(Guid id)
+    {
+        if (id == Guid.Empty) return Task.FromResult<IActionResult>(BadRequest());
+        return HandleResponse(new ListChapterNotesQuery { ChapterId = id.ToString() });
+    }
+
+    [HttpGet("/campaigns/{campaignId:guid}/chapters")]
+    public Task<IActionResult> ListCampaignChapters(Guid campaignId)
+    {
+        if (campaignId == Guid.Empty) return Task.FromResult<IActionResult>(BadRequest());
+        return HandleResponse(new ListCampaignChaptersQuery { CampaignId = campaignId.ToString() });
+    }
 }

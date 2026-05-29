@@ -14,43 +14,65 @@ namespace vohnisca_api_gateway.Controllers.User.CampaignService;
 public class NoteController : BaseController
 {
     [HttpPost("")]
-    public Task<IActionResult> CreateNote(CreateNoteCommand command)
-        => HandleResponse(command);
-
-    [HttpGet("{id}")]
-    public Task<IActionResult> GetNote(string id)
-        => HandleResponse(new GetNoteQuery { NoteId = id });
-
-    [HttpPut("{id}")]
-    public Task<IActionResult> UpdateNote(string id, UpdateNoteCommand command)
+    public Task<IActionResult> CreateNote(CreateNoteCommand? command)
     {
-        command.NoteId = id;
+        if (command is null) return Task.FromResult<IActionResult>(BadRequest());
         return HandleResponse(command);
     }
 
-    [HttpDelete("{id}")]
-    public Task<IActionResult> DeleteNote(string id)
-        => HandleResponse(new DeleteNoteCommand { NoteId = id });
+    [HttpGet("{id:guid}")]
+    public Task<IActionResult> GetNote(Guid id)
+    {
+        if (id == Guid.Empty) return Task.FromResult<IActionResult>(BadRequest());
+        return HandleResponse(new GetNoteQuery { NoteId = id.ToString() });
+    }
+
+    [HttpPut("{id:guid}")]
+    public Task<IActionResult> UpdateNote(Guid id, UpdateNoteCommand? command)
+    {
+        if (id == Guid.Empty) return Task.FromResult<IActionResult>(BadRequest());
+        if (command is null) return Task.FromResult<IActionResult>(BadRequest());
+        command.NoteId = id.ToString();
+        return HandleResponse(command);
+    }
+
+    [HttpDelete("{id:guid}")]
+    public Task<IActionResult> DeleteNote(Guid id)
+    {
+        if (id == Guid.Empty) return Task.FromResult<IActionResult>(BadRequest());
+        return HandleResponse(new DeleteNoteCommand { NoteId = id.ToString() });
+    }
 
     [HttpPut("reorder")]
-    public Task<IActionResult> ReorderNotes(ReorderNotesCommand command)
-        => HandleResponse(command);
-
-    [HttpPut("{id}/visibility")]
-    public Task<IActionResult> SetNoteVisibility(string id, SetNoteVisibilityCommand command)
+    public Task<IActionResult> ReorderNotes(ReorderNotesCommand? command)
     {
-        command.NoteId = id;
+        if (command is null) return Task.FromResult<IActionResult>(BadRequest());
         return HandleResponse(command);
     }
 
-    [HttpPost("{id}/access")]
-    public Task<IActionResult> GrantNoteAccess(string id, GrantNoteAccessCommand command)
+    [HttpPut("{id:guid}/visibility")]
+    public Task<IActionResult> SetNoteVisibility(Guid id, SetNoteVisibilityCommand? command)
     {
-        command.NoteId = id;
+        if (id == Guid.Empty) return Task.FromResult<IActionResult>(BadRequest());
+        if (command is null) return Task.FromResult<IActionResult>(BadRequest());
+        command.NoteId = id.ToString();
         return HandleResponse(command);
     }
 
-    [HttpDelete("{id}/access/{targetUserId}")]
-    public Task<IActionResult> RevokeNoteAccess(string id, string targetUserId)
-        => HandleResponse(new RevokeNoteAccessCommand { NoteId = id, TargetUserId = targetUserId });
+    [HttpPost("{id:guid}/access")]
+    public Task<IActionResult> GrantNoteAccess(Guid id, GrantNoteAccessCommand? command)
+    {
+        if (id == Guid.Empty) return Task.FromResult<IActionResult>(BadRequest());
+        if (command is null) return Task.FromResult<IActionResult>(BadRequest());
+        command.NoteId = id.ToString();
+        return HandleResponse(command);
+    }
+
+    [HttpDelete("{id:guid}/access/{targetUserId}")]
+    public Task<IActionResult> RevokeNoteAccess(Guid id, string targetUserId)
+    {
+        if (id == Guid.Empty || string.IsNullOrEmpty(targetUserId))
+            return Task.FromResult<IActionResult>(BadRequest());
+        return HandleResponse(new RevokeNoteAccessCommand { NoteId = id.ToString(), TargetUserId = targetUserId });
+    }
 }
