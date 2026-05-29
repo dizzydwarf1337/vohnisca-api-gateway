@@ -13,7 +13,7 @@ public class ReorderChaptersCommandHandler : IRequestHandler<ReorderChaptersComm
 
     public async Task<ApiResponse<Unit>> Handle(ReorderChaptersCommand request, CancellationToken cancellationToken)
     {
-        var result = await _campaignRpcClient.ReorderChapters(request.CampaignId, request.ParentId, request.OrderedIds, request.UserId!.Value.ToString());
+        var result = await _campaignRpcClient.ReorderChapters(request.CampaignId, request.ParentId, request.OrderedIds, request.Token!);
         return result.ToApiResponse(_ => Unit.Value, "Error reordering chapters");
     }
 }

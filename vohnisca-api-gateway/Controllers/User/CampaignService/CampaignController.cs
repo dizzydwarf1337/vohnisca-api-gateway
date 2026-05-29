@@ -18,9 +18,9 @@ public class CampaignController : BaseController
     public Task<IActionResult> CreateCampaign(CreateCampaignCommand command)
         => HandleResponse(command);
 
-    [HttpGet("my")]
-    public Task<IActionResult> ListMyCampaigns()
-        => HandleResponse(new ListMyCampaignsQuery());
+    [HttpPost("my")]
+    public Task<IActionResult> ListMyCampaigns([FromBody] ListMyCampaignsQuery query)
+        => HandleResponse(query);
 
     [HttpGet("{id}")]
     public Task<IActionResult> GetCampaign(string id)

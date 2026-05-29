@@ -13,7 +13,7 @@ public class DeleteCampaignCommandHandler : IRequestHandler<DeleteCampaignComman
 
     public async Task<ApiResponse<Unit>> Handle(DeleteCampaignCommand request, CancellationToken cancellationToken)
     {
-        var result = await _campaignRpcClient.DeleteCampaign(request.CampaignId, request.UserId!.Value.ToString());
+        var result = await _campaignRpcClient.DeleteCampaign(request.CampaignId, request.Token!);
         return result.ToApiResponse(_ => Unit.Value, "Error deleting campaign");
     }
 }

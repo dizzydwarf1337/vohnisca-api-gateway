@@ -13,7 +13,7 @@ public class SetNoteVisibilityCommandHandler : IRequestHandler<SetNoteVisibility
 
     public async Task<ApiResponse<NoteData>> Handle(SetNoteVisibilityCommand request, CancellationToken cancellationToken)
     {
-        var result = await _campaignRpcClient.SetNoteVisibility(request.NoteId, request.IsPublic, request.UserId!.Value.ToString());
+        var result = await _campaignRpcClient.SetNoteVisibility(request.NoteId, request.IsPublic, request.Token!);
         return result.ToApiResponse(x => x.Note, "Error setting note visibility");
     }
 }

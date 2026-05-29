@@ -13,7 +13,7 @@ public class ListMembersQueryHandler : IRequestHandler<ListMembersQuery, ApiResp
 
     public async Task<ApiResponse<List<MemberData>>> Handle(ListMembersQuery request, CancellationToken cancellationToken)
     {
-        var result = await _campaignRpcClient.ListMembers(request.CampaignId, request.UserId!.Value.ToString());
+        var result = await _campaignRpcClient.ListMembers(request.CampaignId, request.Token!);
         return result.ToApiResponse(x => x.Members, "Error listing members");
     }
 }

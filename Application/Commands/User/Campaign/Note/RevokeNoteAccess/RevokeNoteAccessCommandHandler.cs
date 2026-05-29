@@ -13,7 +13,7 @@ public class RevokeNoteAccessCommandHandler : IRequestHandler<RevokeNoteAccessCo
 
     public async Task<ApiResponse<Unit>> Handle(RevokeNoteAccessCommand request, CancellationToken cancellationToken)
     {
-        var result = await _campaignRpcClient.RevokeNoteAccess(request.NoteId, request.TargetUserId, request.UserId!.Value.ToString());
+        var result = await _campaignRpcClient.RevokeNoteAccess(request.NoteId, request.TargetUserId, request.Token!);
         return result.ToApiResponse(_ => Unit.Value, "Error revoking note access");
     }
 }

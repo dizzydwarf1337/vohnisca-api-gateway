@@ -13,7 +13,7 @@ public class MoveChapterCommandHandler : IRequestHandler<MoveChapterCommand, Api
 
     public async Task<ApiResponse<Unit>> Handle(MoveChapterCommand request, CancellationToken cancellationToken)
     {
-        var result = await _campaignRpcClient.MoveChapter(request.ChapterId, request.NewParentId, request.UserId!.Value.ToString());
+        var result = await _campaignRpcClient.MoveChapter(request.ChapterId, request.NewParentId, request.Token!);
         return result.ToApiResponse(_ => Unit.Value, "Error moving chapter");
     }
 }

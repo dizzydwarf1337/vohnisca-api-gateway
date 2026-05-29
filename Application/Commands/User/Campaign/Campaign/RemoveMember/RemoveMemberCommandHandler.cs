@@ -13,7 +13,7 @@ public class RemoveMemberCommandHandler : IRequestHandler<RemoveMemberCommand, A
 
     public async Task<ApiResponse<Unit>> Handle(RemoveMemberCommand request, CancellationToken cancellationToken)
     {
-        var result = await _campaignRpcClient.RemoveMember(request.CampaignId, request.TargetUserId, request.UserId!.Value.ToString());
+        var result = await _campaignRpcClient.RemoveMember(request.CampaignId, request.TargetUserId, request.Token!);
         return result.ToApiResponse(_ => Unit.Value, "Error removing member");
     }
 }

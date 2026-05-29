@@ -4,16 +4,20 @@ using MediatR;
 
 namespace Application.Queries.User.Campaign.Campaign.ListMyCampaigns;
 
-public class ListMyCampaignsQueryHandler : IRequestHandler<ListMyCampaignsQuery, ApiResponse<List<CampaignData>>>
+public class ListMyCampaignsQueryHandler : IRequestHandler<ListMyCampaignsQuery, ApiResponse<PaginatedCampaignsResult>>
 {
     private readonly ICampaignRpcClient _campaignRpcClient;
 
     public ListMyCampaignsQueryHandler(ICampaignRpcClient campaignRpcClient)
         => _campaignRpcClient = campaignRpcClient;
 
-    public async Task<ApiResponse<List<CampaignData>>> Handle(ListMyCampaignsQuery request, CancellationToken cancellationToken)
+    public async Task<ApiResponse<PaginatedCampaignsResult>> Handle(ListMyCampaignsQuery request, CancellationToken cancellationToken)
     {
-        var result = await _campaignRpcClient.ListMyCampaigns(request.UserId!.Value.ToString());
-        return result.ToApiResponse(x => x.Campaigns, "Error listing campaigns");
+        var result = await _campaignRpcClient.ListMyCampaigns(
+            request.Pagination,
+            request.Sorting,
+            request.Filters,
+            request.Token!);
+        return result.ToApiResponse(x => new PaginatedCampaignsResult(x.Campaigns, x.Meta), "Error listing campaigns");
     }
 }

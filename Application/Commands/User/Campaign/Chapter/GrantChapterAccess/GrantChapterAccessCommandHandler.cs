@@ -13,7 +13,7 @@ public class GrantChapterAccessCommandHandler : IRequestHandler<GrantChapterAcce
 
     public async Task<ApiResponse<Unit>> Handle(GrantChapterAccessCommand request, CancellationToken cancellationToken)
     {
-        var result = await _campaignRpcClient.GrantChapterAccess(request.ChapterId, request.TargetUserId, request.UserId!.Value.ToString());
+        var result = await _campaignRpcClient.GrantChapterAccess(request.ChapterId, request.TargetUserId, request.Token!);
         return result.ToApiResponse(_ => Unit.Value, "Error granting chapter access");
     }
 }
