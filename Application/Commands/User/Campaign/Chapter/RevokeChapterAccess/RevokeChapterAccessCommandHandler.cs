@@ -13,7 +13,7 @@ public class RevokeChapterAccessCommandHandler : IRequestHandler<RevokeChapterAc
 
     public async Task<ApiResponse<Unit>> Handle(RevokeChapterAccessCommand request, CancellationToken cancellationToken)
     {
-        var result = await _campaignRpcClient.RevokeChapterAccess(request.ChapterId, request.TargetUserId, request.UserId!.Value.ToString());
+        var result = await _campaignRpcClient.RevokeChapterAccess(request.ChapterId, request.TargetUserId, request.Token!);
         return result.ToApiResponse(_ => Unit.Value, "Error revoking chapter access");
     }
 }

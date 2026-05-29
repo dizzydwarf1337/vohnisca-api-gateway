@@ -13,7 +13,7 @@ public class CreateCampaignCommandHandler : IRequestHandler<CreateCampaignComman
 
     public async Task<ApiResponse<CampaignData>> Handle(CreateCampaignCommand request, CancellationToken cancellationToken)
     {
-        var result = await _campaignRpcClient.CreateCampaign(request.Title, request.Description, request.UserId!.Value.ToString());
+        var result = await _campaignRpcClient.CreateCampaign(request.Title, request.Description, request.Token!);
         return result.ToApiResponse(x => x.Campaign, "Error creating campaign");
     }
 }

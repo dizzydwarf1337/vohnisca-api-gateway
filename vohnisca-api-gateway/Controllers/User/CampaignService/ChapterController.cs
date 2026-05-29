@@ -5,8 +5,10 @@ using Application.Commands.User.Campaign.Chapter.MoveChapter;
 using Application.Commands.User.Campaign.Chapter.ReorderChapters;
 using Application.Commands.User.Campaign.Chapter.RevokeChapterAccess;
 using Application.Commands.User.Campaign.Chapter.SetChapterVisibility;
+using Application.Commands.User.Campaign.Chapter.SetCurrentChapter;
 using Application.Commands.User.Campaign.Chapter.UpdateChapter;
 using Application.Queries.User.Campaign.Chapter.GetChapter;
+using Application.Queries.User.Campaign.Chapter.ListCampaignChapters;
 using Application.Queries.User.Campaign.Note.ListChapterNotes;
 using Microsoft.AspNetCore.Mvc;
 
@@ -63,7 +65,18 @@ public class ChapterController : BaseController
     public Task<IActionResult> RevokeChapterAccess(string id, string targetUserId)
         => HandleResponse(new RevokeChapterAccessCommand { ChapterId = id, TargetUserId = targetUserId });
 
+    [HttpPut("{id}/current")]
+    public Task<IActionResult> SetCurrentChapter(string id, SetCurrentChapterCommand command)
+    {
+        command.ChapterId = id;
+        return HandleResponse(command);
+    }
+
     [HttpGet("{id}/notes")]
     public Task<IActionResult> ListChapterNotes(string id)
         => HandleResponse(new ListChapterNotesQuery { ChapterId = id });
+
+    [HttpGet("/campaigns/{campaignId}/chapters")]
+    public Task<IActionResult> ListCampaignChapters(string campaignId)
+        => HandleResponse(new ListCampaignChaptersQuery { CampaignId = campaignId });
 }

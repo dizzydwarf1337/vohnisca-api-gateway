@@ -13,7 +13,7 @@ public class SetChapterVisibilityCommandHandler : IRequestHandler<SetChapterVisi
 
     public async Task<ApiResponse<ChapterData>> Handle(SetChapterVisibilityCommand request, CancellationToken cancellationToken)
     {
-        var result = await _campaignRpcClient.SetChapterVisibility(request.ChapterId, request.IsVisibleToAll, request.UserId!.Value.ToString());
+        var result = await _campaignRpcClient.SetChapterVisibility(request.ChapterId, request.IsVisibleToAll, request.Token!);
         return result.ToApiResponse(x => x.Chapter, "Error setting chapter visibility");
     }
 }

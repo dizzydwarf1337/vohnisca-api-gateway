@@ -13,7 +13,7 @@ public class UpdateChapterCommandHandler : IRequestHandler<UpdateChapterCommand,
 
     public async Task<ApiResponse<ChapterData>> Handle(UpdateChapterCommand request, CancellationToken cancellationToken)
     {
-        var result = await _campaignRpcClient.UpdateChapter(request.ChapterId, request.Title, request.Content, request.UserId!.Value.ToString());
+        var result = await _campaignRpcClient.UpdateChapter(request.ChapterId, request.Title, request.Content, request.Token!);
         return result.ToApiResponse(x => x.Chapter, "Error updating chapter");
     }
 }

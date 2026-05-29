@@ -13,7 +13,7 @@ public class UpdateCampaignCommandHandler : IRequestHandler<UpdateCampaignComman
 
     public async Task<ApiResponse<CampaignData>> Handle(UpdateCampaignCommand request, CancellationToken cancellationToken)
     {
-        var result = await _campaignRpcClient.UpdateCampaign(request.CampaignId, request.Title, request.Description, request.UserId!.Value.ToString());
+        var result = await _campaignRpcClient.UpdateCampaign(request.CampaignId, request.Title, request.Description, request.Token!, request.Status);
         return result.ToApiResponse(x => x.Campaign, "Error updating campaign");
     }
 }
