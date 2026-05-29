@@ -1,10 +1,11 @@
 using Application.Core.Mediatr.Requests.UserRequest;
 using Application.Core.Requests;
+using Application.Core.Responses;
 using Application.Interfaces.RpcClients;
 
 namespace Application.Queries.User.Campaign.Campaign.ListMyCampaigns;
 
-public class ListMyCampaignsQuery : UserRequest<PaginatedCampaignsResult>
+public class ListMyCampaignsQuery : UserRequest<PaginationResponse<CampaignData>>
 {
     public PaginationSpecification Pagination { get; set; } = new();
     public SortingSpecification Sorting { get; set; } = new();
@@ -25,4 +26,3 @@ public class ListMyCampaignsFilterSpecification : IFilterSpecification
     }
 }
 
-public record PaginatedCampaignsResult(List<CampaignData> Campaigns, PaginationMeta Meta);

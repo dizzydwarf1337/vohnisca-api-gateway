@@ -1,4 +1,5 @@
 using Application.Core.Requests;
+using Application.Core.Responses;
 
 namespace Application.Interfaces.RpcClients;
 
@@ -8,7 +9,7 @@ public interface ICampaignRpcClient
     Task<RpcResult<CampaignResponse>> GetCampaign(string campaignId, string token);
     Task<RpcResult<CampaignResponse>> UpdateCampaign(string campaignId, string title, string? description, string token, string? status = null);
     Task<RpcResult<DefaultRpcResponse>> DeleteCampaign(string campaignId, string token);
-    Task<RpcResult<PaginatedCampaignsResponse>> ListMyCampaigns(PaginationSpecification pagination, SortingSpecification sorting, IFilterSpecification filters, string token);
+    Task<RpcResult<PaginationResponse<CampaignData>>> ListMyCampaigns(PaginationSpecification pagination, SortingSpecification sorting, IFilterSpecification filters, string token);
     Task<RpcResult<DefaultRpcResponse>> AddMember(string campaignId, string targetUserId, string role, string token);
     Task<RpcResult<DefaultRpcResponse>> RemoveMember(string campaignId, string targetUserId, string token);
     Task<RpcResult<DefaultRpcResponse>> UpdateMemberRole(string campaignId, string targetUserId, string role, string token);
@@ -39,8 +40,6 @@ public interface ICampaignRpcClient
 
 public record CampaignResponse(CampaignData Campaign);
 public record CampaignsResponse(List<CampaignData> Campaigns);
-public record PaginatedCampaignsResponse(List<CampaignData> Campaigns, PaginationMeta Meta);
-public record PaginationMeta(int Total, int Page, int PerPage, int LastPage);
 public record MembersResponse(List<MemberData> Members);
 public record ChapterResponse(ChapterData Chapter);
 public record ChaptersResponse(List<ChapterData> Chapters);
