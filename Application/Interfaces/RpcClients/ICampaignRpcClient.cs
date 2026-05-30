@@ -70,7 +70,10 @@ public record ChapterData(
     DateTime CreatedAt,
     DateTime UpdatedAt,
     List<ChapterData>? Children = null,
-    List<NoteData>? Notes = null);
+    List<NoteData>? Notes = null,
+    List<ChapterAccessUserData>? AccessUsers = null);
+
+public record ChapterAccessUserData(string UserId, string? UserName);
 
 public record NoteData(
     string Id,
