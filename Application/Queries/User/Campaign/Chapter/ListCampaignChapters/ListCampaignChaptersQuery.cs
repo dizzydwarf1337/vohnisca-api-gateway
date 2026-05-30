@@ -5,5 +5,5 @@ namespace Application.Queries.User.Campaign.Chapter.ListCampaignChapters;
 
 public class ListCampaignChaptersQuery : UserRequest<List<ChapterData>>
 {
-    public required string CampaignId { get; set; }
+    public Guid CampaignId { get; set; }
 }

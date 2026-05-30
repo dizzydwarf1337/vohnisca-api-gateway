@@ -6,7 +6,6 @@ public class CreateNoteCommandValidator : AbstractValidator<CreateNoteCommand>
 {
     public CreateNoteCommandValidator()
     {
-        RuleFor(x => x.ChapterId).NotEmpty();
         RuleFor(x => x.Title).NotEmpty().MaximumLength(255);
         RuleFor(x => x.Content).MaximumLength(100000);
     }

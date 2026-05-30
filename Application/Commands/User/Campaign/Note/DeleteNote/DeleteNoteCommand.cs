@@ -5,5 +5,5 @@ namespace Application.Commands.User.Campaign.Note.DeleteNote;
 
 public class DeleteNoteCommand : UserRequest<Unit>
 {
-    public string NoteId { get; set; }
+    public Guid NoteId { get; set; }
 }

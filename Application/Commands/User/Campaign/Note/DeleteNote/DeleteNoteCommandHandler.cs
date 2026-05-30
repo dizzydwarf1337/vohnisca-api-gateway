@@ -13,7 +13,7 @@ public class DeleteNoteCommandHandler : IRequestHandler<DeleteNoteCommand, ApiRe
 
     public async Task<ApiResponse<Unit>> Handle(DeleteNoteCommand request, CancellationToken cancellationToken)
     {
-        var result = await _campaignRpcClient.DeleteNote(request.NoteId, request.Token!);
+        var result = await _campaignRpcClient.DeleteNote(request.NoteId, request.Token);
         return result.ToApiResponse(_ => Unit.Value, "Error deleting note");
     }
 }

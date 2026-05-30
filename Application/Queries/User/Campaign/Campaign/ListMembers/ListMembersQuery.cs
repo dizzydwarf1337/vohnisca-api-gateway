@@ -5,5 +5,5 @@ namespace Application.Queries.User.Campaign.Campaign.ListMembers;
 
 public class ListMembersQuery : UserRequest<List<MemberData>>
 {
-    public string CampaignId { get; set; }
+    public Guid CampaignId { get; set; }
 }

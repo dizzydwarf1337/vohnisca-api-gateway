@@ -5,5 +5,5 @@ namespace Application.Queries.User.Campaign.Campaign.GetCampaign;
 
 public class GetCampaignQuery : UserRequest<CampaignData>
 {
-    public required string CampaignId { get; set; }
+    public Guid CampaignId { get; set; }
 }

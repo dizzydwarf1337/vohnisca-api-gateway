@@ -5,7 +5,7 @@ namespace Application.Commands.User.Campaign.Campaign.AddMember;
 
 public class AddMemberCommand : UserRequest<Unit>
 {
-    public string CampaignId { get; set; }
-    public required string TargetUserId { get; set; }
-    public required string Role { get; set; }
+    public Guid CampaignId { get; set; }
+    public Guid TargetUserId { get; set; }
+    public string Role { get; set; }
 }

@@ -5,6 +5,6 @@ namespace Application.Commands.User.Campaign.Note.RevokeNoteAccess;
 
 public class RevokeNoteAccessCommand : UserRequest<Unit>
 {
-    public string NoteId { get; set; }
-    public string TargetUserId { get; set; }
+    public Guid NoteId { get; set; }
+    public Guid TargetUserId { get; set; }
 }

@@ -13,7 +13,7 @@ public class CreateNoteCommandHandler : IRequestHandler<CreateNoteCommand, ApiRe
 
     public async Task<ApiResponse<NoteData>> Handle(CreateNoteCommand request, CancellationToken cancellationToken)
     {
-        var result = await _campaignRpcClient.CreateNote(request.ChapterId, request.Title, request.Content, request.Token!);
+        var result = await _campaignRpcClient.CreateNote(request.ChapterId, request.Title, request.Content, request.Token);
         return result.ToApiResponse(x => x.Note, "Error creating note");
     }
 }

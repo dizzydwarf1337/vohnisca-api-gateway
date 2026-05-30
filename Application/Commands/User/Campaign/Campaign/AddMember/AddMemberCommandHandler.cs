@@ -13,7 +13,7 @@ public class AddMemberCommandHandler : IRequestHandler<AddMemberCommand, ApiResp
 
     public async Task<ApiResponse<Unit>> Handle(AddMemberCommand request, CancellationToken cancellationToken)
     {
-        var result = await _campaignRpcClient.AddMember(request.CampaignId, request.TargetUserId, request.Role, request.Token!);
+        var result = await _campaignRpcClient.AddMember(request.CampaignId, request.TargetUserId, request.Role, request.Token);
         return result.ToApiResponse(_ => Unit.Value, "Error adding member");
     }
 }

@@ -13,7 +13,7 @@ public class CreateChapterCommandHandler : IRequestHandler<CreateChapterCommand,
 
     public async Task<ApiResponse<ChapterData>> Handle(CreateChapterCommand request, CancellationToken cancellationToken)
     {
-        var result = await _campaignRpcClient.CreateChapter(request.CampaignId, request.ParentId, request.Title, request.Content, request.Token!);
+        var result = await _campaignRpcClient.CreateChapter(request.CampaignId, request.ParentId, request.Title, request.Content, request.Token);
         return result.ToApiResponse(x => x.Chapter, "Error creating chapter");
     }
 }

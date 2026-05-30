@@ -30,7 +30,7 @@ public class ChapterController : BaseController
         if (id == Guid.Empty)
             return BadRequest();
 
-        return await HandleResponse(new GetChapterQuery { ChapterId = id.ToString() });
+        return await HandleResponse(new GetChapterQuery { ChapterId = id });
     }
 
     [HttpPut]
@@ -40,7 +40,7 @@ public class ChapterController : BaseController
         if (id == Guid.Empty || command is null)
             return BadRequest();
 
-        command.ChapterId = id.ToString();
+        command.ChapterId = id;
 
         return await HandleResponse(command);
     }
@@ -51,7 +51,7 @@ public class ChapterController : BaseController
         if (id == Guid.Empty)
             return BadRequest();
 
-        return await HandleResponse(new DeleteChapterCommand { ChapterId = id.ToString() });
+        return await HandleResponse(new DeleteChapterCommand { ChapterId = id });
     }
 
     [HttpPut]
@@ -61,7 +61,7 @@ public class ChapterController : BaseController
         if (id == Guid.Empty || command is null)
             return BadRequest();
 
-        command.ChapterId = id.ToString();
+        command.ChapterId = id;
 
         return await HandleResponse(command);
     }
@@ -77,7 +77,7 @@ public class ChapterController : BaseController
         if (id == Guid.Empty || command is null)
             return BadRequest();
 
-        command.ChapterId = id.ToString();
+        command.ChapterId = id;
 
         return await HandleResponse(command);
     }
@@ -88,7 +88,7 @@ public class ChapterController : BaseController
     {
         if (id == Guid.Empty || command is null) return BadRequest();
 
-        command.ChapterId = id.ToString();
+        command.ChapterId = id;
 
         return await HandleResponse(command);
     }
@@ -101,7 +101,7 @@ public class ChapterController : BaseController
             return BadRequest();
 
         return await HandleResponse(new RevokeChapterAccessCommand
-            { ChapterId = id.ToString(), TargetUserId = targetUserId.ToString() });
+            { ChapterId = id, TargetUserId = targetUserId });
     }
 
     [HttpPut]
@@ -110,7 +110,7 @@ public class ChapterController : BaseController
     {
         if (id == Guid.Empty || command is null) return BadRequest();
 
-        command.ChapterId = id.ToString();
+        command.ChapterId = id;
 
         return await HandleResponse(command);
     }
@@ -120,7 +120,7 @@ public class ChapterController : BaseController
     public async Task<IActionResult> ListChapterNotes(Guid id)
     {
         if (id == Guid.Empty) return BadRequest();
-        return await HandleResponse(new ListChapterNotesQuery { ChapterId = id.ToString() });
+        return await HandleResponse(new ListChapterNotesQuery { ChapterId = id });
     }
 
     [HttpGet]
@@ -128,6 +128,6 @@ public class ChapterController : BaseController
     public async Task<IActionResult> ListCampaignChapters(Guid campaignId)
     {
         if (campaignId == Guid.Empty) return BadRequest();
-        return await HandleResponse(new ListCampaignChaptersQuery { CampaignId = campaignId.ToString() });
+        return await HandleResponse(new ListCampaignChaptersQuery { CampaignId = campaignId });
     }
 }

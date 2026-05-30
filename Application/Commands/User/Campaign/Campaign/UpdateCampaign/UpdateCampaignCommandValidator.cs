@@ -6,7 +6,6 @@ public class UpdateCampaignCommandValidator : AbstractValidator<UpdateCampaignCo
 {
     public UpdateCampaignCommandValidator()
     {
-        RuleFor(x => x.CampaignId).NotEmpty();
         RuleFor(x => x.Title).NotEmpty().MaximumLength(255);
         RuleFor(x => x.Description).MaximumLength(2000);
     }

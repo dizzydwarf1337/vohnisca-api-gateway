@@ -6,36 +6,36 @@ namespace Application.Interfaces.RpcClients;
 public interface ICampaignRpcClient
 {
     Task<RpcResult<CampaignResponse>> CreateCampaign(string title, string? description, string token);
-    Task<RpcResult<CampaignResponse>> GetCampaign(string campaignId, string token);
-    Task<RpcResult<CampaignResponse>> UpdateCampaign(string campaignId, string title, string? description, string token, string? status = null);
-    Task<RpcResult<DefaultRpcResponse>> DeleteCampaign(string campaignId, string token);
+    Task<RpcResult<CampaignResponse>> GetCampaign(Guid campaignId, string token);
+    Task<RpcResult<CampaignResponse>> UpdateCampaign(Guid campaignId, string title, string? description, string token, string? status = null);
+    Task<RpcResult<DefaultRpcResponse>> DeleteCampaign(Guid campaignId, string token);
     Task<RpcResult<PaginationResponse<CampaignData>>> ListMyCampaigns(PaginationSpecification pagination, SortingSpecification sorting, IFilterSpecification filters, string token);
-    Task<RpcResult<DefaultRpcResponse>> AddMember(string campaignId, string targetUserId, string role, string token);
-    Task<RpcResult<DefaultRpcResponse>> RemoveMember(string campaignId, string targetUserId, string token);
-    Task<RpcResult<DefaultRpcResponse>> UpdateMemberRole(string campaignId, string targetUserId, string role, string token);
-    Task<RpcResult<MembersResponse>> ListMembers(string campaignId, string token);
+    Task<RpcResult<DefaultRpcResponse>> AddMember(Guid campaignId, Guid targetUserId, string role, string token);
+    Task<RpcResult<DefaultRpcResponse>> RemoveMember(Guid campaignId, Guid targetUserId, string token);
+    Task<RpcResult<DefaultRpcResponse>> UpdateMemberRole(Guid campaignId, Guid targetUserId, string role, string token);
+    Task<RpcResult<MembersResponse>> ListMembers(Guid campaignId, string token);
 
-    Task<RpcResult<ChapterResponse>> CreateChapter(string campaignId, string? parentId, string title, string? content, string token);
-    Task<RpcResult<ChapterResponse>> GetChapter(string chapterId, string token);
-    Task<RpcResult<ChapterResponse>> UpdateChapter(string chapterId, string title, string? content, string token);
-    Task<RpcResult<DefaultRpcResponse>> DeleteChapter(string chapterId, string token);
-    Task<RpcResult<DefaultRpcResponse>> MoveChapter(string chapterId, string? newParentId, string token);
-    Task<RpcResult<DefaultRpcResponse>> ReorderChapters(string campaignId, string? parentId, List<string> orderedIds, string token);
-    Task<RpcResult<ChapterResponse>> SetChapterVisibility(string chapterId, bool isVisibleToAll, string token);
-    Task<RpcResult<DefaultRpcResponse>> GrantChapterAccess(string chapterId, string targetUserId, string token);
-    Task<RpcResult<DefaultRpcResponse>> RevokeChapterAccess(string chapterId, string targetUserId, string token);
-    Task<RpcResult<DefaultRpcResponse>> SetCurrentChapter(string campaignId, string chapterId, string token);
-    Task<RpcResult<ChaptersResponse>> ListCampaignChapters(string campaignId, string token);
+    Task<RpcResult<ChapterResponse>> CreateChapter(Guid campaignId, Guid? parentId, string title, string? content, string token);
+    Task<RpcResult<ChapterResponse>> GetChapter(Guid chapterId, string token);
+    Task<RpcResult<ChapterResponse>> UpdateChapter(Guid chapterId, string title, string? content, string token);
+    Task<RpcResult<DefaultRpcResponse>> DeleteChapter(Guid chapterId, string token);
+    Task<RpcResult<DefaultRpcResponse>> MoveChapter(Guid chapterId, Guid? newParentId, string token);
+    Task<RpcResult<DefaultRpcResponse>> ReorderChapters(Guid campaignId, Guid? parentId, List<string> orderedIds, string token);
+    Task<RpcResult<ChapterResponse>> SetChapterVisibility(Guid chapterId, bool isVisibleToAll, string token);
+    Task<RpcResult<DefaultRpcResponse>> GrantChapterAccess(Guid chapterId, Guid targetUserId, string token);
+    Task<RpcResult<DefaultRpcResponse>> RevokeChapterAccess(Guid chapterId, Guid targetUserId, string token);
+    Task<RpcResult<DefaultRpcResponse>> SetCurrentChapter(Guid campaignId, Guid chapterId, string token);
+    Task<RpcResult<ChaptersResponse>> ListCampaignChapters(Guid campaignId, string token);
 
-    Task<RpcResult<NoteResponse>> CreateNote(string chapterId, string title, string? content, string token);
-    Task<RpcResult<NoteResponse>> GetNote(string noteId, string token);
-    Task<RpcResult<NoteResponse>> UpdateNote(string noteId, string title, string? content, string token);
-    Task<RpcResult<DefaultRpcResponse>> DeleteNote(string noteId, string token);
-    Task<RpcResult<NotesResponse>> ListChapterNotes(string chapterId, string token);
-    Task<RpcResult<DefaultRpcResponse>> ReorderNotes(string chapterId, List<string> orderedIds, string token);
-    Task<RpcResult<NoteResponse>> SetNoteVisibility(string noteId, bool isPublic, string token);
-    Task<RpcResult<DefaultRpcResponse>> GrantNoteAccess(string noteId, string targetUserId, string token);
-    Task<RpcResult<DefaultRpcResponse>> RevokeNoteAccess(string noteId, string targetUserId, string token);
+    Task<RpcResult<NoteResponse>> CreateNote(Guid chapterId, string title, string? content, string token);
+    Task<RpcResult<NoteResponse>> GetNote(Guid noteId, string token);
+    Task<RpcResult<NoteResponse>> UpdateNote(Guid noteId, string title, string? content, string token);
+    Task<RpcResult<DefaultRpcResponse>> DeleteNote(Guid noteId, string token);
+    Task<RpcResult<NotesResponse>> ListChapterNotes(Guid chapterId, string token);
+    Task<RpcResult<DefaultRpcResponse>> ReorderNotes(Guid chapterId, List<string> orderedIds, string token);
+    Task<RpcResult<NoteResponse>> SetNoteVisibility(Guid noteId, bool isPublic, string token);
+    Task<RpcResult<DefaultRpcResponse>> GrantNoteAccess(Guid noteId, Guid targetUserId, string token);
+    Task<RpcResult<DefaultRpcResponse>> RevokeNoteAccess(Guid noteId, Guid targetUserId, string token);
 }
 
 public record CampaignResponse(CampaignData Campaign);

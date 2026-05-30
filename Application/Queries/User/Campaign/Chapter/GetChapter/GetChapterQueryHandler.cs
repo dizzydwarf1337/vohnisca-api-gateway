@@ -13,7 +13,7 @@ public class GetChapterQueryHandler : IRequestHandler<GetChapterQuery, ApiRespon
 
     public async Task<ApiResponse<ChapterData>> Handle(GetChapterQuery request, CancellationToken cancellationToken)
     {
-        var result = await _campaignRpcClient.GetChapter(request.ChapterId, request.Token!);
+        var result = await _campaignRpcClient.GetChapter(request.ChapterId, request.Token);
         return result.ToApiResponse(x => x.Chapter, "Error getting chapter");
     }
 }

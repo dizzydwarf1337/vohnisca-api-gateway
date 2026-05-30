@@ -6,7 +6,6 @@ public class ReorderChaptersCommandValidator : AbstractValidator<ReorderChapters
 {
     public ReorderChaptersCommandValidator()
     {
-        RuleFor(x => x.CampaignId).NotEmpty();
         RuleFor(x => x.OrderedIds).NotEmpty();
     }
 }

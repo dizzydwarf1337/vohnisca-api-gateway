@@ -18,7 +18,7 @@ public class ListMyCampaignsQueryHandler : IRequestHandler<ListMyCampaignsQuery,
             request.Pagination,
             request.Sorting,
             request.Filters,
-            request.Token!);
+            request.Token);
         return result.ToApiResponse(x => x, "Error listing campaigns");
     }
 }

@@ -13,7 +13,7 @@ public class ReorderNotesCommandHandler : IRequestHandler<ReorderNotesCommand, A
 
     public async Task<ApiResponse<Unit>> Handle(ReorderNotesCommand request, CancellationToken cancellationToken)
     {
-        var result = await _campaignRpcClient.ReorderNotes(request.ChapterId, request.OrderedIds, request.Token!);
+        var result = await _campaignRpcClient.ReorderNotes(request.ChapterId, request.OrderedIds, request.Token);
         return result.ToApiResponse(_ => Unit.Value, "Error reordering notes");
     }
 }

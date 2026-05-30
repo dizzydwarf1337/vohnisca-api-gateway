@@ -25,7 +25,7 @@ public class NoteController : BaseController
         if (id == Guid.Empty)
             return BadRequest();
 
-        return await HandleResponse(new GetNoteQuery { NoteId = id.ToString() });
+        return await HandleResponse(new GetNoteQuery { NoteId = id });
     }
 
     [HttpPut]
@@ -35,7 +35,7 @@ public class NoteController : BaseController
         if (id == Guid.Empty || command is null)
             return BadRequest();
 
-        command.NoteId = id.ToString();
+        command.NoteId = id;
 
         return await HandleResponse(command);
     }
@@ -47,7 +47,7 @@ public class NoteController : BaseController
         if (id == Guid.Empty)
             return BadRequest();
 
-        return await HandleResponse(new DeleteNoteCommand { NoteId = id.ToString() });
+        return await HandleResponse(new DeleteNoteCommand { NoteId = id });
     }
 
     [HttpPut]
@@ -61,7 +61,7 @@ public class NoteController : BaseController
     {
         if (id == Guid.Empty || command is null) return BadRequest();
 
-        command.NoteId = id.ToString();
+        command.NoteId = id;
 
         return await HandleResponse(command);
     }
@@ -72,7 +72,7 @@ public class NoteController : BaseController
     {
         if (id == Guid.Empty || command is null) return BadRequest();
 
-        command.NoteId = id.ToString();
+        command.NoteId = id;
 
         return await HandleResponse(command);
     }
@@ -85,6 +85,6 @@ public class NoteController : BaseController
             return BadRequest();
 
         return await HandleResponse(new RevokeNoteAccessCommand
-            { NoteId = id.ToString(), TargetUserId = targetUserId.ToString() });
+            { NoteId = id, TargetUserId = targetUserId });
     }
 }

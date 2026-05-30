@@ -5,7 +5,7 @@ namespace Application.Commands.User.Campaign.Note.CreateNote;
 
 public class CreateNoteCommand : UserRequest<NoteData>
 {
-    public required string ChapterId { get; set; }
-    public required string Title { get; set; }
-    public string? Content { get; set; }
+    public Guid ChapterId { get; set; }
+    public string Title { get; set; }
+    public string Content { get; set; }
 }

@@ -5,7 +5,7 @@ namespace Application.Commands.User.Campaign.Campaign.UpdateMemberRole;
 
 public class UpdateMemberRoleCommand : UserRequest<Unit>
 {
-    public string CampaignId { get; set; }
-    public string TargetUserId { get; set; }
-    public required string Role { get; set; }
+    public Guid CampaignId { get; set; }
+    public Guid TargetUserId { get; set; }
+    public string Role { get; set; }
 }

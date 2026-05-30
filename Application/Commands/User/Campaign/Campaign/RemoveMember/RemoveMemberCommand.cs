@@ -5,6 +5,6 @@ namespace Application.Commands.User.Campaign.Campaign.RemoveMember;
 
 public class RemoveMemberCommand : UserRequest<Unit>
 {
-    public string CampaignId { get; set; }
-    public string TargetUserId { get; set; }
+    public Guid CampaignId { get; set; }
+    public Guid TargetUserId { get; set; }
 }
