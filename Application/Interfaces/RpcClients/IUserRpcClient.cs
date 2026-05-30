@@ -35,6 +35,7 @@ public record GetFriendsResult(
     int StatusCode = 200) : DefaultRpcResponse(IsSuccess, Error, StatusCode);
 
 public record UserData(
+    string Id,
     string UserName,
     string Email,
     string Bio,
