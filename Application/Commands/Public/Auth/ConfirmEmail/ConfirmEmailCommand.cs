@@ -1,10 +1,10 @@
-using Application.Core.Mediatr.Requests.UserRequest;
+using Application.Core.Mediatr.Requests.PublicRequest;
 using MediatR;
 
 namespace Application.Commands.Public.Auth.ConfirmEmail;
 
-public class ConfirmEmailCommand : UserRequest<Unit>
+public class ConfirmEmailCommand : PublicRequest<Unit>
 {
-    public required string UserMail { get; set; }
-    public required string Token { get; set; }
+    public string UserMail { get; set; }
+    public string Token { get; set; }
 }

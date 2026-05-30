@@ -14,75 +14,87 @@ namespace vohnisca_api_gateway.Controllers.User.CampaignService;
 [Route("campaigns")]
 public class CampaignController : BaseController
 {
-    [HttpPost("")]
-    public Task<IActionResult> CreateCampaign(CreateCampaignCommand? command)
+    [HttpPost]
+    [Route("")]
+    public async Task<IActionResult> CreateCampaign(CreateCampaignCommand command)
+        => await HandleResponse(command);
+
+
+    [HttpPost]
+    [Route("my")]
+    public async Task<IActionResult> ListMyCampaigns(ListMyCampaignsQuery query)
+        => await HandleResponse(query);
+
+    [HttpGet]
+    [Route("{id:guid}")]
+    public async Task<IActionResult> GetCampaign(Guid id)
     {
-        if (command is null) return Task.FromResult<IActionResult>(BadRequest());
-        return HandleResponse(command);
+        if (id == Guid.Empty)
+            return BadRequest();
+
+        return await HandleResponse(new GetCampaignQuery { CampaignId = id.ToString() });
     }
 
-    [HttpPost("my")]
-    public Task<IActionResult> ListMyCampaigns([FromBody] ListMyCampaignsQuery? query)
+    [HttpPut]
+    [Route("{id:guid}")]
+    public async Task<IActionResult> UpdateCampaign(Guid id, UpdateCampaignCommand command)
     {
-        if (query is null) return Task.FromResult<IActionResult>(BadRequest());
-        return HandleResponse(query);
-    }
+        if (id == Guid.Empty || command is null)
+            return BadRequest();
 
-    [HttpGet("{id:guid}")]
-    public Task<IActionResult> GetCampaign(Guid id)
-    {
-        if (id == Guid.Empty) return Task.FromResult<IActionResult>(BadRequest());
-        return HandleResponse(new GetCampaignQuery { CampaignId = id.ToString() });
-    }
-
-    [HttpPut("{id:guid}")]
-    public Task<IActionResult> UpdateCampaign(Guid id, UpdateCampaignCommand? command)
-    {
-        if (id == Guid.Empty) return Task.FromResult<IActionResult>(BadRequest());
-        if (command is null) return Task.FromResult<IActionResult>(BadRequest());
         command.CampaignId = id.ToString();
-        return HandleResponse(command);
+
+        return await HandleResponse(command);
     }
 
-    [HttpDelete("{id:guid}")]
-    public Task<IActionResult> DeleteCampaign(Guid id)
+    [HttpDelete]
+    [Route("{id:guid}")]
+    public async Task<IActionResult> DeleteCampaign(Guid id)
     {
-        if (id == Guid.Empty) return Task.FromResult<IActionResult>(BadRequest());
-        return HandleResponse(new DeleteCampaignCommand { CampaignId = id.ToString() });
+        if (id == Guid.Empty)
+            return BadRequest();
+
+        return await HandleResponse(new DeleteCampaignCommand { CampaignId = id.ToString() });
     }
 
-    [HttpGet("{id:guid}/members")]
+    [HttpGet]
+    [Route("{id:guid}/members")]
     public Task<IActionResult> ListMembers(Guid id)
     {
         if (id == Guid.Empty) return Task.FromResult<IActionResult>(BadRequest());
         return HandleResponse(new ListMembersQuery { CampaignId = id.ToString() });
     }
 
-    [HttpPost("{id:guid}/members")]
-    public Task<IActionResult> AddMember(Guid id, AddMemberCommand? command)
+    [HttpPost]
+    [Route("{id:guid}/members")]
+    public async Task<IActionResult> AddMember(Guid id, AddMemberCommand command)
     {
-        if (id == Guid.Empty) return Task.FromResult<IActionResult>(BadRequest());
-        if (command is null) return Task.FromResult<IActionResult>(BadRequest());
+        if (id == Guid.Empty || command is null) return BadRequest();
         command.CampaignId = id.ToString();
-        return HandleResponse(command);
+
+        return await HandleResponse(command);
     }
 
-    [HttpDelete("{id:guid}/members/{targetUserId}")]
-    public Task<IActionResult> RemoveMember(Guid id, string targetUserId)
+    [HttpDelete]
+    [Route("{id:guid}/members/{targetUserId:guid}")]
+    public async Task<IActionResult> RemoveMember(Guid id, Guid targetUserId)
     {
-        if (id == Guid.Empty || string.IsNullOrEmpty(targetUserId))
-            return Task.FromResult<IActionResult>(BadRequest());
-        return HandleResponse(new RemoveMemberCommand { CampaignId = id.ToString(), TargetUserId = targetUserId });
+        if (id == Guid.Empty || targetUserId == Guid.Empty)
+            return BadRequest();
+        return await HandleResponse(new RemoveMemberCommand
+            { CampaignId = id.ToString(), TargetUserId = targetUserId.ToString() });
     }
 
-    [HttpPut("{id:guid}/members/{targetUserId}/role")]
-    public Task<IActionResult> UpdateMemberRole(Guid id, string targetUserId, UpdateMemberRoleCommand? command)
+    [HttpPut]
+    [Route("{id:guid}/members/{targetUserId:guid}/role")]
+    public async Task<IActionResult> UpdateMemberRole(Guid id, Guid targetUserId, UpdateMemberRoleCommand command)
     {
-        if (id == Guid.Empty || string.IsNullOrEmpty(targetUserId))
-            return Task.FromResult<IActionResult>(BadRequest());
-        if (command is null) return Task.FromResult<IActionResult>(BadRequest());
+        if (id == Guid.Empty || targetUserId == Guid.Empty || command is null)
+            return BadRequest();
+
         command.CampaignId = id.ToString();
-        command.TargetUserId = targetUserId;
-        return HandleResponse(command);
+        command.TargetUserId = targetUserId.ToString();
+
+        return await HandleResponse(command);
     }
 }
