@@ -6,7 +6,6 @@ public class ReorderNotesCommandValidator : AbstractValidator<ReorderNotesComman
 {
     public ReorderNotesCommandValidator()
     {
-        RuleFor(x => x.ChapterId).NotEmpty();
         RuleFor(x => x.OrderedIds).NotEmpty();
     }
 }

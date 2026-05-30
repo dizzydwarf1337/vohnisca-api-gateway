@@ -6,7 +6,6 @@ public class CreateChapterCommandValidator : AbstractValidator<CreateChapterComm
 {
     public CreateChapterCommandValidator()
     {
-        RuleFor(x => x.CampaignId).NotEmpty();
         RuleFor(x => x.Title).NotEmpty().MaximumLength(255);
         RuleFor(x => x.Content).MaximumLength(100000);
     }

@@ -13,7 +13,7 @@ public class GetNoteQueryHandler : IRequestHandler<GetNoteQuery, ApiResponse<Not
 
     public async Task<ApiResponse<NoteData>> Handle(GetNoteQuery request, CancellationToken cancellationToken)
     {
-        var result = await _campaignRpcClient.GetNote(request.NoteId, request.Token!);
+        var result = await _campaignRpcClient.GetNote(request.NoteId, request.Token);
         return result.ToApiResponse(x => x.Note, "Error getting note");
     }
 }

@@ -13,7 +13,7 @@ public class UpdateNoteCommandHandler : IRequestHandler<UpdateNoteCommand, ApiRe
 
     public async Task<ApiResponse<NoteData>> Handle(UpdateNoteCommand request, CancellationToken cancellationToken)
     {
-        var result = await _campaignRpcClient.UpdateNote(request.NoteId, request.Title, request.Content, request.Token!);
+        var result = await _campaignRpcClient.UpdateNote(request.NoteId, request.Title, request.Content, request.Token);
         return result.ToApiResponse(x => x.Note, "Error updating note");
     }
 }

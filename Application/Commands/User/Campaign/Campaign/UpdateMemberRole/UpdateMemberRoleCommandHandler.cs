@@ -13,7 +13,7 @@ public class UpdateMemberRoleCommandHandler : IRequestHandler<UpdateMemberRoleCo
 
     public async Task<ApiResponse<Unit>> Handle(UpdateMemberRoleCommand request, CancellationToken cancellationToken)
     {
-        var result = await _campaignRpcClient.UpdateMemberRole(request.CampaignId, request.TargetUserId, request.Role, request.Token!);
+        var result = await _campaignRpcClient.UpdateMemberRole(request.CampaignId, request.TargetUserId, request.Role, request.Token);
         return result.ToApiResponse(_ => Unit.Value, "Error updating member role");
     }
 }

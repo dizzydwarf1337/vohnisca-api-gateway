@@ -5,7 +5,7 @@ namespace Application.Commands.User.Campaign.Chapter.UpdateChapter;
 
 public class UpdateChapterCommand : UserRequest<ChapterData>
 {
-    public string ChapterId { get; set; } = string.Empty;
-    public required string Title { get; set; }
-    public string? Content { get; set; }
+    public Guid ChapterId { get; set; }
+    public string Title { get; set; }
+    public string Content { get; set; }
 }

@@ -13,7 +13,7 @@ public class GetCampaignQueryHandler : IRequestHandler<GetCampaignQuery, ApiResp
 
     public async Task<ApiResponse<CampaignData>> Handle(GetCampaignQuery request, CancellationToken cancellationToken)
     {
-        var result = await _campaignRpcClient.GetCampaign(request.CampaignId, request.Token!);
+        var result = await _campaignRpcClient.GetCampaign(request.CampaignId, request.Token);
         return result.ToApiResponse(x => x.Campaign, "Error getting campaign");
     }
 }

@@ -5,5 +5,5 @@ namespace Application.Commands.User.Campaign.Campaign.DeleteCampaign;
 
 public class DeleteCampaignCommand : UserRequest<Unit>
 {
-    public string CampaignId { get; set; }
+    public Guid CampaignId { get; set; }
 }

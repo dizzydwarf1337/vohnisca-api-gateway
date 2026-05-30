@@ -13,7 +13,7 @@ public class DeleteChapterCommandHandler : IRequestHandler<DeleteChapterCommand,
 
     public async Task<ApiResponse<Unit>> Handle(DeleteChapterCommand request, CancellationToken cancellationToken)
     {
-        var result = await _campaignRpcClient.DeleteChapter(request.ChapterId, request.Token!);
+        var result = await _campaignRpcClient.DeleteChapter(request.ChapterId, request.Token);
         return result.ToApiResponse(_ => Unit.Value, "Error deleting chapter");
     }
 }

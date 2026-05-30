@@ -6,8 +6,6 @@ public class UpdateMemberRoleCommandValidator : AbstractValidator<UpdateMemberRo
 {
     public UpdateMemberRoleCommandValidator()
     {
-        RuleFor(x => x.CampaignId).NotEmpty();
-        RuleFor(x => x.TargetUserId).NotEmpty();
         RuleFor(x => x.Role).NotEmpty();
     }
 }

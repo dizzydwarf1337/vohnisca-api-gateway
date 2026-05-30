@@ -5,6 +5,6 @@ namespace Application.Commands.User.Campaign.Note.ReorderNotes;
 
 public class ReorderNotesCommand : UserRequest<Unit>
 {
-    public required string ChapterId { get; set; }
+    public Guid ChapterId { get; set; }
     public List<string> OrderedIds { get; set; } = [];
 }

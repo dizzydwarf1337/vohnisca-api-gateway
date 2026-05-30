@@ -5,6 +5,6 @@ namespace Application.Commands.User.Campaign.Note.GrantNoteAccess;
 
 public class GrantNoteAccessCommand : UserRequest<Unit>
 {
-    public string NoteId { get; set; }
-    public required string TargetUserId { get; set; }
+    public Guid NoteId { get; set; }
+    public Guid TargetUserId { get; set; }
 }

@@ -13,7 +13,7 @@ public class ListChapterNotesQueryHandler : IRequestHandler<ListChapterNotesQuer
 
     public async Task<ApiResponse<List<NoteData>>> Handle(ListChapterNotesQuery request, CancellationToken cancellationToken)
     {
-        var result = await _campaignRpcClient.ListChapterNotes(request.ChapterId, request.Token!);
+        var result = await _campaignRpcClient.ListChapterNotes(request.ChapterId, request.Token);
         return result.ToApiResponse(x => x.Notes, "Error listing notes");
     }
 }

@@ -5,7 +5,7 @@ namespace Application.Commands.User.Campaign.Note.UpdateNote;
 
 public class UpdateNoteCommand : UserRequest<NoteData>
 {
-    public string NoteId { get; set; }
-    public required string Title { get; set; }
-    public string? Content { get; set; }
+    public Guid NoteId { get; set; }
+    public string Title { get; set; }
+    public string Content { get; set; }
 }

@@ -5,5 +5,5 @@ namespace Application.Queries.User.Campaign.Chapter.GetChapter;
 
 public class GetChapterQuery : UserRequest<ChapterData>
 {
-    public string ChapterId { get; set; } = string.Empty;
+    public Guid ChapterId { get; set; }
 }

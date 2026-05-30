@@ -35,10 +35,10 @@ public class CampaignRpcClient : LaravelRpcClient, ICampaignRpcClient
         return Send<CampaignResponse>("CreateCampaign", p, token);
     }
 
-    public Task<RpcResult<CampaignResponse>> GetCampaign(string campaignId, string token)
+    public Task<RpcResult<CampaignResponse>> GetCampaign(Guid campaignId, string token)
         => Send<CampaignResponse>("GetCampaign", new() { { "campaignId", campaignId } }, token);
 
-    public Task<RpcResult<CampaignResponse>> UpdateCampaign(string campaignId, string title, string? description, string token, string? status = null)
+    public Task<RpcResult<CampaignResponse>> UpdateCampaign(Guid campaignId, string title, string? description, string token, string? status = null)
     {
         var p = new Dictionary<string, object> { { "campaignId", campaignId }, { "title", title } };
         if (description != null) p["description"] = description;
@@ -46,7 +46,7 @@ public class CampaignRpcClient : LaravelRpcClient, ICampaignRpcClient
         return Send<CampaignResponse>("UpdateCampaign", p, token);
     }
 
-    public Task<RpcResult<DefaultRpcResponse>> DeleteCampaign(string campaignId, string token)
+    public Task<RpcResult<DefaultRpcResponse>> DeleteCampaign(Guid campaignId, string token)
         => Send<DefaultRpcResponse>("DeleteCampaign", new() { { "campaignId", campaignId } }, token);
 
     public Task<RpcResult<PaginationResponse<CampaignData>>> ListMyCampaigns(PaginationSpecification pagination, SortingSpecification sorting, IFilterSpecification filters, string token)
@@ -63,19 +63,19 @@ public class CampaignRpcClient : LaravelRpcClient, ICampaignRpcClient
         return Send<PaginationResponse<CampaignData>>("ListMyCampaigns", p, token);
     }
 
-    public Task<RpcResult<DefaultRpcResponse>> AddMember(string campaignId, string targetUserId, string role, string token)
+    public Task<RpcResult<DefaultRpcResponse>> AddMember(Guid campaignId, Guid targetUserId, string role, string token)
         => Send<DefaultRpcResponse>("AddMember", new() { { "campaignId", campaignId }, { "targetUserId", targetUserId }, { "role", role } }, token);
 
-    public Task<RpcResult<DefaultRpcResponse>> RemoveMember(string campaignId, string targetUserId, string token)
+    public Task<RpcResult<DefaultRpcResponse>> RemoveMember(Guid campaignId, Guid targetUserId, string token)
         => Send<DefaultRpcResponse>("RemoveMember", new() { { "campaignId", campaignId }, { "targetUserId", targetUserId } }, token);
 
-    public Task<RpcResult<DefaultRpcResponse>> UpdateMemberRole(string campaignId, string targetUserId, string role, string token)
+    public Task<RpcResult<DefaultRpcResponse>> UpdateMemberRole(Guid campaignId, Guid targetUserId, string role, string token)
         => Send<DefaultRpcResponse>("UpdateMemberRole", new() { { "campaignId", campaignId }, { "targetUserId", targetUserId }, { "role", role } }, token);
 
-    public Task<RpcResult<MembersResponse>> ListMembers(string campaignId, string token)
+    public Task<RpcResult<MembersResponse>> ListMembers(Guid campaignId, string token)
         => Send<MembersResponse>("ListMembers", new() { { "campaignId", campaignId } }, token);
 
-    public Task<RpcResult<ChapterResponse>> CreateChapter(string campaignId, string? parentId, string title, string? content, string token)
+    public Task<RpcResult<ChapterResponse>> CreateChapter(Guid campaignId, Guid? parentId, string title, string? content, string token)
     {
         var p = new Dictionary<string, object> { { "campaignId", campaignId }, { "title", title } };
         if (parentId != null) p["parentId"] = parentId;
@@ -83,80 +83,80 @@ public class CampaignRpcClient : LaravelRpcClient, ICampaignRpcClient
         return Send<ChapterResponse>("CreateChapter", p, token);
     }
 
-    public Task<RpcResult<ChapterResponse>> GetChapter(string chapterId, string token)
+    public Task<RpcResult<ChapterResponse>> GetChapter(Guid chapterId, string token)
         => Send<ChapterResponse>("GetChapter", new() { { "chapterId", chapterId } }, token);
 
-    public Task<RpcResult<ChapterResponse>> UpdateChapter(string chapterId, string title, string? content, string token)
+    public Task<RpcResult<ChapterResponse>> UpdateChapter(Guid chapterId, string title, string? content, string token)
     {
         var p = new Dictionary<string, object> { { "chapterId", chapterId }, { "title", title } };
         if (content != null) p["content"] = content;
         return Send<ChapterResponse>("UpdateChapter", p, token);
     }
 
-    public Task<RpcResult<DefaultRpcResponse>> DeleteChapter(string chapterId, string token)
+    public Task<RpcResult<DefaultRpcResponse>> DeleteChapter(Guid chapterId, string token)
         => Send<DefaultRpcResponse>("DeleteChapter", new() { { "chapterId", chapterId } }, token);
 
-    public Task<RpcResult<DefaultRpcResponse>> MoveChapter(string chapterId, string? newParentId, string token)
+    public Task<RpcResult<DefaultRpcResponse>> MoveChapter(Guid chapterId, Guid? newParentId, string token)
     {
         var p = new Dictionary<string, object> { { "chapterId", chapterId } };
         if (newParentId != null) p["newParentId"] = newParentId;
         return Send<DefaultRpcResponse>("MoveChapter", p, token);
     }
 
-    public Task<RpcResult<DefaultRpcResponse>> ReorderChapters(string campaignId, string? parentId, List<string> orderedIds, string token)
+    public Task<RpcResult<DefaultRpcResponse>> ReorderChapters(Guid campaignId, Guid? parentId, List<string> orderedIds, string token)
     {
         var p = new Dictionary<string, object> { { "campaignId", campaignId }, { "orderedIds", orderedIds } };
         if (parentId != null) p["parentId"] = parentId;
         return Send<DefaultRpcResponse>("ReorderChapters", p, token);
     }
 
-    public Task<RpcResult<ChapterResponse>> SetChapterVisibility(string chapterId, bool isVisibleToAll, string token)
+    public Task<RpcResult<ChapterResponse>> SetChapterVisibility(Guid chapterId, bool isVisibleToAll, string token)
         => Send<ChapterResponse>("SetChapterVisibility", new() { { "chapterId", chapterId }, { "isVisibleToAll", isVisibleToAll } }, token);
 
-    public Task<RpcResult<DefaultRpcResponse>> GrantChapterAccess(string chapterId, string targetUserId, string token)
+    public Task<RpcResult<DefaultRpcResponse>> GrantChapterAccess(Guid chapterId, Guid targetUserId, string token)
         => Send<DefaultRpcResponse>("GrantChapterAccess", new() { { "chapterId", chapterId }, { "targetUserId", targetUserId } }, token);
 
-    public Task<RpcResult<DefaultRpcResponse>> RevokeChapterAccess(string chapterId, string targetUserId, string token)
+    public Task<RpcResult<DefaultRpcResponse>> RevokeChapterAccess(Guid chapterId, Guid targetUserId, string token)
         => Send<DefaultRpcResponse>("RevokeChapterAccess", new() { { "chapterId", chapterId }, { "targetUserId", targetUserId } }, token);
 
-    public Task<RpcResult<DefaultRpcResponse>> SetCurrentChapter(string campaignId, string chapterId, string token)
+    public Task<RpcResult<DefaultRpcResponse>> SetCurrentChapter(Guid campaignId, Guid chapterId, string token)
         => Send<DefaultRpcResponse>("SetCurrentChapter", new() { { "campaignId", campaignId }, { "chapterId", chapterId } }, token);
 
-    public Task<RpcResult<ChaptersResponse>> ListCampaignChapters(string campaignId, string token)
+    public Task<RpcResult<ChaptersResponse>> ListCampaignChapters(Guid campaignId, string token)
         => Send<ChaptersResponse>("ListCampaignChapters", new() { { "campaignId", campaignId } }, token);
 
-    public Task<RpcResult<NoteResponse>> CreateNote(string chapterId, string title, string? content, string token)
+    public Task<RpcResult<NoteResponse>> CreateNote(Guid chapterId, string title, string? content, string token)
     {
         var p = new Dictionary<string, object> { { "chapterId", chapterId }, { "title", title } };
         if (content != null) p["content"] = content;
         return Send<NoteResponse>("CreateNote", p, token);
     }
 
-    public Task<RpcResult<NoteResponse>> GetNote(string noteId, string token)
+    public Task<RpcResult<NoteResponse>> GetNote(Guid noteId, string token)
         => Send<NoteResponse>("GetNote", new() { { "noteId", noteId } }, token);
 
-    public Task<RpcResult<NoteResponse>> UpdateNote(string noteId, string title, string? content, string token)
+    public Task<RpcResult<NoteResponse>> UpdateNote(Guid noteId, string title, string? content, string token)
     {
         var p = new Dictionary<string, object> { { "noteId", noteId }, { "title", title } };
         if (content != null) p["content"] = content;
         return Send<NoteResponse>("UpdateNote", p, token);
     }
 
-    public Task<RpcResult<DefaultRpcResponse>> DeleteNote(string noteId, string token)
+    public Task<RpcResult<DefaultRpcResponse>> DeleteNote(Guid noteId, string token)
         => Send<DefaultRpcResponse>("DeleteNote", new() { { "noteId", noteId } }, token);
 
-    public Task<RpcResult<NotesResponse>> ListChapterNotes(string chapterId, string token)
+    public Task<RpcResult<NotesResponse>> ListChapterNotes(Guid chapterId, string token)
         => Send<NotesResponse>("ListChapterNotes", new() { { "chapterId", chapterId } }, token);
 
-    public Task<RpcResult<DefaultRpcResponse>> ReorderNotes(string chapterId, List<string> orderedIds, string token)
+    public Task<RpcResult<DefaultRpcResponse>> ReorderNotes(Guid chapterId, List<string> orderedIds, string token)
         => Send<DefaultRpcResponse>("ReorderNotes", new() { { "chapterId", chapterId }, { "orderedIds", orderedIds } }, token);
 
-    public Task<RpcResult<NoteResponse>> SetNoteVisibility(string noteId, bool isPublic, string token)
+    public Task<RpcResult<NoteResponse>> SetNoteVisibility(Guid noteId, bool isPublic, string token)
         => Send<NoteResponse>("SetNoteVisibility", new() { { "noteId", noteId }, { "isPublic", isPublic } }, token);
 
-    public Task<RpcResult<DefaultRpcResponse>> GrantNoteAccess(string noteId, string targetUserId, string token)
+    public Task<RpcResult<DefaultRpcResponse>> GrantNoteAccess(Guid noteId, Guid targetUserId, string token)
         => Send<DefaultRpcResponse>("GrantNoteAccess", new() { { "noteId", noteId }, { "targetUserId", targetUserId } }, token);
 
-    public Task<RpcResult<DefaultRpcResponse>> RevokeNoteAccess(string noteId, string targetUserId, string token)
+    public Task<RpcResult<DefaultRpcResponse>> RevokeNoteAccess(Guid noteId, Guid targetUserId, string token)
         => Send<DefaultRpcResponse>("RevokeNoteAccess", new() { { "noteId", noteId }, { "targetUserId", targetUserId } }, token);
 }

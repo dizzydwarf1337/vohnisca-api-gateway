@@ -32,7 +32,7 @@ public class CampaignController : BaseController
         if (id == Guid.Empty)
             return BadRequest();
 
-        return await HandleResponse(new GetCampaignQuery { CampaignId = id.ToString() });
+        return await HandleResponse(new GetCampaignQuery { CampaignId = id });
     }
 
     [HttpPut]
@@ -42,7 +42,7 @@ public class CampaignController : BaseController
         if (id == Guid.Empty || command is null)
             return BadRequest();
 
-        command.CampaignId = id.ToString();
+        command.CampaignId = id;
 
         return await HandleResponse(command);
     }
@@ -54,7 +54,7 @@ public class CampaignController : BaseController
         if (id == Guid.Empty)
             return BadRequest();
 
-        return await HandleResponse(new DeleteCampaignCommand { CampaignId = id.ToString() });
+        return await HandleResponse(new DeleteCampaignCommand { CampaignId = id });
     }
 
     [HttpGet]
@@ -62,7 +62,7 @@ public class CampaignController : BaseController
     public Task<IActionResult> ListMembers(Guid id)
     {
         if (id == Guid.Empty) return Task.FromResult<IActionResult>(BadRequest());
-        return HandleResponse(new ListMembersQuery { CampaignId = id.ToString() });
+        return HandleResponse(new ListMembersQuery { CampaignId = id });
     }
 
     [HttpPost]
@@ -70,7 +70,7 @@ public class CampaignController : BaseController
     public async Task<IActionResult> AddMember(Guid id, AddMemberCommand command)
     {
         if (id == Guid.Empty || command is null) return BadRequest();
-        command.CampaignId = id.ToString();
+        command.CampaignId = id;
 
         return await HandleResponse(command);
     }
@@ -82,7 +82,7 @@ public class CampaignController : BaseController
         if (id == Guid.Empty || targetUserId == Guid.Empty)
             return BadRequest();
         return await HandleResponse(new RemoveMemberCommand
-            { CampaignId = id.ToString(), TargetUserId = targetUserId.ToString() });
+            { CampaignId = id, TargetUserId = targetUserId });
     }
 
     [HttpPut]
@@ -92,8 +92,8 @@ public class CampaignController : BaseController
         if (id == Guid.Empty || targetUserId == Guid.Empty || command is null)
             return BadRequest();
 
-        command.CampaignId = id.ToString();
-        command.TargetUserId = targetUserId.ToString();
+        command.CampaignId = id;
+        command.TargetUserId = targetUserId;
 
         return await HandleResponse(command);
     }

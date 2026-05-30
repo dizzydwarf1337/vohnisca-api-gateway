@@ -5,6 +5,6 @@ namespace Application.Commands.User.Campaign.Chapter.SetChapterVisibility;
 
 public class SetChapterVisibilityCommand : UserRequest<ChapterData>
 {
-    public string ChapterId { get; set; } = string.Empty;
+    public Guid ChapterId { get; set; }
     public bool IsVisibleToAll { get; set; }
 }

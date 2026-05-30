@@ -13,7 +13,7 @@ public class ListCampaignChaptersQueryHandler : IRequestHandler<ListCampaignChap
 
     public async Task<ApiResponse<List<ChapterData>>> Handle(ListCampaignChaptersQuery request, CancellationToken cancellationToken)
     {
-        var result = await _campaignRpcClient.ListCampaignChapters(request.CampaignId, request.Token!);
+        var result = await _campaignRpcClient.ListCampaignChapters(request.CampaignId, request.Token);
         return result.ToApiResponse(x => x.Chapters, "Error listing campaign chapters");
     }
 }

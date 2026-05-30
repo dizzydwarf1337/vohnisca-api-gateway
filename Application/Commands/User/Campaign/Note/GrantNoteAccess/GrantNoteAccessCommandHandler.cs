@@ -13,7 +13,7 @@ public class GrantNoteAccessCommandHandler : IRequestHandler<GrantNoteAccessComm
 
     public async Task<ApiResponse<Unit>> Handle(GrantNoteAccessCommand request, CancellationToken cancellationToken)
     {
-        var result = await _campaignRpcClient.GrantNoteAccess(request.NoteId, request.TargetUserId, request.Token!);
+        var result = await _campaignRpcClient.GrantNoteAccess(request.NoteId, request.TargetUserId, request.Token);
         return result.ToApiResponse(_ => Unit.Value, "Error granting note access");
     }
 }

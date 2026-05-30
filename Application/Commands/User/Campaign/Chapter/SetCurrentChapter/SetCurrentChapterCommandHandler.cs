@@ -13,7 +13,7 @@ public class SetCurrentChapterCommandHandler : IRequestHandler<SetCurrentChapter
 
     public async Task<ApiResponse<Unit>> Handle(SetCurrentChapterCommand request, CancellationToken cancellationToken)
     {
-        var result = await _campaignRpcClient.SetCurrentChapter(request.CampaignId, request.ChapterId, request.Token!);
+        var result = await _campaignRpcClient.SetCurrentChapter(request.CampaignId, request.ChapterId, request.Token);
         return result.ToApiResponse(_ => Unit.Value, "Error setting current chapter");
     }
 }

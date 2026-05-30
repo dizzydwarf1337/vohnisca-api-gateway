@@ -5,6 +5,6 @@ namespace Application.Commands.User.Campaign.Chapter.GrantChapterAccess;
 
 public class GrantChapterAccessCommand : UserRequest<Unit>
 {
-    public string ChapterId { get; set; } = string.Empty;
-    public required string TargetUserId { get; set; }
+    public Guid ChapterId { get; set; }
+    public Guid TargetUserId { get; set; }
 }
