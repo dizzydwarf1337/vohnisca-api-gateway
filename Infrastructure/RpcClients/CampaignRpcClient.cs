@@ -113,11 +113,11 @@ public class CampaignRpcClient : LaravelRpcClient, ICampaignRpcClient
     public Task<RpcResult<ChapterResponse>> SetChapterVisibility(Guid chapterId, bool isVisibleToAll, string token)
         => Send<ChapterResponse>("SetChapterVisibility", new() { { "chapterId", chapterId }, { "isVisibleToAll", isVisibleToAll } }, token);
 
-    public Task<RpcResult<DefaultRpcResponse>> GrantChapterAccess(Guid chapterId, Guid targetUserId, string token)
-        => Send<DefaultRpcResponse>("GrantChapterAccess", new() { { "chapterId", chapterId }, { "targetUserId", targetUserId } }, token);
+    public Task<RpcResult<DefaultRpcResponse>> GrantChapterAccess(Guid chapterId, Guid[] targetUserIds, string token)
+        => Send<DefaultRpcResponse>("GrantChapterAccess", new() { { "chapterId", chapterId }, { "targetUserIds", targetUserIds } }, token);
 
-    public Task<RpcResult<DefaultRpcResponse>> RevokeChapterAccess(Guid chapterId, Guid targetUserId, string token)
-        => Send<DefaultRpcResponse>("RevokeChapterAccess", new() { { "chapterId", chapterId }, { "targetUserId", targetUserId } }, token);
+    public Task<RpcResult<DefaultRpcResponse>> RevokeChapterAccess(Guid chapterId, Guid[] targetUserIds, string token)
+        => Send<DefaultRpcResponse>("RevokeChapterAccess", new() { { "chapterId", chapterId }, { "targetUserIds", targetUserIds } }, token);
 
     public Task<RpcResult<DefaultRpcResponse>> SetCurrentChapter(Guid campaignId, Guid chapterId, string token)
         => Send<DefaultRpcResponse>("SetCurrentChapter", new() { { "campaignId", campaignId }, { "chapterId", chapterId } }, token);

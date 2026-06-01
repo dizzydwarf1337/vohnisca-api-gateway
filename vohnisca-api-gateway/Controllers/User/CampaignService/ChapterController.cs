@@ -83,7 +83,7 @@ public class ChapterController : BaseController
     }
 
     [HttpPost]
-    [Route("{id:guid}/access")]
+    [Route("{id:guid}/grant-access")]
     public async Task<IActionResult> GrantChapterAccess(Guid id, GrantChapterAccessCommand command)
     {
         if (id == Guid.Empty || command is null) return BadRequest();
@@ -94,14 +94,14 @@ public class ChapterController : BaseController
     }
 
     [HttpDelete]
-    [Route("{id:guid}/access/{targetUserId:guid}")]
-    public async Task<IActionResult> RevokeChapterAccess(Guid id, Guid targetUserId)
+    [Route("{id:guid}/revoke-access")]
+    public async Task<IActionResult> RevokeChapterAccess(Guid id, [FromBody] RevokeChapterAccessCommand command)
     {
-        if (id == Guid.Empty || targetUserId == Guid.Empty)
-            return BadRequest();
+        if (id == Guid.Empty || command is null) return BadRequest();
 
-        return await HandleResponse(new RevokeChapterAccessCommand
-            { ChapterId = id, TargetUserId = targetUserId });
+        command.ChapterId = id;
+
+        return await HandleResponse(command);
     }
 
     [HttpPut]
