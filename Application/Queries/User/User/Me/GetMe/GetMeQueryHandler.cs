@@ -4,14 +4,14 @@ using MediatR;
 
 namespace Application.Queries.User.User.Me.GetMe;
 
-public class GetMeQueryHandler : IRequestHandler<GetMeQuery, ApiResponse<UserData>>
+public class GetMeQueryHandler : IRequestHandler<GetMeQuery, ApiResponse<MeData>>
 {
     private readonly IUserRpcClient _userRpcClient;
 
     public GetMeQueryHandler(IUserRpcClient userRpcClient)
         => _userRpcClient = userRpcClient;
 
-    public async Task<ApiResponse<UserData>> Handle(GetMeQuery request, CancellationToken cancellationToken)
+    public async Task<ApiResponse<MeData>> Handle(GetMeQuery request, CancellationToken cancellationToken)
     {
         var rpcResult = await _userRpcClient.GetMe(request.Token);
         return rpcResult.ToApiResponse(data => data.Data, "Error while loading user data");
