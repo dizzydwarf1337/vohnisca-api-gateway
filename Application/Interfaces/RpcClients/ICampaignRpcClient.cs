@@ -22,8 +22,8 @@ public interface ICampaignRpcClient
     Task<RpcResult<DefaultRpcResponse>> MoveChapter(Guid chapterId, Guid? newParentId, string token);
     Task<RpcResult<DefaultRpcResponse>> ReorderChapters(Guid campaignId, Guid? parentId, List<string> orderedIds, string token);
     Task<RpcResult<ChapterResponse>> SetChapterVisibility(Guid chapterId, bool isVisibleToAll, string token);
-    Task<RpcResult<DefaultRpcResponse>> GrantChapterAccess(Guid chapterId, Guid targetUserId, string token);
-    Task<RpcResult<DefaultRpcResponse>> RevokeChapterAccess(Guid chapterId, Guid targetUserId, string token);
+    Task<RpcResult<DefaultRpcResponse>> GrantChapterAccess(Guid chapterId, Guid[] targetUserIds, string token);
+    Task<RpcResult<DefaultRpcResponse>> RevokeChapterAccess(Guid chapterId, Guid[] targetUserIds, string token);
     Task<RpcResult<DefaultRpcResponse>> SetCurrentChapter(Guid campaignId, Guid chapterId, string token);
     Task<RpcResult<ChaptersResponse>> ListCampaignChapters(Guid campaignId, string token);
 
