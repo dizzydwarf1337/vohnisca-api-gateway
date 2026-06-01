@@ -11,10 +11,6 @@ public class UserRpcClient : DotnetRpcClient, IUserRpcClient
     {
     }
 
-    public Task<RpcResult<DefaultRpcResponse>> UpdateUserData(string userName, string bio, string token)
-        => SendRpcRequest<DefaultRpcResponse>("User.UpdateUserData",
-            new Dictionary<string, object> { { "UserName", userName }, { "Bio", bio } }, token: token);
-
     public Task<RpcResult<GetMeResult>> GetMe(string token)
         => SendRpcRequest<GetMeResult>("GetMe", token: token);
 
@@ -54,4 +50,14 @@ public class UserRpcClient : DotnetRpcClient, IUserRpcClient
     public Task<RpcResult<GetFriendsResult>> GetFriends(PaginationSpecification pagination, string token)
         => SendRpcRequest<GetFriendsResult>("GetFriends",
             new Dictionary<string, object> { { "Pagination", pagination } }, token: token);
+
+    public Task<RpcResult<DefaultRpcResponse>> UpdateUserData(UpdateUserDataRequest userData, string token)
+        => SendRpcRequest<DefaultRpcResponse>("UpdateUserData",
+            new Dictionary<string, object> { { "UserData", userData } }, token: token);
+
+    public Task<RpcResult<GetUserResult>> GetUser(Guid id, string token)
+        => SendRpcRequest<GetUserResult>("GetUser", new Dictionary<string, object> { { "Id", id } }, token: token);
+
+    public Task<RpcResult<DefaultRpcResponse>> DeleteProfilePicture(string token)
+        => SendRpcRequest<DefaultRpcResponse>("DeleteProfilePicture", token: token);
 }

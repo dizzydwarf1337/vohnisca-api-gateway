@@ -3,4 +3,4 @@ using Application.Interfaces.RpcClients;
 
 namespace Application.Queries.User.User.Me.GetMe;
 
-public class GetMeQuery : UserRequest<UserData>;
+public class GetMeQuery : UserRequest<MeData>;
