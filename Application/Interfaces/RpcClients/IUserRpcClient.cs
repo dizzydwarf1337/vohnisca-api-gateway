@@ -66,7 +66,7 @@ public record MeData(
 
 public record UserData(
     Guid Id,
-    string Username,
+    string UserName,
     string Bio,
     string ProfilePicturePath,
     DateTime CreatedAt,
