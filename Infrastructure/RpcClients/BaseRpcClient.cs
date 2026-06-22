@@ -68,7 +68,15 @@ public abstract class BaseRpcClient
         }
         catch (Exception ex)
         {
-            return RpcResult<T>.Failure(ex.Message, 500);
+            // EdjCase wraps transport/parse failures in a generic message; unwind the
+            // inner exception chain so the real cause (e.g. connection refused, bad
+            // response) and the target service URL are visible to the caller.
+            var causes = new List<string>();
+            for (var e = ex; e is not null; e = e.InnerException)
+                causes.Add(e.Message);
+
+            var detail = $"{string.Join(" -> ", causes.Distinct())} [target: {_baseUrl}]";
+            return RpcResult<T>.Failure(detail, 500);
         }
     }
 
