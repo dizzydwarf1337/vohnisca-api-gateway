@@ -10,7 +10,8 @@ public static class HttpRpcClients
         services.AddScoped<IMailRpcClient, MailRpcClient>();
         services.AddScoped<IUserRpcClient, UserRpcClient>();
         services.AddScoped<ICampaignRpcClient, CampaignRpcClient>();
-        
+        services.AddScoped<ICharacterRpcClient, CharacterRpcClient>();
+
         return services;
     }
 }
