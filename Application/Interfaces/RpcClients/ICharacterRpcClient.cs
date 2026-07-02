@@ -91,7 +91,7 @@ public record CreateCharacterData(Guid Id);
 public record CharRaceRef(Guid Id, string Name);
 public record CharBackgroundRef(Guid Id, string Name);
 
-public record CharacterListRow(Guid Id, string Name, CharRaceRef Race, CharBackgroundRef Background, int TotalLevel);
+public record CharacterListRow(Guid Id, string Name, CharRaceRef Race, CharBackgroundRef Background, int TotalLevel, string AvatarUrl = "");
 
 public record SharedCharacterRow(
     Guid CharacterId,
