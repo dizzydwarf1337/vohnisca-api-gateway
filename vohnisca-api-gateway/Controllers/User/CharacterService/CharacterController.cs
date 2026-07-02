@@ -22,13 +22,20 @@ using Application.Commands.User.Character.UnprepareSpell;
 using Application.Queries.User.Character.GetCharacterById;
 using Application.Queries.User.Character.GetSharedCharactersList;
 using Application.Queries.User.Character.ListCharacters;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using vohnisca_api_gateway.Core.Requests;
 
 namespace vohnisca_api_gateway.Controllers.User.CharacterService;
 
 [Route("characters")]
 public class CharacterController : BaseController
 {
+    private static readonly JsonSerializerOptions PayloadJson = new()
+    {
+        PropertyNameCaseInsensitive = true,
+    };
+
     [HttpGet("")]
     public Task<IActionResult> ListCharacters([FromQuery] int page = 1, [FromQuery] int pageSize = 50)
         => HandleResponse(new ListCharactersQuery { Page = page, PageSize = pageSize });
@@ -43,9 +50,33 @@ public class CharacterController : BaseController
             ? Task.FromResult<IActionResult>(BadRequest())
             : HandleResponse(new GetCharacterByIdQuery { Id = id });
 
+    // Multipart: "payload" carries the creation JSON, "file" an optional portrait
+    // (same shape as user profile updates). The image travels to the character
+    // service as bytes and lands in blob storage as the character's avatar.
     [HttpPost("")]
-    public Task<IActionResult> CreateCharacter(CreateCharacterCommand command)
-        => HandleResponse(command);
+    public async Task<IActionResult> CreateCharacter([FromForm] string payload, [FromForm] IFormFile? file)
+    {
+        CreateCharacterCommand? command;
+        try
+        {
+            command = JsonSerializer.Deserialize<CreateCharacterCommand>(payload, PayloadJson);
+        }
+        catch (JsonException)
+        {
+            return BadRequest();
+        }
+
+        if (command is null)
+            return BadRequest();
+
+        var (bytes, contentType) = await GetFileContent.GetAsync(
+            file, [FileType.ImageJpeg, FileType.ImagePng, FileType.ImageWebp, FileType.ImageGif]);
+
+        command.Image = bytes;
+        command.ImageContentType = contentType;
+
+        return await HandleResponse(command);
+    }
 
     [HttpPut("{id:guid}/name")]
     public Task<IActionResult> RenameCharacter(Guid id, RenameCharacterCommand command)
