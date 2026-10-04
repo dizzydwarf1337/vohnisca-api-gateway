@@ -159,4 +159,11 @@ public class CampaignRpcClient : LaravelRpcClient, ICampaignRpcClient
 
     public Task<RpcResult<DefaultRpcResponse>> RevokeNoteAccess(Guid noteId, Guid targetUserId, string token)
         => Send<DefaultRpcResponse>("RevokeNoteAccess", new() { { "noteId", noteId }, { "targetUserId", targetUserId } }, token);
+
+    public Task<RpcResult<NoteResponse>> SetNoteColor(Guid noteId, string? backgroundColor, string token)
+    {
+        var p = new Dictionary<string, object> { { "noteId", noteId } };
+        if (backgroundColor != null) p["backgroundColor"] = backgroundColor;
+        return Send<NoteResponse>("SetNoteColor", p, token);
+    }
 }

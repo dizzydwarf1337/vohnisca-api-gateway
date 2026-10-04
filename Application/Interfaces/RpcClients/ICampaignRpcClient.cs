@@ -36,6 +36,7 @@ public interface ICampaignRpcClient
     Task<RpcResult<NoteResponse>> SetNoteVisibility(Guid noteId, bool isPublic, string token);
     Task<RpcResult<DefaultRpcResponse>> GrantNoteAccess(Guid noteId, Guid targetUserId, string token);
     Task<RpcResult<DefaultRpcResponse>> RevokeNoteAccess(Guid noteId, Guid targetUserId, string token);
+    Task<RpcResult<NoteResponse>> SetNoteColor(Guid noteId, string? backgroundColor, string token);
 }
 
 public record CampaignResponse(CampaignData Campaign);
@@ -84,4 +85,6 @@ public record NoteData(
     bool IsPublic,
     int Order,
     DateTime CreatedAt,
-    DateTime UpdatedAt);
+    DateTime UpdatedAt,
+    List<ChapterAccessUserData>? AccessUsers = null,
+    string? BackgroundColor = null);
