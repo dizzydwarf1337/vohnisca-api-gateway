@@ -3,6 +3,7 @@ using Application.Commands.User.Campaign.Note.DeleteNote;
 using Application.Commands.User.Campaign.Note.GrantNoteAccess;
 using Application.Commands.User.Campaign.Note.ReorderNotes;
 using Application.Commands.User.Campaign.Note.RevokeNoteAccess;
+using Application.Commands.User.Campaign.Note.SetNoteColor;
 using Application.Commands.User.Campaign.Note.SetNoteVisibility;
 using Application.Commands.User.Campaign.Note.UpdateNote;
 using Application.Queries.User.Campaign.Note.GetNote;
@@ -58,6 +59,17 @@ public class NoteController : BaseController
     [HttpPut]
     [Route("{id:guid}/visibility")]
     public async Task<IActionResult> SetNoteVisibility(Guid id, SetNoteVisibilityCommand command)
+    {
+        if (id == Guid.Empty || command is null) return BadRequest();
+
+        command.NoteId = id;
+
+        return await HandleResponse(command);
+    }
+
+    [HttpPut]
+    [Route("{id:guid}/color")]
+    public async Task<IActionResult> SetNoteColor(Guid id, SetNoteColorCommand command)
     {
         if (id == Guid.Empty || command is null) return BadRequest();
 
