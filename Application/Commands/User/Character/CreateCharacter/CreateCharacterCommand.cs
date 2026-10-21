@@ -19,6 +19,8 @@ public class CreateCharacterCommand : UserRequest<CreateCharacterData>
     public Guid ClassId { get; set; }
     public int ClassLevel { get; set; } = 1;
 
+    // standardArray | pointBuy | rolled — the service validates the base scores against it.
+    public string AbilityScoreMethod { get; set; } = "pointBuy";
     public Dictionary<string, int> BaseAbilityScores { get; set; } = new();
     public Dictionary<string, int>? CustomAbilityIncreases { get; set; }
 

@@ -14,14 +14,13 @@ using Application.Commands.User.Character.LearnSpell;
 using Application.Commands.User.Character.LevelUpCharacter;
 using Application.Commands.User.Character.PrepareSpell;
 using Application.Commands.User.Character.RemoveItemFromCharacter;
-using Application.Commands.User.Character.RenameCharacter;
 using Application.Commands.User.Character.RevokeCharacterShare;
 using Application.Commands.User.Character.SetCharacterAbilityScores;
 using Application.Commands.User.Character.ShareCharacter;
 using Application.Commands.User.Character.UnequipItem;
 using Application.Commands.User.Character.UnlearnSpell;
 using Application.Commands.User.Character.UnprepareSpell;
-using Application.Commands.User.Character.UpdateCharacterAvatar;
+using Application.Commands.User.Character.UpdateCharacter;
 using Application.Core.Responses;
 using Application.Interfaces.RpcClients;
 using Microsoft.Extensions.Configuration;
@@ -40,14 +39,11 @@ public class CharacterRpcClient : DotnetRpcClient, ICharacterRpcClient
     public Task<RpcResult<CreateCharacterData>> CreateCharacter(CreateCharacterCommand request, string token)
         => SendData<CreateCharacterData>("CreateCharacter", request, token);
 
-    public Task<RpcResult<bool>> RenameCharacter(RenameCharacterCommand request, string token)
-        => SendCommand("RenameCharacter", request, token);
-
     public Task<RpcResult<bool>> DeleteCharacter(DeleteCharacterCommand request, string token)
         => SendCommand("DeleteCharacter", request, token);
 
-    public Task<RpcResult<bool>> UpdateCharacterAvatar(UpdateCharacterAvatarCommand request, string token)
-        => SendCommand("UpdateCharacterAvatar", request, token);
+    public Task<RpcResult<bool>> UpdateCharacter(UpdateCharacterCommand request, string token)
+        => SendCommand("UpdateCharacter", request, token);
 
     public Task<RpcResult<bool>> AddClassToCharacter(AddClassToCharacterCommand request, string token)
         => SendCommand("AddClassToCharacter", request, token);
@@ -115,6 +111,9 @@ public class CharacterRpcClient : DotnetRpcClient, ICharacterRpcClient
 
     public Task<RpcResult<List<SharedCharacterRow>>> GetSharedCharactersList(string token)
         => SendData<List<SharedCharacterRow>>("GetSharedCharactersList", new { }, token);
+
+    public Task<RpcResult<List<CharacterShareRow>>> GetCharacterShares(Guid characterId, string token)
+        => SendData<List<CharacterShareRow>>("GetCharacterShares", new { CharacterId = characterId }, token);
 
     // --- Catalog reads ---
     public Task<RpcResult<PaginationResponse<RaceListRow>>> ListRaces(int page, int pageSize, string token)
