@@ -125,6 +125,7 @@ public record SheetSpellcastingRow(
     Guid ClassId,
     string ClassName,
     string Type,
+    bool IsPreparedCaster,
     string Ability,
     int SaveDC,
     int AttackBonus,
