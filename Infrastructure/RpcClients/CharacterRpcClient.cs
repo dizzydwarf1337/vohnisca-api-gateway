@@ -1,3 +1,4 @@
+using Application.Queries.User.Character.GetCreationOptions;
 using System.Reflection;
 using System.Text.Json.Serialization;
 using Application.Commands.User.Character.AddClassToCharacter;
@@ -111,6 +112,9 @@ public class CharacterRpcClient : DotnetRpcClient, ICharacterRpcClient
 
     public Task<RpcResult<List<SharedCharacterRow>>> GetSharedCharactersList(string token)
         => SendData<List<SharedCharacterRow>>("GetSharedCharactersList", new { }, token);
+
+    public Task<RpcResult<List<CreationChoiceRow>>> GetCreationOptions(GetCreationOptionsQuery request, string token)
+        => SendData<List<CreationChoiceRow>>("GetCreationOptions", request, token);
 
     public Task<RpcResult<List<CharacterShareRow>>> GetCharacterShares(Guid characterId, string token)
         => SendData<List<CharacterShareRow>>("GetCharacterShares", new { CharacterId = characterId }, token);

@@ -21,6 +21,7 @@ using Application.Commands.User.Character.UnprepareSpell;
 using Application.Commands.User.Character.UpdateCharacter;
 using Application.Queries.User.Character.GetCharacterById;
 using Application.Queries.User.Character.GetCharacterShares;
+using Application.Queries.User.Character.GetCreationOptions;
 using Application.Queries.User.Character.GetLearnableSpells;
 using Application.Queries.User.Character.GetSharedCharactersList;
 using Application.Queries.User.Character.ListCharacters;
@@ -51,6 +52,11 @@ public class CharacterController : BaseController
         => id == Guid.Empty
             ? Task.FromResult<IActionResult>(BadRequest())
             : HandleResponse(new GetCharacterByIdQuery { Id = id });
+
+    // Level 1 creation choices for the current picks; the creator re-asks as choices change.
+    [HttpPost("creation-options")]
+    public Task<IActionResult> GetCreationOptions(GetCreationOptionsQuery query)
+        => HandleResponse(query);
 
     // Multipart: "payload" carries the creation JSON, "file" an optional portrait
     // (same shape as user profile updates). The image travels to the character

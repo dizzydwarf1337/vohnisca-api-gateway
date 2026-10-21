@@ -21,6 +21,8 @@ using Application.Commands.User.Character.UnprepareSpell;
 using Application.Commands.User.Character.UpdateCharacter;
 using Application.Core.Responses;
 
+using Application.Queries.User.Character.GetCreationOptions;
+
 namespace Application.Interfaces.RpcClients;
 
 // Talks to the (.NET / JSON-RPC) character service. Methods are addressed by name on
@@ -35,6 +37,7 @@ public interface ICharacterRpcClient
     Task<RpcResult<PaginationResponse<CharacterListRow>>> ListCharacters(int page, int pageSize, string token);
     Task<RpcResult<List<SharedCharacterRow>>> GetSharedCharactersList(string token);
     Task<RpcResult<List<CharacterShareRow>>> GetCharacterShares(Guid characterId, string token);
+    Task<RpcResult<List<CreationChoiceRow>>> GetCreationOptions(GetCreationOptionsQuery request, string token);
 
     // Progression
     Task<RpcResult<bool>> AddClassToCharacter(AddClassToCharacterCommand request, string token);
@@ -137,13 +140,13 @@ public record SheetSpellcastingRow(
     SheetSpellRow[] KnownSpells,
     SheetSpellRow[] PreparedSpells,
     SheetSpellRow[] AlwaysPreparedSpells);
-public record SheetInnateSpellRow(
+public record SheetSpellGrantRow(
     SheetSpellRow Spell,
+    string Source,
     int MinCharacterLevel,
     bool Available,
     string Ability,
     string Uses,
-    string? Note,
     int SaveDC,
     int AttackBonus);
 public record SheetMoneyRow(int Copper, int Silver, int Electrum, int Gold, int Platinum);
@@ -193,8 +196,21 @@ public record CharacterSheetData(
     SheetItemRow[] Items,
     SheetItemSpellRow[] ItemSpells,
     SheetPendingAsiRow[] PendingAbilityScoreImprovements,
-    SheetInnateSpellRow[] InnateSpells,
+    SheetSpellGrantRow[] SpellGrants,
+    List<string> WeaponMasteries,
     string Access);
+
+// ---- Creation options (level 1 choices, SRD 5.2) ----
+public record CreationChoiceOption(string Value, string Label, string? Description, string? Group);
+public record CreationChoiceRow(
+    string Key,
+    string Step,
+    string Label,
+    int Count,
+    CreationChoiceOption[] Options,
+    string Kind,
+    string? Hint,
+    string[]? Defaults);
 
 // ---- Learnable spells (per spellcasting class; Max* of 0 = no limit) ----
 public record LearnableSpellRow(Guid Id, string Name, int Level, string School, string? ImagePath);
