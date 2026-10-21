@@ -126,6 +126,7 @@ public record SheetSpellcastingRow(
     string ClassName,
     string Type,
     bool IsPreparedCaster,
+    string Kind,
     string Ability,
     int SaveDC,
     int AttackBonus,
@@ -190,12 +191,14 @@ public record LearnableSpellClassRow(
     Guid ClassId,
     string ClassName,
     bool IsPreparedCaster,
+    string Kind,
     int KnownCantrips,
     int MaxCantrips,
     int KnownSpells,
     int MaxKnownSpells,
     int HighestSpellLevel,
-    LearnableSpellRow[] Spells);
+    LearnableSpellRow[] Spells,
+    LearnableSpellRow[] PreparableSpells);
 
 // ---- Races ----
 public record RaceListRow(Guid Id, string Name, string Source, string Size, int BaseSpeed, int SubRaceCount);
