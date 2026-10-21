@@ -12,15 +12,15 @@ using Application.Commands.User.Character.LearnSpell;
 using Application.Commands.User.Character.LevelUpCharacter;
 using Application.Commands.User.Character.PrepareSpell;
 using Application.Commands.User.Character.RemoveItemFromCharacter;
-using Application.Commands.User.Character.RenameCharacter;
 using Application.Commands.User.Character.RevokeCharacterShare;
 using Application.Commands.User.Character.SetCharacterAbilityScores;
 using Application.Commands.User.Character.ShareCharacter;
 using Application.Commands.User.Character.UnequipItem;
 using Application.Commands.User.Character.UnlearnSpell;
 using Application.Commands.User.Character.UnprepareSpell;
-using Application.Commands.User.Character.UpdateCharacterAvatar;
+using Application.Commands.User.Character.UpdateCharacter;
 using Application.Queries.User.Character.GetCharacterById;
+using Application.Queries.User.Character.GetCharacterShares;
 using Application.Queries.User.Character.GetLearnableSpells;
 using Application.Queries.User.Character.GetSharedCharactersList;
 using Application.Queries.User.Character.ListCharacters;
@@ -80,26 +80,21 @@ public class CharacterController : BaseController
         return await HandleResponse(command);
     }
 
-    [HttpPut("{id:guid}/name")]
-    public Task<IActionResult> RenameCharacter(Guid id, RenameCharacterCommand command)
-    {
-        command.CharacterId = id;
-        return HandleResponse(command);
-    }
-
     [HttpDelete("{id:guid}")]
     public Task<IActionResult> DeleteCharacter(Guid id)
         => HandleResponse(new DeleteCharacterCommand { CharacterId = id });
 
-    [HttpPut("{id:guid}/avatar")]
-    public async Task<IActionResult> UpdateAvatar(Guid id, [FromForm] IFormFile? file)
+    // Multipart: "name" plus an optional "file" portrait, applied together.
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> UpdateCharacter(Guid id, [FromForm] string name, [FromForm] IFormFile? file)
     {
         var (bytes, contentType) = await GetFileContent.GetAsync(
             file, [FileType.ImageJpeg, FileType.ImagePng, FileType.ImageWebp, FileType.ImageGif]);
 
-        return await HandleResponse(new UpdateCharacterAvatarCommand
+        return await HandleResponse(new UpdateCharacterCommand
         {
             CharacterId = id,
+            Name = name,
             Image = bytes,
             ImageContentType = contentType,
         });
@@ -231,6 +226,10 @@ public class CharacterController : BaseController
         command.CharacterId = id;
         return HandleResponse(command);
     }
+
+    [HttpGet("{id:guid}/shares")]
+    public Task<IActionResult> GetShares(Guid id)
+        => HandleResponse(new GetCharacterSharesQuery { CharacterId = id });
 
     [HttpPost("{id:guid}/share/revoke")]
     public Task<IActionResult> RevokeShare(Guid id, RevokeCharacterShareCommand command)

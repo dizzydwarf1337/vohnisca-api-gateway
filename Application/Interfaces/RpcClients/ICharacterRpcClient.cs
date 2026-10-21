@@ -12,14 +12,13 @@ using Application.Commands.User.Character.LearnSpell;
 using Application.Commands.User.Character.LevelUpCharacter;
 using Application.Commands.User.Character.PrepareSpell;
 using Application.Commands.User.Character.RemoveItemFromCharacter;
-using Application.Commands.User.Character.RenameCharacter;
 using Application.Commands.User.Character.RevokeCharacterShare;
 using Application.Commands.User.Character.SetCharacterAbilityScores;
 using Application.Commands.User.Character.ShareCharacter;
 using Application.Commands.User.Character.UnequipItem;
 using Application.Commands.User.Character.UnlearnSpell;
 using Application.Commands.User.Character.UnprepareSpell;
-using Application.Commands.User.Character.UpdateCharacterAvatar;
+using Application.Commands.User.Character.UpdateCharacter;
 using Application.Core.Responses;
 
 namespace Application.Interfaces.RpcClients;
@@ -30,12 +29,12 @@ public interface ICharacterRpcClient
 {
     // Characters
     Task<RpcResult<CreateCharacterData>> CreateCharacter(CreateCharacterCommand request, string token);
-    Task<RpcResult<bool>> RenameCharacter(RenameCharacterCommand request, string token);
     Task<RpcResult<bool>> DeleteCharacter(DeleteCharacterCommand request, string token);
-    Task<RpcResult<bool>> UpdateCharacterAvatar(UpdateCharacterAvatarCommand request, string token);
+    Task<RpcResult<bool>> UpdateCharacter(UpdateCharacterCommand request, string token);
     Task<RpcResult<CharacterSheetData>> GetCharacterById(Guid id, string token);
     Task<RpcResult<PaginationResponse<CharacterListRow>>> ListCharacters(int page, int pageSize, string token);
     Task<RpcResult<List<SharedCharacterRow>>> GetSharedCharactersList(string token);
+    Task<RpcResult<List<CharacterShareRow>>> GetCharacterShares(Guid characterId, string token);
 
     // Progression
     Task<RpcResult<bool>> AddClassToCharacter(AddClassToCharacterCommand request, string token);
@@ -105,6 +104,8 @@ public record SharedCharacterRow(
     string OwnerUserName,
     string OwnerProfilePicturePath);
 
+public record CharacterShareRow(Guid UserId, string UserName, string ProfilePicturePath, string Access);
+
 // ---- Character sheet ----
 public record SheetSubClassRef(Guid Id, string Name);
 public record SheetClassRow(Guid ClassId, string Name, string IconUrl, int Level, SheetSubClassRef? SubClass);
@@ -113,6 +114,7 @@ public record SheetSkillRow(string Skill, string Proficiency, int Modifier);
 public record SheetAbilityRow(
     string Ability,
     int Value,
+    int BaseValue,
     int Modifier,
     bool SavingThrowProficient,
     int SavingThrowModifier,
@@ -145,6 +147,7 @@ public record SheetItemRow(
     bool IsEquipped,
     bool IsAttuned);
 public record SheetItemSpellRow(SheetSpellRow Spell, Guid ItemId, string ItemName);
+public record SheetPendingAsiRow(Guid ClassId, string ClassName, int Level);
 
 public record CharacterSheetData(
     Guid Id,
@@ -176,7 +179,9 @@ public record CharacterSheetData(
     SheetSpellcastingRow[] Spellcasting,
     SheetMoneyRow Money,
     SheetItemRow[] Items,
-    SheetItemSpellRow[] ItemSpells);
+    SheetItemSpellRow[] ItemSpells,
+    SheetPendingAsiRow[] PendingAbilityScoreImprovements,
+    string Access);
 
 // ---- Learnable spells (per spellcasting class; Max* of 0 = no limit) ----
 public record LearnableSpellRow(Guid Id, string Name, int Level, string School, string? ImagePath);
