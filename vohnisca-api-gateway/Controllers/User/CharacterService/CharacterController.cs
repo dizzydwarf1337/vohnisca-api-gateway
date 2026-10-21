@@ -19,7 +19,9 @@ using Application.Commands.User.Character.ShareCharacter;
 using Application.Commands.User.Character.UnequipItem;
 using Application.Commands.User.Character.UnlearnSpell;
 using Application.Commands.User.Character.UnprepareSpell;
+using Application.Commands.User.Character.UpdateCharacterAvatar;
 using Application.Queries.User.Character.GetCharacterById;
+using Application.Queries.User.Character.GetLearnableSpells;
 using Application.Queries.User.Character.GetSharedCharactersList;
 using Application.Queries.User.Character.ListCharacters;
 using System.Text.Json;
@@ -88,6 +90,20 @@ public class CharacterController : BaseController
     [HttpDelete("{id:guid}")]
     public Task<IActionResult> DeleteCharacter(Guid id)
         => HandleResponse(new DeleteCharacterCommand { CharacterId = id });
+
+    [HttpPut("{id:guid}/avatar")]
+    public async Task<IActionResult> UpdateAvatar(Guid id, [FromForm] IFormFile? file)
+    {
+        var (bytes, contentType) = await GetFileContent.GetAsync(
+            file, [FileType.ImageJpeg, FileType.ImagePng, FileType.ImageWebp, FileType.ImageGif]);
+
+        return await HandleResponse(new UpdateCharacterAvatarCommand
+        {
+            CharacterId = id,
+            Image = bytes,
+            ImageContentType = contentType,
+        });
+    }
 
     [HttpPut("{id:guid}/subrace")]
     public Task<IActionResult> ChangeSubRace(Guid id, ChangeCharacterSubRaceCommand command)
@@ -176,6 +192,10 @@ public class CharacterController : BaseController
     }
 
     // Spells
+    [HttpGet("{id:guid}/spells/learnable")]
+    public Task<IActionResult> GetLearnableSpells(Guid id)
+        => HandleResponse(new GetLearnableSpellsQuery { CharacterId = id });
+
     [HttpPost("{id:guid}/spells/learn")]
     public Task<IActionResult> LearnSpell(Guid id, LearnSpellCommand command)
     {

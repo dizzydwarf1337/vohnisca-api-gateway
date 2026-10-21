@@ -21,6 +21,7 @@ using Application.Commands.User.Character.ShareCharacter;
 using Application.Commands.User.Character.UnequipItem;
 using Application.Commands.User.Character.UnlearnSpell;
 using Application.Commands.User.Character.UnprepareSpell;
+using Application.Commands.User.Character.UpdateCharacterAvatar;
 using Application.Core.Responses;
 using Application.Interfaces.RpcClients;
 using Microsoft.Extensions.Configuration;
@@ -44,6 +45,9 @@ public class CharacterRpcClient : DotnetRpcClient, ICharacterRpcClient
 
     public Task<RpcResult<bool>> DeleteCharacter(DeleteCharacterCommand request, string token)
         => SendCommand("DeleteCharacter", request, token);
+
+    public Task<RpcResult<bool>> UpdateCharacterAvatar(UpdateCharacterAvatarCommand request, string token)
+        => SendCommand("UpdateCharacterAvatar", request, token);
 
     public Task<RpcResult<bool>> AddClassToCharacter(AddClassToCharacterCommand request, string token)
         => SendCommand("AddClassToCharacter", request, token);
@@ -92,6 +96,9 @@ public class CharacterRpcClient : DotnetRpcClient, ICharacterRpcClient
 
     public Task<RpcResult<bool>> UnprepareSpell(UnprepareSpellCommand request, string token)
         => SendCommand("UnprepareSpell", request, token);
+
+    public Task<RpcResult<List<LearnableSpellClassRow>>> GetLearnableSpells(Guid characterId, string token)
+        => SendData<List<LearnableSpellClassRow>>("GetLearnableSpells", new { CharacterId = characterId }, token);
 
     public Task<RpcResult<bool>> ShareCharacter(ShareCharacterCommand request, string token)
         => SendCommand("ShareCharacter", request, token);
