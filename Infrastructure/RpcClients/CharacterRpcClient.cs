@@ -161,7 +161,7 @@ public class CharacterRpcClient : DotnetRpcClient, ICharacterRpcClient
         var result = await SendRpcRequest<DefaultRpcResponse>(method, ToDict(payload), token: token);
         return result.IsSuccess
             ? RpcResult<bool>.Success(true)
-            : RpcResult<bool>.Failure(result.Error, result.StatusCode);
+            : RpcResult<bool>.Failure(result.Error, ToHttpStatus(result.StatusCode));
     }
 
     // Sends a request and unwraps the service's RpcResponse<T> envelope.
@@ -169,9 +169,21 @@ public class CharacterRpcClient : DotnetRpcClient, ICharacterRpcClient
     {
         var result = await SendRpcRequest<RpcDataResponse<T>>(method, ToDict(payload), token: token);
         if (!result.IsSuccess || result.Data is null)
-            return RpcResult<T>.Failure(result.Error, result.StatusCode);
+            return RpcResult<T>.Failure(result.Error, ToHttpStatus(result.StatusCode));
         return RpcResult<T>.Success(result.Data.Data);
     }
+
+    // The service reports domain errors with the LanguageExt error code, which is 0 for a
+    // plain Error.New("..."), and transport errors with JSON-RPC codes (negative). Neither
+    // is a valid HTTP status, so map them before they become the gateway's response code.
+    private static int ToHttpStatus(int code) => code switch
+    {
+        >= 400 and <= 599 => code,
+        0 => 400,
+        -32601 => 404,
+        -32602 => 422,
+        _ => 500
+    };
 
     // Turns a request/anonymous payload into the parameter map. Native CLR values are
     // kept (the JSON-RPC client serializes them), and [JsonIgnore] members (Token/UserId)
