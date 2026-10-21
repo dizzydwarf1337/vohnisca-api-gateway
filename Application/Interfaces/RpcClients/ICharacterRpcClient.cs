@@ -19,6 +19,7 @@ using Application.Commands.User.Character.ShareCharacter;
 using Application.Commands.User.Character.UnequipItem;
 using Application.Commands.User.Character.UnlearnSpell;
 using Application.Commands.User.Character.UnprepareSpell;
+using Application.Commands.User.Character.UpdateCharacterAvatar;
 using Application.Core.Responses;
 
 namespace Application.Interfaces.RpcClients;
@@ -31,6 +32,7 @@ public interface ICharacterRpcClient
     Task<RpcResult<CreateCharacterData>> CreateCharacter(CreateCharacterCommand request, string token);
     Task<RpcResult<bool>> RenameCharacter(RenameCharacterCommand request, string token);
     Task<RpcResult<bool>> DeleteCharacter(DeleteCharacterCommand request, string token);
+    Task<RpcResult<bool>> UpdateCharacterAvatar(UpdateCharacterAvatarCommand request, string token);
     Task<RpcResult<CharacterSheetData>> GetCharacterById(Guid id, string token);
     Task<RpcResult<PaginationResponse<CharacterListRow>>> ListCharacters(int page, int pageSize, string token);
     Task<RpcResult<List<SharedCharacterRow>>> GetSharedCharactersList(string token);
@@ -56,6 +58,7 @@ public interface ICharacterRpcClient
     Task<RpcResult<bool>> UnlearnSpell(UnlearnSpellCommand request, string token);
     Task<RpcResult<bool>> PrepareSpell(PrepareSpellCommand request, string token);
     Task<RpcResult<bool>> UnprepareSpell(UnprepareSpellCommand request, string token);
+    Task<RpcResult<List<LearnableSpellClassRow>>> GetLearnableSpells(Guid characterId, string token);
 
     // Sharing
     Task<RpcResult<bool>> ShareCharacter(ShareCharacterCommand request, string token);
@@ -174,6 +177,19 @@ public record CharacterSheetData(
     SheetMoneyRow Money,
     SheetItemRow[] Items,
     SheetItemSpellRow[] ItemSpells);
+
+// ---- Learnable spells (per spellcasting class; Max* of 0 = no limit) ----
+public record LearnableSpellRow(Guid Id, string Name, int Level, string School, string? ImagePath);
+public record LearnableSpellClassRow(
+    Guid ClassId,
+    string ClassName,
+    bool IsPreparedCaster,
+    int KnownCantrips,
+    int MaxCantrips,
+    int KnownSpells,
+    int MaxKnownSpells,
+    int HighestSpellLevel,
+    LearnableSpellRow[] Spells);
 
 // ---- Races ----
 public record RaceListRow(Guid Id, string Name, string Source, string Size, int BaseSpeed, int SubRaceCount);
