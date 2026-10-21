@@ -1,7 +1,5 @@
-using Application.Core.ApiResponse;
 using Application.Core.Mediatr.Requests.UserRequest;
 using Application.Interfaces.RpcClients;
-using MediatR;
 
 namespace Application.Commands.User.Character.CreateCharacter;
 
@@ -29,16 +27,4 @@ public class CreateCharacterCommand : UserRequest<CreateCharacterData>
     public List<string>? ChosenToolProficiencies { get; set; }
 
     public List<int> ChosenEquipmentOptions { get; set; } = new();
-}
-
-public class CreateCharacterCommandHandler : IRequestHandler<CreateCharacterCommand, ApiResponse<CreateCharacterData>>
-{
-    private readonly ICharacterRpcClient _client;
-    public CreateCharacterCommandHandler(ICharacterRpcClient client) => _client = client;
-
-    public async Task<ApiResponse<CreateCharacterData>> Handle(CreateCharacterCommand request, CancellationToken cancellationToken)
-    {
-        var result = await _client.CreateCharacter(request, request.Token!);
-        return result.ToApiResponse(x => x, "Error creating character");
-    }
 }
