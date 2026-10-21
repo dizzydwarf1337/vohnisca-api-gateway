@@ -135,7 +135,17 @@ public record SheetSpellcastingRow(
     int MaxKnownSpells,
     Dictionary<int, int> TotalSlots,
     SheetSpellRow[] KnownSpells,
-    SheetSpellRow[] PreparedSpells);
+    SheetSpellRow[] PreparedSpells,
+    SheetSpellRow[] AlwaysPreparedSpells);
+public record SheetInnateSpellRow(
+    SheetSpellRow Spell,
+    int MinCharacterLevel,
+    bool Available,
+    string Ability,
+    string Uses,
+    string? Note,
+    int SaveDC,
+    int AttackBonus);
 public record SheetMoneyRow(int Copper, int Silver, int Electrum, int Gold, int Platinum);
 public record SheetItemRow(
     Guid ItemId,
@@ -183,6 +193,7 @@ public record CharacterSheetData(
     SheetItemRow[] Items,
     SheetItemSpellRow[] ItemSpells,
     SheetPendingAsiRow[] PendingAbilityScoreImprovements,
+    SheetInnateSpellRow[] InnateSpells,
     string Access);
 
 // ---- Learnable spells (per spellcasting class; Max* of 0 = no limit) ----
