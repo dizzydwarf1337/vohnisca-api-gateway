@@ -12,6 +12,8 @@ using Application.Commands.User.Character.LearnSpell;
 using Application.Commands.User.Character.LevelUpCharacter;
 using Application.Commands.User.Character.PrepareSpell;
 using Application.Commands.User.Character.RemoveItemFromCharacter;
+using Application.Commands.User.Character.AddCharacterMoney;
+using Application.Commands.User.Character.SpendCharacterMoney;
 using Application.Commands.User.Character.RevokeCharacterShare;
 using Application.Commands.User.Character.SetCharacterAbilityScores;
 using Application.Commands.User.Character.ShareCharacter;
@@ -53,6 +55,8 @@ public interface ICharacterRpcClient
     // Inventory
     Task<RpcResult<bool>> AddItemToCharacter(AddItemToCharacterCommand request, string token);
     Task<RpcResult<bool>> RemoveItemFromCharacter(RemoveItemFromCharacterCommand request, string token);
+    Task<RpcResult<bool>> AddCharacterMoney(AddCharacterMoneyCommand request, string token);
+    Task<RpcResult<bool>> SpendCharacterMoney(SpendCharacterMoneyCommand request, string token);
     Task<RpcResult<bool>> EquipItem(EquipItemCommand request, string token);
     Task<RpcResult<bool>> UnequipItem(UnequipItemCommand request, string token);
     Task<RpcResult<bool>> AttuneItem(AttuneItemCommand request, string token);

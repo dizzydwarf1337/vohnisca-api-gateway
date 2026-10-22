@@ -21,6 +21,8 @@ using Application.Commands.User.Character.UnprepareSpell;
 using Application.Commands.User.Character.UpdateCharacter;
 using Application.Queries.User.Character.GetCharacterById;
 using Application.Queries.User.Character.GetCharacterShares;
+using Application.Commands.User.Character.AddCharacterMoney;
+using Application.Commands.User.Character.SpendCharacterMoney;
 using Application.Queries.User.Character.GetCreationOptions;
 using Application.Queries.User.Character.GetLevelUpOptions;
 using Application.Queries.User.Character.GetLearnableSpells;
@@ -170,6 +172,21 @@ public class CharacterController : BaseController
     // Inventory
     [HttpPost("{id:guid}/items")]
     public Task<IActionResult> AddItem(Guid id, AddItemToCharacterCommand command)
+    {
+        command.CharacterId = id;
+        return HandleResponse(command);
+    }
+
+    // Coins gained (loot, a sale) or spent (a purchase: paid from any coins, change given).
+    [HttpPost("{id:guid}/money/add")]
+    public Task<IActionResult> AddMoney(Guid id, AddCharacterMoneyCommand command)
+    {
+        command.CharacterId = id;
+        return HandleResponse(command);
+    }
+
+    [HttpPost("{id:guid}/money/spend")]
+    public Task<IActionResult> SpendMoney(Guid id, SpendCharacterMoneyCommand command)
     {
         command.CharacterId = id;
         return HandleResponse(command);
