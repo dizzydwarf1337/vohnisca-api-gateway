@@ -22,6 +22,7 @@ using Application.Commands.User.Character.UpdateCharacter;
 using Application.Core.Responses;
 
 using Application.Queries.User.Character.GetCreationOptions;
+using Application.Queries.User.Character.GetLevelUpOptions;
 
 namespace Application.Interfaces.RpcClients;
 
@@ -38,6 +39,7 @@ public interface ICharacterRpcClient
     Task<RpcResult<List<SharedCharacterRow>>> GetSharedCharactersList(string token);
     Task<RpcResult<List<CharacterShareRow>>> GetCharacterShares(Guid characterId, string token);
     Task<RpcResult<List<CreationChoiceRow>>> GetCreationOptions(GetCreationOptionsQuery request, string token);
+    Task<RpcResult<List<CreationChoiceRow>>> GetLevelUpOptions(GetLevelUpOptionsQuery request, string token);
 
     // Progression
     Task<RpcResult<bool>> AddClassToCharacter(AddClassToCharacterCommand request, string token);
