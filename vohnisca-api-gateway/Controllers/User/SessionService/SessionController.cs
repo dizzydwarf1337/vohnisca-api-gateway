@@ -21,6 +21,8 @@ using Application.Commands.User.Session.RevealSceneCells;
 using Application.Commands.User.Session.AddSceneToken;
 using Application.Commands.User.Session.UpdateSceneToken;
 using Application.Commands.User.Session.RemoveSceneToken;
+using Application.Commands.User.Session.RemoveSceneArea;
+using Application.Commands.User.Session.TakeCombatAction;
 using Application.Commands.User.Session.MoveSceneToken;
 using Application.Commands.User.Session.ApplySessionAction;
 using Application.Commands.User.Session.EndSession;
@@ -171,6 +173,11 @@ public class SessionController : BaseController
     public Task<IActionResult> RemoveSceneToken(Guid id, Guid tokenId)
         => HandleResponse(new RemoveSceneTokenCommand { SessionId = id, TokenId = tokenId });
 
+    [HttpDelete]
+    [Route("sessions/{id:guid}/scene/areas/{areaId:guid}")]
+    public Task<IActionResult> RemoveSceneArea(Guid id, Guid areaId)
+        => HandleResponse(new RemoveSceneAreaCommand { SessionId = id, AreaId = areaId });
+
     [HttpPost]
     [Route("sessions/{id:guid}/scene/tokens/{tokenId:guid}/move")]
     public Task<IActionResult> MoveSceneToken(Guid id, Guid tokenId, MoveSceneTokenCommand command)
@@ -294,4 +301,13 @@ public class SessionController : BaseController
     [Route("sessions/{id:guid}/combat/{tokenId:guid}/dash")]
     public Task<IActionResult> Dash(Guid id, Guid tokenId)
         => HandleResponse(new DashCommand { SessionId = id, TokenId = tokenId });
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/combat/{tokenId:guid}/action")]
+    public Task<IActionResult> TakeCombatAction(Guid id, Guid tokenId, TakeCombatActionCommand command)
+    {
+        command.SessionId = id;
+        command.TokenId = tokenId;
+        return HandleResponse(command);
+    }
 }
