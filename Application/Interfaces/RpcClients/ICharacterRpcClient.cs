@@ -189,6 +189,7 @@ public record CharacterSheetData(
     int MaxHitPoints,
     int CurrentHitPoints,
     int ArmorClass,
+    string ArmorClassSource,
     int Speed,
     int Initiative,
     int PassivePerception,
@@ -200,6 +201,8 @@ public record CharacterSheetData(
     SheetPendingAsiRow[] PendingAbilityScoreImprovements,
     SheetSpellGrantRow[] SpellGrants,
     List<string> WeaponMasteries,
+    int AttacksPerAction,
+    int? PactWeaponAttacks,
     string Access);
 
 // ---- Creation options (level 1 choices, SRD 5.2) ----
