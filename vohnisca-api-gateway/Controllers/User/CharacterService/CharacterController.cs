@@ -23,6 +23,7 @@ using Application.Queries.User.Character.GetCharacterById;
 using Application.Queries.User.Character.GetCharacterShares;
 using Application.Commands.User.Character.AddCharacterMoney;
 using Application.Commands.User.Character.SpendCharacterMoney;
+using Application.Commands.User.Character.ReleaseCharacterSession;
 using Application.Queries.User.Character.GetCreationOptions;
 using Application.Queries.User.Character.GetLevelUpOptions;
 using Application.Queries.User.Character.GetLearnableSpells;
@@ -176,6 +177,11 @@ public class CharacterController : BaseController
         command.CharacterId = id;
         return HandleResponse(command);
     }
+
+    // The owner takes the character back from a game session that never ended.
+    [HttpPost("{id:guid}/session/release")]
+    public Task<IActionResult> ReleaseSession(Guid id)
+        => HandleResponse(new ReleaseCharacterSessionCommand { CharacterId = id });
 
     // Coins gained (loot, a sale) or spent (a purchase: paid from any coins, change given).
     [HttpPost("{id:guid}/money/add")]
