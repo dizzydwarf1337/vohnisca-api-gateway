@@ -1,3 +1,13 @@
+using Application.Queries.User.Session.GetEncounter;
+using Application.Commands.User.Session.StartCombat;
+using Application.Commands.User.Session.JoinCombat;
+using Application.Commands.User.Session.RemoveCombatant;
+using Application.Commands.User.Session.SetInitiative;
+using Application.Commands.User.Session.EndTurn;
+using Application.Commands.User.Session.EndCombat;
+using Application.Commands.User.Session.SetSpent;
+using Application.Commands.User.Session.Dash;
+using Application.Commands.User.Session.Attack;
 using Application.Queries.User.Session.GetDiceRolls;
 using Application.Commands.User.Session.RollDice;
 using Application.Commands.User.Session.RollCheck;
@@ -48,6 +58,17 @@ public interface ISessionRpcClient
     Task<RpcResult<DiceRollsData>> GetDiceRolls(GetDiceRollsQuery request, string token);
     Task<RpcResult<DiceRollData>> RollDice(RollDiceCommand request, string token);
     Task<RpcResult<DiceRollData>> RollCheck(RollCheckCommand request, string token);
+
+    Task<RpcResult<SessionEncounterData>> GetEncounter(GetEncounterQuery request, string token);
+    Task<RpcResult<SessionEncounterData>> StartCombat(StartCombatCommand request, string token);
+    Task<RpcResult<SessionEncounterData>> JoinCombat(JoinCombatCommand request, string token);
+    Task<RpcResult<SessionEncounterData>> RemoveCombatant(RemoveCombatantCommand request, string token);
+    Task<RpcResult<SessionEncounterData>> SetInitiative(SetInitiativeCommand request, string token);
+    Task<RpcResult<SessionEncounterData>> EndTurn(EndTurnCommand request, string token);
+    Task<RpcResult<bool>> EndCombat(EndCombatCommand request, string token);
+    Task<RpcResult<SessionEncounterData>> SetSpent(SetSpentCommand request, string token);
+    Task<RpcResult<SessionEncounterData>> Dash(DashCommand request, string token);
+    Task<RpcResult<AttackResultData>> Attack(AttackCommand request, string token);
 }
 
 // Status: "lobby" | "live". Enum values (conditions, resources, dice) come as camelCase names.
@@ -90,7 +111,26 @@ public record SessionCharacterData(
     List<SessionSlotData> SpellSlots,
     List<SessionResourceData> Resources,
     List<SessionHitDiceData> HitDice,
-    List<SessionSpellData> Spells);
+    List<SessionSpellData> Spells,
+    List<AttackOptionData> Attacks);
+
+// An attack the character can make (CombatRules.AttackOption): damage is DiceCount dice of
+// DieFaces + DamageBonus (DamageMin: a die below it counts as it); Reach in feet for
+// melee, RangeNormal / RangeLong for ranged; BonusAction: the two-weapon extra attack.
+public record AttackOptionData(
+    string Id,
+    string Name,
+    int AttackBonus,
+    int DiceCount,
+    int DieFaces,
+    int DamageBonus,
+    int? DamageMin,
+    string DamageType,
+    bool Ranged,
+    int Reach,
+    int? RangeNormal,
+    int? RangeLong,
+    bool BonusAction);
 
 public record SessionSpellRef(Guid Id, string Name);
 
@@ -134,7 +174,13 @@ public record SceneTokenData(
     int Size,
     int Quantity,
     bool Hidden,
-    Guid? OwnerUserId);
+    Guid? OwnerUserId,
+    int? MaxHp,
+    int? Hp,
+    int? Ac,
+    int? Speed,
+    int? InitiativeBonus,
+    string? Health);
 
 // A roll at the table. Terms: each part of the roll (dice with their rolls and the dropped
 // ones, or a flat number). Outcome: what a rule roll decided ("Success", "Heals 7").
@@ -155,3 +201,32 @@ public record DiceRollData(
 public record DiceTermData(string Text, int Sign, List<int> Rolls, List<int> Dropped, int Value);
 
 public record DiceRollsData(List<DiceRollData> Rolls);
+
+// The fight (Encounter is null when there's none).
+public record SessionEncounterData(EncounterData? Encounter);
+
+public record EncounterData(int Round, Guid? CurrentTokenId, List<CombatantData> Order);
+
+// Health: how hurt an NPC looks. What's spent this turn: action, bonus action, reaction,
+// movement (MovementLeft of Speed), attacks left in an Attack action already taken.
+public record CombatantData(
+    Guid TokenId,
+    string Kind,
+    Guid? CharacterId,
+    Guid? OwnerUserId,
+    string Name,
+    string ImageUrl,
+    int Initiative,
+    string? Health,
+    bool Hidden,
+    bool ActionUsed,
+    bool BonusActionUsed,
+    bool ReactionUsed,
+    int MovementLeft,
+    int Speed,
+    int AttacksLeft);
+
+// A made-up attack (an NPC's, a spell attack): Damage in dice notation ("1d6+2").
+public record CustomAttackData(string Name, int Bonus, string Damage, string DamageType, int RangeFeet = 5);
+
+public record AttackResultData(DiceRollData Attack, DiceRollData? Damage);

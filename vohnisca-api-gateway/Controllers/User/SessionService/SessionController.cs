@@ -1,3 +1,13 @@
+using Application.Queries.User.Session.GetEncounter;
+using Application.Commands.User.Session.StartCombat;
+using Application.Commands.User.Session.JoinCombat;
+using Application.Commands.User.Session.RemoveCombatant;
+using Application.Commands.User.Session.SetInitiative;
+using Application.Commands.User.Session.EndTurn;
+using Application.Commands.User.Session.EndCombat;
+using Application.Commands.User.Session.SetSpent;
+using Application.Commands.User.Session.Dash;
+using Application.Commands.User.Session.Attack;
 using Application.Queries.User.Session.GetDiceRolls;
 using Application.Commands.User.Session.RollDice;
 using Application.Commands.User.Session.RollCheck;
@@ -190,4 +200,73 @@ public class SessionController : BaseController
         command.CharacterId = characterId;
         return HandleResponse(command);
     }
+
+    // ---- Combat ----
+
+    [HttpGet]
+    [Route("sessions/{id:guid}/combat")]
+    public Task<IActionResult> GetEncounter(Guid id)
+        => HandleResponse(new GetEncounterQuery { SessionId = id });
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/combat")]
+    public Task<IActionResult> StartCombat(Guid id, StartCombatCommand command)
+    {
+        command.SessionId = id;
+        return HandleResponse(command);
+    }
+
+    [HttpDelete]
+    [Route("sessions/{id:guid}/combat")]
+    public Task<IActionResult> EndCombat(Guid id)
+        => HandleResponse(new EndCombatCommand { SessionId = id });
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/combat/join")]
+    public Task<IActionResult> JoinCombat(Guid id, JoinCombatCommand command)
+    {
+        command.SessionId = id;
+        return HandleResponse(command);
+    }
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/combat/end-turn")]
+    public Task<IActionResult> EndTurn(Guid id)
+        => HandleResponse(new EndTurnCommand { SessionId = id });
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/combat/attack")]
+    public Task<IActionResult> Attack(Guid id, AttackCommand command)
+    {
+        command.SessionId = id;
+        return HandleResponse(command);
+    }
+
+    [HttpDelete]
+    [Route("sessions/{id:guid}/combat/{tokenId:guid}")]
+    public Task<IActionResult> RemoveCombatant(Guid id, Guid tokenId)
+        => HandleResponse(new RemoveCombatantCommand { SessionId = id, TokenId = tokenId });
+
+    [HttpPut]
+    [Route("sessions/{id:guid}/combat/{tokenId:guid}/initiative")]
+    public Task<IActionResult> SetInitiative(Guid id, Guid tokenId, SetInitiativeCommand command)
+    {
+        command.SessionId = id;
+        command.TokenId = tokenId;
+        return HandleResponse(command);
+    }
+
+    [HttpPut]
+    [Route("sessions/{id:guid}/combat/{tokenId:guid}/spent")]
+    public Task<IActionResult> SetSpent(Guid id, Guid tokenId, SetSpentCommand command)
+    {
+        command.SessionId = id;
+        command.TokenId = tokenId;
+        return HandleResponse(command);
+    }
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/combat/{tokenId:guid}/dash")]
+    public Task<IActionResult> Dash(Guid id, Guid tokenId)
+        => HandleResponse(new DashCommand { SessionId = id, TokenId = tokenId });
 }
