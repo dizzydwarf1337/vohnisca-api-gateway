@@ -1,4 +1,7 @@
 using Application.Queries.User.Session.GetEncounter;
+using Application.Commands.User.Session.CastSpell;
+using Application.Commands.User.Session.SetShortRest;
+using Application.Commands.User.Session.TakeLongRest;
 using Application.Commands.User.Session.StartCombat;
 using Application.Commands.User.Session.JoinCombat;
 using Application.Commands.User.Session.RemoveCombatant;
@@ -45,6 +48,9 @@ public interface ISessionRpcClient
     Task<RpcResult<SessionData>> StartSession(StartSessionCommand request, string token);
     Task<RpcResult<SessionData>> ApplySessionAction(ApplySessionActionCommand request, string token);
     Task<RpcResult<bool>> EndSession(EndSessionCommand request, string token);
+    Task<RpcResult<SessionData>> SetShortRest(SetShortRestCommand request, string token);
+    Task<RpcResult<SessionData>> TakeLongRest(TakeLongRestCommand request, string token);
+    Task<RpcResult<CombatResultData>> CastSpell(CastSpellCommand request, string token);
 
     Task<RpcResult<SessionSceneData>> GetScene(GetSceneQuery request, string token);
     Task<RpcResult<SessionSceneData>> SetScene(SetSceneCommand request, string token);
@@ -68,10 +74,11 @@ public interface ISessionRpcClient
     Task<RpcResult<bool>> EndCombat(EndCombatCommand request, string token);
     Task<RpcResult<SessionEncounterData>> SetSpent(SetSpentCommand request, string token);
     Task<RpcResult<SessionEncounterData>> Dash(DashCommand request, string token);
-    Task<RpcResult<AttackResultData>> Attack(AttackCommand request, string token);
+    Task<RpcResult<CombatResultData>> Attack(AttackCommand request, string token);
 }
 
-// Status: "lobby" | "live". Enum values (conditions, resources, dice) come as camelCase names.
+// The session as the user may see it. Status: "lobby" | "live"; ShortRest: the GM called
+// one. Enum values (conditions, resources, dice) come as camelCase names.
 public record SessionData(
     Guid Id,
     Guid CampaignId,
@@ -81,12 +88,29 @@ public record SessionData(
     string Status,
     DateTime OpenedAt,
     DateTime? StartedAt,
+    bool ShortRest,
     List<SessionPlayerData> Players,
     List<SessionLogData> Log);
 
-public record SessionPlayerData(Guid UserId, string Username, bool Ready, SessionCharacterData? Character);
+// Character: the whole sheet in play (the user's own, or every one for the GM); Member:
+// what the table sees of it.
+public record SessionPlayerData(Guid UserId, string Username, bool Ready, SessionCharacterData? Character, SessionMemberData? Member);
 
-public record SessionLogData(DateTime At, Guid UserId, Guid? CharacterId, string Text);
+public record SessionMemberData(
+    Guid Id,
+    string Name,
+    string AvatarUrl,
+    int Level,
+    string Classes,
+    int MaxHitPoints,
+    int CurrentHitPoints,
+    int TemporaryHitPoints,
+    bool IsDead,
+    List<string> Conditions,
+    string? Concentration);
+
+// Kind "combat": what an attack or a spell did (Text may run over several lines).
+public record SessionLogData(DateTime At, Guid UserId, Guid? CharacterId, string Text, string? Kind);
 
 public record SessionCharacterData(
     Guid Id,
@@ -141,7 +165,38 @@ public record SessionResourceData(string Type, string Name, int Current, int Max
 
 public record SessionHitDiceData(string Die, int Total, int Used);
 
-public record SessionSpellData(Guid Id, string Name, int Level, bool Ritual, bool Concentration, int? FreeUsesLeft, bool RitualOnly);
+// Effect: what the spell does to its targets (null when casting only spends what it costs).
+public record SessionSpellData(
+    Guid Id,
+    string Name,
+    int Level,
+    bool Ritual,
+    bool Concentration,
+    int? FreeUsesLeft,
+    bool RitualOnly,
+    string CastingTime,
+    string Range,
+    SpellEffectData? Effect);
+
+// A spell's mechanics at its own level for the character (a cantrip grown with its level):
+// Attack "melee" | "ranged"; Save: the ability; Damage / Healing in dice notation (+ the
+// spellcasting modifier when AddsModifier); DamageChoices: types the caster picks from
+// when DamageType is null; Projectiles: darts, rays or beams, each picking a target
+// (ProjectilePerSlot more per higher slot); Upcast: added per higher slot.
+public record SpellEffectData(
+    string? Attack,
+    string? Save,
+    bool HalfOnSave,
+    string? Damage,
+    string? DamageType,
+    List<string> DamageChoices,
+    string? Healing,
+    bool AddsModifier,
+    int Projectiles,
+    bool ProjectilePerSlot,
+    string? Upcast,
+    string? OnFailedSave,
+    int? RangeFeet);
 
 // Session is null when the campaign has none open.
 public record CampaignSessionData(SessionData? Session);
@@ -164,6 +219,8 @@ public record SceneData(
     List<SceneTokenData> Tokens);
 
 // Kind: "character" | "npc" | "item" | "marker"; OwnerUserId: the player of a character token.
+// An NPC's numbers (MaxHp, Hp, Ac, Speed, InitiativeBonus, Saves) come to the GM; its
+// Health and Conditions to everyone.
 public record SceneTokenData(
     Guid Id,
     string Kind,
@@ -181,7 +238,9 @@ public record SceneTokenData(
     int? Ac,
     int? Speed,
     int? InitiativeBonus,
-    string? Health);
+    string? Health,
+    Dictionary<string, int>? Saves,
+    List<string> Conditions);
 
 // A roll at the table. Terms: each part of the roll (dice with their rolls and the dropped
 // ones, or a flat number). Outcome: what a rule roll decided ("Success", "Heals 7").
@@ -227,7 +286,8 @@ public record CombatantData(
     int Speed,
     int AttacksLeft);
 
-// A made-up attack (an NPC's, a spell attack): Damage in dice notation ("1d6+2").
+// An NPC's attack made up by the GM: Damage in dice notation ("1d6+2").
 public record CustomAttackData(string Name, int Bonus, string Damage, string DamageType, int RangeFeet = 5);
 
-public record AttackResultData(DiceRollData Attack, DiceRollData? Damage);
+// What an attack or a spell did, as the user may read it (the same goes to the log).
+public record CombatResultData(List<string> Log);

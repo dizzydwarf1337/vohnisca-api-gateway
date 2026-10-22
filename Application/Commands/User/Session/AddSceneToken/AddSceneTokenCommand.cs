@@ -16,4 +16,11 @@ public class AddSceneTokenCommand : UserRequest<SessionSceneData>
     public int Size { get; set; } = 1;
     public int Quantity { get; set; } = 1;
     public bool Hidden { get; set; }
+    // An NPC's numbers, set as it is placed.
+    public int? MaxHp { get; set; }
+    public int? Ac { get; set; }
+    public int? Speed { get; set; }
+    public int? InitiativeBonus { get; set; }
+    // Saving throw bonuses by ability ("dexterity": 2).
+    public Dictionary<string, int>? Saves { get; set; }
 }

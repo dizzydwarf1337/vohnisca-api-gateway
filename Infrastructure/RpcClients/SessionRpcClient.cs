@@ -8,6 +8,9 @@ using Application.Commands.User.Session.EndCombat;
 using Application.Commands.User.Session.SetSpent;
 using Application.Commands.User.Session.Dash;
 using Application.Commands.User.Session.Attack;
+using Application.Commands.User.Session.CastSpell;
+using Application.Commands.User.Session.SetShortRest;
+using Application.Commands.User.Session.TakeLongRest;
 using Application.Queries.User.Session.GetDiceRolls;
 using Application.Commands.User.Session.RollDice;
 using Application.Commands.User.Session.RollCheck;
@@ -133,6 +136,15 @@ public class SessionRpcClient : DotnetRpcClient, ISessionRpcClient
     public Task<RpcResult<SessionEncounterData>> Dash(DashCommand request, string token)
         => SendData<SessionEncounterData>("Dash", request, token);
 
-    public Task<RpcResult<AttackResultData>> Attack(AttackCommand request, string token)
-        => SendData<AttackResultData>("Attack", request, token);
+    public Task<RpcResult<CombatResultData>> Attack(AttackCommand request, string token)
+        => SendData<CombatResultData>("Attack", request, token);
+
+    public Task<RpcResult<CombatResultData>> CastSpell(CastSpellCommand request, string token)
+        => SendData<CombatResultData>("CastSpell", request, token);
+
+    public Task<RpcResult<SessionData>> SetShortRest(SetShortRestCommand request, string token)
+        => SendData<SessionData>("SetShortRest", request, token);
+
+    public Task<RpcResult<SessionData>> TakeLongRest(TakeLongRestCommand request, string token)
+        => SendData<SessionData>("TakeLongRest", request, token);
 }

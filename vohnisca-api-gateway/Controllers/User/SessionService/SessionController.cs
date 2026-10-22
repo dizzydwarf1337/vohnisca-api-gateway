@@ -8,6 +8,9 @@ using Application.Commands.User.Session.EndCombat;
 using Application.Commands.User.Session.SetSpent;
 using Application.Commands.User.Session.Dash;
 using Application.Commands.User.Session.Attack;
+using Application.Commands.User.Session.CastSpell;
+using Application.Commands.User.Session.SetShortRest;
+using Application.Commands.User.Session.TakeLongRest;
 using Application.Queries.User.Session.GetDiceRolls;
 using Application.Commands.User.Session.RollDice;
 using Application.Commands.User.Session.RollCheck;
@@ -191,6 +194,28 @@ public class SessionController : BaseController
         command.SessionId = id;
         return HandleResponse(command);
     }
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/characters/{characterId:guid}/cast")]
+    public Task<IActionResult> CastSpell(Guid id, Guid characterId, CastSpellCommand command)
+    {
+        command.SessionId = id;
+        command.CharacterId = characterId;
+        return HandleResponse(command);
+    }
+
+    [HttpPut]
+    [Route("sessions/{id:guid}/rest/short")]
+    public Task<IActionResult> SetShortRest(Guid id, SetShortRestCommand command)
+    {
+        command.SessionId = id;
+        return HandleResponse(command);
+    }
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/rest/long")]
+    public Task<IActionResult> TakeLongRest(Guid id)
+        => HandleResponse(new TakeLongRestCommand { SessionId = id });
 
     [HttpPost]
     [Route("sessions/{id:guid}/characters/{characterId:guid}/checks")]
