@@ -1,3 +1,13 @@
+using Application.Queries.User.Session.GetEncounter;
+using Application.Commands.User.Session.StartCombat;
+using Application.Commands.User.Session.JoinCombat;
+using Application.Commands.User.Session.RemoveCombatant;
+using Application.Commands.User.Session.SetInitiative;
+using Application.Commands.User.Session.EndTurn;
+using Application.Commands.User.Session.EndCombat;
+using Application.Commands.User.Session.SetSpent;
+using Application.Commands.User.Session.Dash;
+using Application.Commands.User.Session.Attack;
 using Application.Queries.User.Session.GetDiceRolls;
 using Application.Commands.User.Session.RollDice;
 using Application.Commands.User.Session.RollCheck;
@@ -95,4 +105,34 @@ public class SessionRpcClient : DotnetRpcClient, ISessionRpcClient
 
     public Task<RpcResult<DiceRollData>> RollCheck(RollCheckCommand request, string token)
         => SendData<DiceRollData>("RollCheck", request, token);
+
+    public Task<RpcResult<SessionEncounterData>> GetEncounter(GetEncounterQuery request, string token)
+        => SendData<SessionEncounterData>("GetEncounter", request, token);
+
+    public Task<RpcResult<SessionEncounterData>> StartCombat(StartCombatCommand request, string token)
+        => SendData<SessionEncounterData>("StartCombat", request, token);
+
+    public Task<RpcResult<SessionEncounterData>> JoinCombat(JoinCombatCommand request, string token)
+        => SendData<SessionEncounterData>("JoinCombat", request, token);
+
+    public Task<RpcResult<SessionEncounterData>> RemoveCombatant(RemoveCombatantCommand request, string token)
+        => SendData<SessionEncounterData>("RemoveCombatant", request, token);
+
+    public Task<RpcResult<SessionEncounterData>> SetInitiative(SetInitiativeCommand request, string token)
+        => SendData<SessionEncounterData>("SetInitiative", request, token);
+
+    public Task<RpcResult<SessionEncounterData>> EndTurn(EndTurnCommand request, string token)
+        => SendData<SessionEncounterData>("EndTurn", request, token);
+
+    public Task<RpcResult<bool>> EndCombat(EndCombatCommand request, string token)
+        => SendData<bool>("EndCombat", request, token);
+
+    public Task<RpcResult<SessionEncounterData>> SetSpent(SetSpentCommand request, string token)
+        => SendData<SessionEncounterData>("SetSpent", request, token);
+
+    public Task<RpcResult<SessionEncounterData>> Dash(DashCommand request, string token)
+        => SendData<SessionEncounterData>("Dash", request, token);
+
+    public Task<RpcResult<AttackResultData>> Attack(AttackCommand request, string token)
+        => SendData<AttackResultData>("Attack", request, token);
 }
