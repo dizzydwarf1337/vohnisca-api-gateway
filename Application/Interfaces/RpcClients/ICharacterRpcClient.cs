@@ -12,6 +12,7 @@ using Application.Commands.User.Character.LearnSpell;
 using Application.Commands.User.Character.LevelUpCharacter;
 using Application.Commands.User.Character.PrepareSpell;
 using Application.Commands.User.Character.RemoveItemFromCharacter;
+using Application.Commands.User.Character.ReleaseCharacterSession;
 using Application.Commands.User.Character.AddCharacterMoney;
 using Application.Commands.User.Character.SpendCharacterMoney;
 using Application.Commands.User.Character.RevokeCharacterShare;
@@ -55,6 +56,7 @@ public interface ICharacterRpcClient
     // Inventory
     Task<RpcResult<bool>> AddItemToCharacter(AddItemToCharacterCommand request, string token);
     Task<RpcResult<bool>> RemoveItemFromCharacter(RemoveItemFromCharacterCommand request, string token);
+    Task<RpcResult<bool>> ReleaseCharacterSession(ReleaseCharacterSessionCommand request, string token);
     Task<RpcResult<bool>> AddCharacterMoney(AddCharacterMoneyCommand request, string token);
     Task<RpcResult<bool>> SpendCharacterMoney(SpendCharacterMoneyCommand request, string token);
     Task<RpcResult<bool>> EquipItem(EquipItemCommand request, string token);
@@ -207,6 +209,7 @@ public record CharacterSheetData(
     List<string> WeaponMasteries,
     int AttacksPerAction,
     int? PactWeaponAttacks,
+    Guid? ActiveSessionId,
     string Access);
 
 // ---- Creation options (level 1 choices, SRD 5.2) ----

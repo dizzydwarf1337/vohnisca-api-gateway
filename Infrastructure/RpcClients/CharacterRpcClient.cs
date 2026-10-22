@@ -16,6 +16,7 @@ using Application.Commands.User.Character.LearnSpell;
 using Application.Commands.User.Character.LevelUpCharacter;
 using Application.Commands.User.Character.PrepareSpell;
 using Application.Commands.User.Character.RemoveItemFromCharacter;
+using Application.Commands.User.Character.ReleaseCharacterSession;
 using Application.Commands.User.Character.AddCharacterMoney;
 using Application.Commands.User.Character.SpendCharacterMoney;
 using Application.Commands.User.Character.RevokeCharacterShare;
@@ -75,6 +76,9 @@ public class CharacterRpcClient : DotnetRpcClient, ICharacterRpcClient
 
     public Task<RpcResult<bool>> RemoveItemFromCharacter(RemoveItemFromCharacterCommand request, string token)
         => SendCommand("RemoveItemFromCharacter", request, token);
+
+    public Task<RpcResult<bool>> ReleaseCharacterSession(ReleaseCharacterSessionCommand request, string token)
+        => SendCommand("ReleaseCharacterSession", request, token);
 
     public Task<RpcResult<bool>> AddCharacterMoney(AddCharacterMoneyCommand request, string token)
         => SendCommand("AddCharacterMoney", request, token);
