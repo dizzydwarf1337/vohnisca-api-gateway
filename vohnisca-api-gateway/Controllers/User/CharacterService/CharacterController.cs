@@ -90,9 +90,9 @@ public class CharacterController : BaseController
     public Task<IActionResult> DeleteCharacter(Guid id)
         => HandleResponse(new DeleteCharacterCommand { CharacterId = id });
 
-    // Multipart: "name" plus an optional "file" portrait, applied together.
+    // Multipart: "name" and/or "file" (portrait); whichever is sent is applied.
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> UpdateCharacter(Guid id, [FromForm] string name, [FromForm] IFormFile? file)
+    public async Task<IActionResult> UpdateCharacter(Guid id, [FromForm] string? name, [FromForm] IFormFile? file)
     {
         var (bytes, contentType) = await GetFileContent.GetAsync(
             file, [FileType.ImageJpeg, FileType.ImagePng, FileType.ImageWebp, FileType.ImageGif]);
@@ -100,7 +100,9 @@ public class CharacterController : BaseController
         return await HandleResponse(new UpdateCharacterCommand
         {
             CharacterId = id,
-            Name = name,
+            // Form binding turns an empty field into null; keep "sent but empty" as ""
+            // so the service rejects it instead of leaving the name unchanged.
+            Name = Request.Form.ContainsKey("name") ? name ?? string.Empty : null,
             Image = bytes,
             ImageContentType = contentType,
         });
