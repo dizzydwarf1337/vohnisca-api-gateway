@@ -8,4 +8,7 @@ public class LevelUpCharacterCommand : UserRequest<bool>
     public Guid ClassId { get; set; }
     public int By { get; set; } = 1;
     public List<int>? RolledHitPoints { get; set; }
+
+    // Level-up choices, keyed like the level-up options.
+    public Dictionary<string, List<string>> Choices { get; set; } = new();
 }

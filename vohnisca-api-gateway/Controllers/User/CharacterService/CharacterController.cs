@@ -22,6 +22,7 @@ using Application.Commands.User.Character.UpdateCharacter;
 using Application.Queries.User.Character.GetCharacterById;
 using Application.Queries.User.Character.GetCharacterShares;
 using Application.Queries.User.Character.GetCreationOptions;
+using Application.Queries.User.Character.GetLevelUpOptions;
 using Application.Queries.User.Character.GetLearnableSpells;
 using Application.Queries.User.Character.GetSharedCharactersList;
 using Application.Queries.User.Character.ListCharacters;
@@ -135,6 +136,14 @@ public class CharacterController : BaseController
     {
         command.CharacterId = id;
         return HandleResponse(command);
+    }
+
+    // Choices for the next level of a class; the dialog re-asks as choices change.
+    [HttpPost("{id:guid}/level-up-options")]
+    public Task<IActionResult> GetLevelUpOptions(Guid id, GetLevelUpOptionsQuery query)
+    {
+        query.CharacterId = id;
+        return HandleResponse(query);
     }
 
     [HttpPost("{id:guid}/level-up")]
