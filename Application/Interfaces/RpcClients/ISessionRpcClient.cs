@@ -112,7 +112,8 @@ public record SessionCharacterData(
     List<SessionResourceData> Resources,
     List<SessionHitDiceData> HitDice,
     List<SessionSpellData> Spells,
-    List<AttackOptionData> Attacks);
+    List<AttackOptionData> Attacks,
+    int? SpellAttackBonus);
 
 // An attack the character can make (CombatRules.AttackOption): damage is DiceCount dice of
 // DieFaces + DamageBonus (DamageMin: a die below it counts as it); Reach in feet for
