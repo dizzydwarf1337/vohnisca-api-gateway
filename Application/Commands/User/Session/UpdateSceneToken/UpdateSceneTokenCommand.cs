@@ -21,4 +21,13 @@ public class UpdateSceneTokenCommand : UserRequest<SessionSceneData>
     // Saving throw bonuses by ability ("dexterity": 2); the NPC's conditions ("prone"...).
     public Dictionary<string, int>? Saves { get; set; }
     public List<string>? Conditions { get; set; }
+    // Damage types ("fire"...) it resists, ignores, takes double; conditions it can't have.
+    public List<string>? Resistances { get; set; }
+    public List<string>? Immunities { get; set; }
+    public List<string>? Vulnerabilities { get; set; }
+    public List<string>? ConditionImmunities { get; set; }
+    // What lasts on it, by name (the GM's buffs and debuffs; spells keep where they came from).
+    public List<string>? Effects { get; set; }
+    // Players may look at its sheet.
+    public bool? SheetShown { get; set; }
 }
