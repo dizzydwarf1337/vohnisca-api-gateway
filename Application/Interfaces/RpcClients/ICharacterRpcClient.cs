@@ -212,7 +212,8 @@ public record CreationChoiceRow(
     CreationChoiceOption[] Options,
     string Kind,
     string? Hint,
-    string[]? Defaults);
+    string[]? Defaults,
+    bool Optional);
 
 // ---- Learnable spells (per spellcasting class; Max* of 0 = no limit) ----
 public record LearnableSpellRow(Guid Id, string Name, int Level, string School, string? ImagePath);
