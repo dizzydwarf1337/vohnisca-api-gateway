@@ -1,3 +1,6 @@
+using Application.Queries.User.Session.GetDiceRolls;
+using Application.Commands.User.Session.RollDice;
+using Application.Commands.User.Session.RollCheck;
 using Application.Queries.User.Session.GetScene;
 using Application.Commands.User.Session.SetScene;
 using Application.Commands.User.Session.SetSceneFog;
@@ -161,6 +164,30 @@ public class SessionController : BaseController
     {
         command.SessionId = id;
         command.TokenId = tokenId;
+        return HandleResponse(command);
+    }
+
+    // ---- Dice ----
+
+    [HttpGet]
+    [Route("sessions/{id:guid}/dice")]
+    public Task<IActionResult> GetDiceRolls(Guid id)
+        => HandleResponse(new GetDiceRollsQuery { SessionId = id });
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/dice")]
+    public Task<IActionResult> RollDice(Guid id, RollDiceCommand command)
+    {
+        command.SessionId = id;
+        return HandleResponse(command);
+    }
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/characters/{characterId:guid}/checks")]
+    public Task<IActionResult> RollCheck(Guid id, Guid characterId, RollCheckCommand command)
+    {
+        command.SessionId = id;
+        command.CharacterId = characterId;
         return HandleResponse(command);
     }
 }

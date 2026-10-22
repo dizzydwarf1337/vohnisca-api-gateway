@@ -1,3 +1,6 @@
+using Application.Queries.User.Session.GetDiceRolls;
+using Application.Commands.User.Session.RollDice;
+using Application.Commands.User.Session.RollCheck;
 using Application.Queries.User.Session.GetScene;
 using Application.Commands.User.Session.SetScene;
 using Application.Commands.User.Session.SetSceneFog;
@@ -83,4 +86,13 @@ public class SessionRpcClient : DotnetRpcClient, ISessionRpcClient
 
     public Task<RpcResult<SessionSceneData>> MoveSceneToken(MoveSceneTokenCommand request, string token)
         => SendData<SessionSceneData>("MoveSceneToken", request, token);
+
+    public Task<RpcResult<DiceRollsData>> GetDiceRolls(GetDiceRollsQuery request, string token)
+        => SendData<DiceRollsData>("GetDiceRolls", request, token);
+
+    public Task<RpcResult<DiceRollData>> RollDice(RollDiceCommand request, string token)
+        => SendData<DiceRollData>("RollDice", request, token);
+
+    public Task<RpcResult<DiceRollData>> RollCheck(RollCheckCommand request, string token)
+        => SendData<DiceRollData>("RollCheck", request, token);
 }
