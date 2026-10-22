@@ -1,3 +1,11 @@
+using Application.Queries.User.Session.GetScene;
+using Application.Commands.User.Session.SetScene;
+using Application.Commands.User.Session.SetSceneFog;
+using Application.Commands.User.Session.RevealSceneCells;
+using Application.Commands.User.Session.AddSceneToken;
+using Application.Commands.User.Session.UpdateSceneToken;
+using Application.Commands.User.Session.RemoveSceneToken;
+using Application.Commands.User.Session.MoveSceneToken;
 using Application.Commands.User.Session.ApplySessionAction;
 using Application.Commands.User.Session.EndSession;
 using Application.Commands.User.Session.JoinSession;
@@ -9,6 +17,7 @@ using Application.Queries.User.Session.GetCampaignSession;
 using Application.Queries.User.Session.GetSession;
 using Application.Queries.User.Session.ListMySessions;
 using Microsoft.AspNetCore.Mvc;
+using vohnisca_api_gateway.Core.Requests;
 
 namespace vohnisca_api_gateway.Controllers.User.SessionService;
 
@@ -77,6 +86,81 @@ public class SessionController : BaseController
     public Task<IActionResult> EndSession(Guid id, EndSessionCommand command)
     {
         command.SessionId = id;
+        return HandleResponse(command);
+    }
+
+    // ---- Scene (the map) ----
+
+    [HttpGet]
+    [Route("sessions/{id:guid}/scene")]
+    public Task<IActionResult> GetScene(Guid id)
+        => HandleResponse(new GetSceneQuery { SessionId = id });
+
+    // Multipart: name, cols, rows, fog, and optionally "file" (the background image).
+    [HttpPut]
+    [Route("sessions/{id:guid}/scene")]
+    public async Task<IActionResult> SetScene(Guid id, [FromForm] string? name, [FromForm] int cols, [FromForm] int rows,
+        [FromForm] bool fog, [FromForm] IFormFile? file)
+    {
+        var (bytes, contentType) = await GetFileContent.GetAsync(
+            file, [FileType.ImageJpeg, FileType.ImagePng, FileType.ImageWebp, FileType.ImageGif]);
+
+        return await HandleResponse(new SetSceneCommand
+        {
+            SessionId = id,
+            Name = name ?? string.Empty,
+            Cols = cols,
+            Rows = rows,
+            Fog = fog,
+            Image = bytes,
+            ImageContentType = contentType,
+        });
+    }
+
+    [HttpPut]
+    [Route("sessions/{id:guid}/scene/fog")]
+    public Task<IActionResult> SetSceneFog(Guid id, SetSceneFogCommand command)
+    {
+        command.SessionId = id;
+        return HandleResponse(command);
+    }
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/scene/reveal")]
+    public Task<IActionResult> RevealSceneCells(Guid id, RevealSceneCellsCommand command)
+    {
+        command.SessionId = id;
+        return HandleResponse(command);
+    }
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/scene/tokens")]
+    public Task<IActionResult> AddSceneToken(Guid id, AddSceneTokenCommand command)
+    {
+        command.SessionId = id;
+        return HandleResponse(command);
+    }
+
+    [HttpPut]
+    [Route("sessions/{id:guid}/scene/tokens/{tokenId:guid}")]
+    public Task<IActionResult> UpdateSceneToken(Guid id, Guid tokenId, UpdateSceneTokenCommand command)
+    {
+        command.SessionId = id;
+        command.TokenId = tokenId;
+        return HandleResponse(command);
+    }
+
+    [HttpDelete]
+    [Route("sessions/{id:guid}/scene/tokens/{tokenId:guid}")]
+    public Task<IActionResult> RemoveSceneToken(Guid id, Guid tokenId)
+        => HandleResponse(new RemoveSceneTokenCommand { SessionId = id, TokenId = tokenId });
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/scene/tokens/{tokenId:guid}/move")]
+    public Task<IActionResult> MoveSceneToken(Guid id, Guid tokenId, MoveSceneTokenCommand command)
+    {
+        command.SessionId = id;
+        command.TokenId = tokenId;
         return HandleResponse(command);
     }
 }

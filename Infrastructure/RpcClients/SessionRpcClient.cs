@@ -1,3 +1,11 @@
+using Application.Queries.User.Session.GetScene;
+using Application.Commands.User.Session.SetScene;
+using Application.Commands.User.Session.SetSceneFog;
+using Application.Commands.User.Session.RevealSceneCells;
+using Application.Commands.User.Session.AddSceneToken;
+using Application.Commands.User.Session.UpdateSceneToken;
+using Application.Commands.User.Session.RemoveSceneToken;
+using Application.Commands.User.Session.MoveSceneToken;
 using Application.Commands.User.Session.ApplySessionAction;
 using Application.Commands.User.Session.EndSession;
 using Application.Commands.User.Session.JoinSession;
@@ -51,4 +59,28 @@ public class SessionRpcClient : DotnetRpcClient, ISessionRpcClient
 
     public Task<RpcResult<bool>> EndSession(EndSessionCommand request, string token)
         => SendData<bool>("EndSession", request, token);
+
+    public Task<RpcResult<SessionSceneData>> GetScene(GetSceneQuery request, string token)
+        => SendData<SessionSceneData>("GetScene", request, token);
+
+    public Task<RpcResult<SessionSceneData>> SetScene(SetSceneCommand request, string token)
+        => SendData<SessionSceneData>("SetScene", request, token);
+
+    public Task<RpcResult<SessionSceneData>> SetSceneFog(SetSceneFogCommand request, string token)
+        => SendData<SessionSceneData>("SetSceneFog", request, token);
+
+    public Task<RpcResult<SessionSceneData>> RevealSceneCells(RevealSceneCellsCommand request, string token)
+        => SendData<SessionSceneData>("RevealSceneCells", request, token);
+
+    public Task<RpcResult<SessionSceneData>> AddSceneToken(AddSceneTokenCommand request, string token)
+        => SendData<SessionSceneData>("AddSceneToken", request, token);
+
+    public Task<RpcResult<SessionSceneData>> UpdateSceneToken(UpdateSceneTokenCommand request, string token)
+        => SendData<SessionSceneData>("UpdateSceneToken", request, token);
+
+    public Task<RpcResult<SessionSceneData>> RemoveSceneToken(RemoveSceneTokenCommand request, string token)
+        => SendData<SessionSceneData>("RemoveSceneToken", request, token);
+
+    public Task<RpcResult<SessionSceneData>> MoveSceneToken(MoveSceneTokenCommand request, string token)
+        => SendData<SessionSceneData>("MoveSceneToken", request, token);
 }

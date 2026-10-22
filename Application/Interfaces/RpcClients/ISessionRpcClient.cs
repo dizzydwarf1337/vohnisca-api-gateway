@@ -1,3 +1,11 @@
+using Application.Queries.User.Session.GetScene;
+using Application.Commands.User.Session.SetScene;
+using Application.Commands.User.Session.SetSceneFog;
+using Application.Commands.User.Session.RevealSceneCells;
+using Application.Commands.User.Session.AddSceneToken;
+using Application.Commands.User.Session.UpdateSceneToken;
+using Application.Commands.User.Session.RemoveSceneToken;
+using Application.Commands.User.Session.MoveSceneToken;
 using Application.Commands.User.Session.ApplySessionAction;
 using Application.Commands.User.Session.EndSession;
 using Application.Commands.User.Session.JoinSession;
@@ -24,6 +32,15 @@ public interface ISessionRpcClient
     Task<RpcResult<SessionData>> StartSession(StartSessionCommand request, string token);
     Task<RpcResult<SessionData>> ApplySessionAction(ApplySessionActionCommand request, string token);
     Task<RpcResult<bool>> EndSession(EndSessionCommand request, string token);
+
+    Task<RpcResult<SessionSceneData>> GetScene(GetSceneQuery request, string token);
+    Task<RpcResult<SessionSceneData>> SetScene(SetSceneCommand request, string token);
+    Task<RpcResult<SessionSceneData>> SetSceneFog(SetSceneFogCommand request, string token);
+    Task<RpcResult<SessionSceneData>> RevealSceneCells(RevealSceneCellsCommand request, string token);
+    Task<RpcResult<SessionSceneData>> AddSceneToken(AddSceneTokenCommand request, string token);
+    Task<RpcResult<SessionSceneData>> UpdateSceneToken(UpdateSceneTokenCommand request, string token);
+    Task<RpcResult<SessionSceneData>> RemoveSceneToken(RemoveSceneTokenCommand request, string token);
+    Task<RpcResult<SessionSceneData>> MoveSceneToken(MoveSceneTokenCommand request, string token);
 }
 
 // Status: "lobby" | "live". Enum values (conditions, resources, dice) come as camelCase names.
@@ -82,3 +99,32 @@ public record SessionSpellData(Guid Id, string Name, int Level, bool Ritual, boo
 public record CampaignSessionData(SessionData? Session);
 
 public record SessionNoticeData(Guid SessionId, Guid CampaignId, string CampaignTitle, string GmName, string Status);
+
+// The map of a session as the user may see it (Scene is null until the GM sets one).
+public record SessionSceneData(SceneData? Scene);
+
+// Revealed: cells (row * cols + col) the players see when Fog is on.
+public record SceneData(
+    string Name,
+    string ImageUrl,
+    int Cols,
+    int Rows,
+    int StartCol,
+    int StartRow,
+    bool Fog,
+    List<int> Revealed,
+    List<SceneTokenData> Tokens);
+
+// Kind: "character" | "npc" | "item" | "marker"; OwnerUserId: the player of a character token.
+public record SceneTokenData(
+    Guid Id,
+    string Kind,
+    Guid? RefId,
+    string Name,
+    string ImageUrl,
+    int Col,
+    int Row,
+    int Size,
+    int Quantity,
+    bool Hidden,
+    Guid? OwnerUserId);
