@@ -44,6 +44,10 @@ HTTP (REST) → Controller → MediatR Send(Command)
 Порты downstream — `appsettings.Development.json` (`RpcServices`) и env docker-compose
 (`RpcServices__<Service>`). CORS — только `http(s)://localhost`.
 
+Хабы реального времени проксируются как есть (YARP, `Core/ServicesConfiguration/Proxy`):
+`/hubs/session` → session service (`RpcServices:SessionService`). Фронтенд по-прежнему ходит
+только в gateway.
+
 ## Известный долг
 
 Авторизация `AdminRequest`/`SuperadminRequest` в `AuthorizationBehavior` не полна — расширять при

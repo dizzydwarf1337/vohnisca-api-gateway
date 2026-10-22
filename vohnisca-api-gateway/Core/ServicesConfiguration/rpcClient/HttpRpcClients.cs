@@ -11,6 +11,7 @@ public static class HttpRpcClients
         services.AddScoped<IUserRpcClient, UserRpcClient>();
         services.AddScoped<ICampaignRpcClient, CampaignRpcClient>();
         services.AddScoped<ICharacterRpcClient, CharacterRpcClient>();
+        services.AddScoped<ISessionRpcClient, SessionRpcClient>();
 
         return services;
     }
