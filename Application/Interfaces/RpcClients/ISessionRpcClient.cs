@@ -282,7 +282,11 @@ public record TokenSheetData(
     List<string> Immunities,
     List<string> Vulnerabilities,
     List<string> ConditionImmunities,
-    List<string> Effects);
+    List<string> Effects,
+    List<NpcAttackData> Attacks);
+
+// An NPC's attack the GM keeps on it: to hit, damage dice ("1d6+2"), type, reach or range.
+public record NpcAttackData(Guid Id, string Name, int Bonus, string Damage, string DamageType, int RangeFeet);
 
 // A roll at the table. Terms: each part of the roll (dice with their rolls and the dropped
 // ones, or a flat number). Outcome: what a rule roll decided ("Success", "Heals 7").
@@ -330,7 +334,9 @@ public record CombatantData(
     bool Dodging,
     bool Disengaged,
     bool Assisted,
-    bool Hiding);
+    bool Hiding,
+    // It attacked with its main-hand weapon this turn: the off-hand attack may follow.
+    bool OffHandReady);
 
 // An NPC's attack made up by the GM: Damage in dice notation ("1d6+2").
 public record CustomAttackData(string Name, int Bonus, string Damage, string DamageType, int RangeFeet = 5);
