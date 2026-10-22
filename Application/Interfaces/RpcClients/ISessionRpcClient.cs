@@ -107,7 +107,8 @@ public record SessionMemberData(
     int TemporaryHitPoints,
     bool IsDead,
     List<string> Conditions,
-    string? Concentration);
+    string? Concentration,
+    List<string> Effects);
 
 // Kind "combat": what an attack or a spell did (Text may run over several lines).
 public record SessionLogData(DateTime At, Guid UserId, Guid? CharacterId, string Text, string? Kind);
@@ -196,7 +197,14 @@ public record SpellEffectData(
     bool ProjectilePerSlot,
     string? Upcast,
     string? OnFailedSave,
-    int? RangeFeet);
+    int? RangeFeet,
+    bool Lasting,
+    SpellAreaData? Area);
+
+// The area a spell fills: Shape "sphere" | "cylinder" | "cone" | "cube" | "line" |
+// "emanation"; Size: radius, length or side in feet; Width: a line's; FromCaster: it
+// starts at the caster (otherwise it's placed at a point in range).
+public record SpellAreaData(string Shape, int Size, int Width, bool FromCaster);
 
 // Session is null when the campaign has none open.
 public record CampaignSessionData(SessionData? Session);
@@ -219,8 +227,8 @@ public record SceneData(
     List<SceneTokenData> Tokens);
 
 // Kind: "character" | "npc" | "item" | "marker"; OwnerUserId: the player of a character token.
-// An NPC's numbers (MaxHp, Hp, Ac, Speed, InitiativeBonus, Saves) come to the GM; its
-// Health and Conditions to everyone.
+// An NPC's numbers (MaxHp, Hp, Ac, Speed, InitiativeBonus) come to the GM; its Health and
+// Conditions to everyone; its Sheet to the GM, and to players while SheetShown.
 public record SceneTokenData(
     Guid Id,
     string Kind,
@@ -239,8 +247,19 @@ public record SceneTokenData(
     int? Speed,
     int? InitiativeBonus,
     string? Health,
-    Dictionary<string, int>? Saves,
-    List<string> Conditions);
+    List<string> Conditions,
+    bool SheetShown,
+    TokenSheetData? Sheet);
+
+// An NPC's sheet: saving throw bonuses, damage resistances / immunities /
+// vulnerabilities, condition immunities, and what lasts on it (spells, the GM's notes).
+public record TokenSheetData(
+    Dictionary<string, int> Saves,
+    List<string> Resistances,
+    List<string> Immunities,
+    List<string> Vulnerabilities,
+    List<string> ConditionImmunities,
+    List<string> Effects);
 
 // A roll at the table. Terms: each part of the roll (dice with their rolls and the dropped
 // ones, or a flat number). Outcome: what a rule roll decided ("Success", "Heals 7").
