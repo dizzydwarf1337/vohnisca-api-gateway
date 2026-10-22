@@ -1,3 +1,6 @@
+using Application.Queries.User.Session.GetDiceRolls;
+using Application.Commands.User.Session.RollDice;
+using Application.Commands.User.Session.RollCheck;
 using Application.Queries.User.Session.GetScene;
 using Application.Commands.User.Session.SetScene;
 using Application.Commands.User.Session.SetSceneFog;
@@ -41,6 +44,10 @@ public interface ISessionRpcClient
     Task<RpcResult<SessionSceneData>> UpdateSceneToken(UpdateSceneTokenCommand request, string token);
     Task<RpcResult<SessionSceneData>> RemoveSceneToken(RemoveSceneTokenCommand request, string token);
     Task<RpcResult<SessionSceneData>> MoveSceneToken(MoveSceneTokenCommand request, string token);
+
+    Task<RpcResult<DiceRollsData>> GetDiceRolls(GetDiceRollsQuery request, string token);
+    Task<RpcResult<DiceRollData>> RollDice(RollDiceCommand request, string token);
+    Task<RpcResult<DiceRollData>> RollCheck(RollCheckCommand request, string token);
 }
 
 // Status: "lobby" | "live". Enum values (conditions, resources, dice) come as camelCase names.
@@ -128,3 +135,23 @@ public record SceneTokenData(
     int Quantity,
     bool Hidden,
     Guid? OwnerUserId);
+
+// A roll at the table. Terms: each part of the roll (dice with their rolls and the dropped
+// ones, or a flat number). Outcome: what a rule roll decided ("Success", "Heals 7").
+public record DiceRollData(
+    Guid Id,
+    DateTime At,
+    Guid UserId,
+    string Username,
+    Guid? CharacterId,
+    string? CharacterName,
+    string? Label,
+    string Expression,
+    int Total,
+    List<DiceTermData> Terms,
+    bool Secret,
+    string? Outcome);
+
+public record DiceTermData(string Text, int Sign, List<int> Rolls, List<int> Dropped, int Value);
+
+public record DiceRollsData(List<DiceRollData> Rolls);
