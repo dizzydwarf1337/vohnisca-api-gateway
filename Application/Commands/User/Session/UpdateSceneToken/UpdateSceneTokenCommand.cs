@@ -30,4 +30,6 @@ public class UpdateSceneTokenCommand : UserRequest<SessionSceneData>
     public List<string>? Effects { get; set; }
     // Players may look at its sheet.
     public bool? SheetShown { get; set; }
+    // All of an NPC's attacks (replacing the ones it had).
+    public List<CustomAttackData>? Attacks { get; set; }
 }

@@ -16,4 +16,6 @@ public class AttackCommand : UserRequest<CombatResultData>
     public string Mode { get; set; } = "normal";
     // Off-turn, with the reaction (an opportunity attack).
     public bool Reaction { get; set; }
+    // The GM's custom attack is kept on the NPC for the next time.
+    public bool Remember { get; set; }
 }
