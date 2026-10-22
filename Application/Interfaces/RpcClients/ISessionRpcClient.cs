@@ -21,6 +21,8 @@ using Application.Commands.User.Session.RevealSceneCells;
 using Application.Commands.User.Session.AddSceneToken;
 using Application.Commands.User.Session.UpdateSceneToken;
 using Application.Commands.User.Session.RemoveSceneToken;
+using Application.Commands.User.Session.RemoveSceneArea;
+using Application.Commands.User.Session.TakeCombatAction;
 using Application.Commands.User.Session.MoveSceneToken;
 using Application.Commands.User.Session.ApplySessionAction;
 using Application.Commands.User.Session.EndSession;
@@ -59,6 +61,8 @@ public interface ISessionRpcClient
     Task<RpcResult<SessionSceneData>> AddSceneToken(AddSceneTokenCommand request, string token);
     Task<RpcResult<SessionSceneData>> UpdateSceneToken(UpdateSceneTokenCommand request, string token);
     Task<RpcResult<SessionSceneData>> RemoveSceneToken(RemoveSceneTokenCommand request, string token);
+    Task<RpcResult<SessionSceneData>> RemoveSceneArea(RemoveSceneAreaCommand request, string token);
+    Task<RpcResult<CombatResultData>> TakeCombatAction(TakeCombatActionCommand request, string token);
     Task<RpcResult<SessionSceneData>> MoveSceneToken(MoveSceneTokenCommand request, string token);
 
     Task<RpcResult<DiceRollsData>> GetDiceRolls(GetDiceRollsQuery request, string token);
@@ -199,7 +203,8 @@ public record SpellEffectData(
     string? OnFailedSave,
     int? RangeFeet,
     bool Lasting,
-    SpellAreaData? Area);
+    SpellAreaData? Area,
+    bool AreaStays);
 
 // The area a spell fills: Shape "sphere" | "cylinder" | "cone" | "cube" | "line" |
 // "emanation"; Size: radius, length or side in feet; Width: a line's; FromCaster: it
@@ -224,7 +229,25 @@ public record SceneData(
     int StartRow,
     bool Fog,
     List<int> Revealed,
-    List<SceneTokenData> Tokens);
+    List<SceneTokenData> Tokens,
+    List<SceneAreaData> Areas);
+
+// A spell's area that stays on the map (everyone sees it): Origin is where the caster
+// stood when it was cast; an emanation follows CasterTokenId.
+public record SceneAreaData(
+    Guid Id,
+    string Name,
+    string Shape,
+    int Size,
+    int Width,
+    bool FromCaster,
+    double AimCol,
+    double AimRow,
+    int OriginCol,
+    int OriginRow,
+    int OriginSize,
+    string Color,
+    Guid? CasterTokenId);
 
 // Kind: "character" | "npc" | "item" | "marker"; OwnerUserId: the player of a character token.
 // An NPC's numbers (MaxHp, Hp, Ac, Speed, InitiativeBonus) come to the GM; its Health and
@@ -303,7 +326,11 @@ public record CombatantData(
     bool ReactionUsed,
     int MovementLeft,
     int Speed,
-    int AttacksLeft);
+    int AttacksLeft,
+    bool Dodging,
+    bool Disengaged,
+    bool Assisted,
+    bool Hiding);
 
 // An NPC's attack made up by the GM: Damage in dice notation ("1d6+2").
 public record CustomAttackData(string Name, int Bonus, string Damage, string DamageType, int RangeFeet = 5);

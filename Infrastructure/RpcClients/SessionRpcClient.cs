@@ -21,6 +21,8 @@ using Application.Commands.User.Session.RevealSceneCells;
 using Application.Commands.User.Session.AddSceneToken;
 using Application.Commands.User.Session.UpdateSceneToken;
 using Application.Commands.User.Session.RemoveSceneToken;
+using Application.Commands.User.Session.RemoveSceneArea;
+using Application.Commands.User.Session.TakeCombatAction;
 using Application.Commands.User.Session.MoveSceneToken;
 using Application.Commands.User.Session.ApplySessionAction;
 using Application.Commands.User.Session.EndSession;
@@ -96,6 +98,12 @@ public class SessionRpcClient : DotnetRpcClient, ISessionRpcClient
 
     public Task<RpcResult<SessionSceneData>> RemoveSceneToken(RemoveSceneTokenCommand request, string token)
         => SendData<SessionSceneData>("RemoveSceneToken", request, token);
+
+    public Task<RpcResult<SessionSceneData>> RemoveSceneArea(RemoveSceneAreaCommand request, string token)
+        => SendData<SessionSceneData>("RemoveSceneArea", request, token);
+
+    public Task<RpcResult<CombatResultData>> TakeCombatAction(TakeCombatActionCommand request, string token)
+        => SendData<CombatResultData>("TakeCombatAction", request, token);
 
     public Task<RpcResult<SessionSceneData>> MoveSceneToken(MoveSceneTokenCommand request, string token)
         => SendData<SessionSceneData>("MoveSceneToken", request, token);
