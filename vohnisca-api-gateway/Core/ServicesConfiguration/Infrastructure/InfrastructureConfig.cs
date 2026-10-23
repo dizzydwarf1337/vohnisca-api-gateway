@@ -4,6 +4,7 @@ using Application.Interfaces.Behavior;
 using Infrastructure.Core.Services;
 
 namespace vohnisca_api_gateway.Core.ServicesConfiguration.Infrastructure;
+
 using FluentValidation;
 public static class InfrastructureConfig
 {
@@ -11,7 +12,7 @@ public static class InfrastructureConfig
     {
         services.AddHttpContextAccessor();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
-        
+
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());

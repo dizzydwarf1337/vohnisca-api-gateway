@@ -82,7 +82,7 @@ public class CampaignController : BaseController
         if (id == Guid.Empty || targetUserId == Guid.Empty)
             return BadRequest();
         return await HandleResponse(new RemoveMemberCommand
-            { CampaignId = id, TargetUserId = targetUserId });
+        { CampaignId = id, TargetUserId = targetUserId });
     }
 
     [HttpPut]

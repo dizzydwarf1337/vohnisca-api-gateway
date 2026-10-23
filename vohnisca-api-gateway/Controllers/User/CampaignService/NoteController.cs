@@ -97,6 +97,6 @@ public class NoteController : BaseController
             return BadRequest();
 
         return await HandleResponse(new RevokeNoteAccessCommand
-            { NoteId = id, TargetUserId = targetUserId });
+        { NoteId = id, TargetUserId = targetUserId });
     }
 }

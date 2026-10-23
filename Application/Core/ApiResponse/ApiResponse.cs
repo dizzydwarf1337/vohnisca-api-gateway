@@ -13,12 +13,12 @@ public class ApiResponse<T>
     public static ApiResponse<T> Success(T value, int statusCode = 200)
     {
         return new ApiResponse<T>
-            { IsSuccess = true, Value = value, StatusCode = statusCode };
+        { IsSuccess = true, Value = value, StatusCode = statusCode };
     }
 
     public static ApiResponse<T> Failure(string error, int statusCode = 400)
     {
         return new ApiResponse<T>
-            { IsSuccess = false, Error = error, StatusCode = statusCode };
+        { IsSuccess = false, Error = error, StatusCode = statusCode };
     }
 }

@@ -22,8 +22,8 @@ var app = builder.Build();
 
 
 app.UseRouting();
-app.UseAuthentication(); 
-app.UseAuthorization(); 
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseCors("CorsPolicy");
 
 app.MapControllers();

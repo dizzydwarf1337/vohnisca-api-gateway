@@ -7,9 +7,9 @@ namespace Application.Commands.Public.Auth.Login;
 public class LoginCommandHandler : IRequestHandler<LoginCommand, ApiResponse<LoginCommand.Result>>
 {
     private readonly IAuthRpcClient _authGrpcClient;
-    
+
     public LoginCommandHandler(IAuthRpcClient authGrpcClient) => _authGrpcClient = authGrpcClient;
-    
+
     public async Task<ApiResponse<LoginCommand.Result>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
         var result = await _authGrpcClient.LoginAsync(request.Email, request.Password);
