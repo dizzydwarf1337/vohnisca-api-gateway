@@ -22,4 +22,6 @@ public class CastSpellCommand : UserRequest<CombatResultData>
     // Where an area spell is placed or pointed, in cells: its targets are whoever is in it.
     public double? AimCol { get; set; }
     public double? AimRow { get; set; }
+    // The creatures a spell that lets its caster pick leaves alone (the party when none).
+    public List<Guid>? SparedTokenIds { get; set; }
 }
