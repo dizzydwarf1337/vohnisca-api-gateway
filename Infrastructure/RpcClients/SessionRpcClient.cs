@@ -1,3 +1,11 @@
+using Application.Commands.User.Session.PlaceSceneDoor;
+using Application.Commands.User.Session.SetSceneLock;
+using Application.Commands.User.Session.SetContainerContents;
+using Application.Commands.User.Session.UseDoor;
+using Application.Commands.User.Session.OpenContainer;
+using Application.Commands.User.Session.TakeFromContainer;
+using Application.Commands.User.Session.PutIntoContainer;
+using Application.Commands.User.Session.UnlockLock;
 using Application.Commands.User.Session.GatherSpill;
 using Application.Commands.User.Session.IgniteSceneTerrain;
 using Application.Commands.User.Session.SetSceneWalls;
@@ -151,6 +159,30 @@ public class SessionRpcClient : DotnetRpcClient, ISessionRpcClient
 
     public Task<RpcResult<SessionData>> PickUpItem(PickUpItemCommand request, string token)
         => SendData<SessionData>("PickUpItem", request, token);
+
+    public Task<RpcResult<SessionSceneData>> PlaceSceneDoor(PlaceSceneDoorCommand request, string token)
+        => SendData<SessionSceneData>("PlaceSceneDoor", request, token);
+
+    public Task<RpcResult<SessionSceneData>> SetSceneLock(SetSceneLockCommand request, string token)
+        => SendData<SessionSceneData>("SetSceneLock", request, token);
+
+    public Task<RpcResult<SessionSceneData>> SetContainerContents(SetContainerContentsCommand request, string token)
+        => SendData<SessionSceneData>("SetContainerContents", request, token);
+
+    public Task<RpcResult<SessionData>> UseDoor(UseDoorCommand request, string token)
+        => SendData<SessionData>("UseDoor", request, token);
+
+    public Task<RpcResult<SessionData>> OpenContainer(OpenContainerCommand request, string token)
+        => SendData<SessionData>("OpenContainer", request, token);
+
+    public Task<RpcResult<SessionData>> TakeFromContainer(TakeFromContainerCommand request, string token)
+        => SendData<SessionData>("TakeFromContainer", request, token);
+
+    public Task<RpcResult<SessionData>> PutIntoContainer(PutIntoContainerCommand request, string token)
+        => SendData<SessionData>("PutIntoContainer", request, token);
+
+    public Task<RpcResult<CombatResultData>> UnlockLock(UnlockLockCommand request, string token)
+        => SendData<CombatResultData>("UnlockLock", request, token);
 
     public Task<RpcResult<CombatResultData>> UseItem(UseItemCommand request, string token)
         => SendData<CombatResultData>("UseItem", request, token);

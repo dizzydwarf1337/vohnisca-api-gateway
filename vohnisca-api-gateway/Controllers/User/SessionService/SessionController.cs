@@ -1,3 +1,11 @@
+using Application.Commands.User.Session.PlaceSceneDoor;
+using Application.Commands.User.Session.SetSceneLock;
+using Application.Commands.User.Session.SetContainerContents;
+using Application.Commands.User.Session.UseDoor;
+using Application.Commands.User.Session.OpenContainer;
+using Application.Commands.User.Session.TakeFromContainer;
+using Application.Commands.User.Session.PutIntoContainer;
+using Application.Commands.User.Session.UnlockLock;
 using Application.Commands.User.Session.GatherSpill;
 using Application.Commands.User.Session.IgniteSceneTerrain;
 using Application.Commands.User.Session.SetSceneWalls;
@@ -462,6 +470,78 @@ public class SessionController : BaseController
     {
         command.SessionId = id;
         command.TokenId = tokenId;
+        return HandleResponse(command);
+    }
+
+    // ---- Doors, containers, locks ----
+
+    [HttpPut]
+    [Route("sessions/{id:guid}/scene/doors")]
+    public Task<IActionResult> PlaceSceneDoor(Guid id, PlaceSceneDoorCommand command)
+    {
+        command.SessionId = id;
+        return HandleResponse(command);
+    }
+
+    [HttpPut]
+    [Route("sessions/{id:guid}/scene/locks/{targetId:guid}")]
+    public Task<IActionResult> SetSceneLock(Guid id, Guid targetId, SetSceneLockCommand command)
+    {
+        command.SessionId = id;
+        command.TargetId = targetId;
+        return HandleResponse(command);
+    }
+
+    [HttpPut]
+    [Route("sessions/{id:guid}/scene/tokens/{tokenId:guid}/contents")]
+    public Task<IActionResult> SetContainerContents(Guid id, Guid tokenId, SetContainerContentsCommand command)
+    {
+        command.SessionId = id;
+        command.TokenId = tokenId;
+        return HandleResponse(command);
+    }
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/scene/doors/{doorId:guid}/use")]
+    public Task<IActionResult> UseDoor(Guid id, Guid doorId, UseDoorCommand command)
+    {
+        command.SessionId = id;
+        command.DoorId = doorId;
+        return HandleResponse(command);
+    }
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/characters/{characterId:guid}/containers/{tokenId:guid}/open")]
+    public Task<IActionResult> OpenContainer(Guid id, Guid characterId, Guid tokenId)
+        => HandleResponse(new OpenContainerCommand { SessionId = id, CharacterId = characterId, TokenId = tokenId });
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/characters/{characterId:guid}/containers/{tokenId:guid}/take")]
+    public Task<IActionResult> TakeFromContainer(Guid id, Guid characterId, Guid tokenId, TakeFromContainerCommand command)
+    {
+        command.SessionId = id;
+        command.CharacterId = characterId;
+        command.TokenId = tokenId;
+        return HandleResponse(command);
+    }
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/characters/{characterId:guid}/containers/{tokenId:guid}/put")]
+    public Task<IActionResult> PutIntoContainer(Guid id, Guid characterId, Guid tokenId, PutIntoContainerCommand command)
+    {
+        command.SessionId = id;
+        command.CharacterId = characterId;
+        command.TokenId = tokenId;
+        return HandleResponse(command);
+    }
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/characters/{characterId:guid}/unlock/{targetId:guid}")]
+    public Task<IActionResult> UnlockLock(Guid id, Guid characterId, Guid targetId, UnlockLockCommand command)
+    {
+        command.SessionId = id;
+        command.CharacterId = characterId;
+        command.TargetId = targetId;
         return HandleResponse(command);
     }
 }
