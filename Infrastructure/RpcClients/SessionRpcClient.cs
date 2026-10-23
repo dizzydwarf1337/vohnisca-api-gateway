@@ -1,3 +1,7 @@
+using Application.Commands.User.Session.SetTimeScale;
+using Application.Commands.User.Session.PassTime;
+using Application.Commands.User.Session.TimeCondition;
+using Application.Commands.User.Session.CancelTimer;
 using Application.Commands.User.Session.SetSceneVision;
 using Application.Commands.User.Session.SetVisionGroups;
 using Application.Commands.User.Session.SetTokenLight;
@@ -168,6 +172,18 @@ public class SessionRpcClient : DotnetRpcClient, ISessionRpcClient
 
     public Task<RpcResult<SessionData>> SetVisionGroups(SetVisionGroupsCommand request, string token)
         => SendData<SessionData>("SetVisionGroups", request, token);
+
+    public Task<RpcResult<SessionData>> SetTimeScale(SetTimeScaleCommand request, string token)
+        => SendData<SessionData>("SetTimeScale", request, token);
+
+    public Task<RpcResult<SessionData>> PassTime(PassTimeCommand request, string token)
+        => SendData<SessionData>("PassTime", request, token);
+
+    public Task<RpcResult<SessionData>> TimeCondition(TimeConditionCommand request, string token)
+        => SendData<SessionData>("TimeCondition", request, token);
+
+    public Task<RpcResult<SessionData>> CancelTimer(CancelTimerCommand request, string token)
+        => SendData<SessionData>("CancelTimer", request, token);
 
     public Task<RpcResult<SessionSceneData>> SetTokenLight(SetTokenLightCommand request, string token)
         => SendData<SessionSceneData>("SetTokenLight", request, token);

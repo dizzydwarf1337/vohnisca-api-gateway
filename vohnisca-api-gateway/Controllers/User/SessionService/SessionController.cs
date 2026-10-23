@@ -1,3 +1,7 @@
+using Application.Commands.User.Session.SetTimeScale;
+using Application.Commands.User.Session.PassTime;
+using Application.Commands.User.Session.TimeCondition;
+using Application.Commands.User.Session.CancelTimer;
 using Application.Commands.User.Session.SetSceneVision;
 using Application.Commands.User.Session.SetVisionGroups;
 using Application.Commands.User.Session.SetTokenLight;
@@ -574,4 +578,36 @@ public class SessionController : BaseController
         command.TokenId = tokenId;
         return HandleResponse(command);
     }
+
+    // ---- Game time ----
+
+    [HttpPut]
+    [Route("sessions/{id:guid}/clock/scale")]
+    public Task<IActionResult> SetTimeScale(Guid id, SetTimeScaleCommand command)
+    {
+        command.SessionId = id;
+        return HandleResponse(command);
+    }
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/clock/pass")]
+    public Task<IActionResult> PassTime(Guid id, PassTimeCommand command)
+    {
+        command.SessionId = id;
+        return HandleResponse(command);
+    }
+
+    [HttpPut]
+    [Route("sessions/{id:guid}/scene/tokens/{tokenId:guid}/condition-timer")]
+    public Task<IActionResult> TimeCondition(Guid id, Guid tokenId, TimeConditionCommand command)
+    {
+        command.SessionId = id;
+        command.TokenId = tokenId;
+        return HandleResponse(command);
+    }
+
+    [HttpDelete]
+    [Route("sessions/{id:guid}/clock/timers/{timerId:guid}")]
+    public Task<IActionResult> CancelTimer(Guid id, Guid timerId)
+        => HandleResponse(new CancelTimerCommand { SessionId = id, TimerId = timerId });
 }

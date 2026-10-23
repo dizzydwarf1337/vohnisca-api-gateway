@@ -1,3 +1,7 @@
+using Application.Commands.User.Session.SetTimeScale;
+using Application.Commands.User.Session.PassTime;
+using Application.Commands.User.Session.TimeCondition;
+using Application.Commands.User.Session.CancelTimer;
 using Application.Commands.User.Session.SetSceneVision;
 using Application.Commands.User.Session.SetVisionGroups;
 using Application.Commands.User.Session.SetTokenLight;
@@ -87,6 +91,10 @@ public interface ISessionRpcClient
     Task<RpcResult<SessionData>> PickUpItem(PickUpItemCommand request, string token);
     Task<RpcResult<SessionSceneData>> SetSceneVision(SetSceneVisionCommand request, string token);
     Task<RpcResult<SessionData>> SetVisionGroups(SetVisionGroupsCommand request, string token);
+    Task<RpcResult<SessionData>> SetTimeScale(SetTimeScaleCommand request, string token);
+    Task<RpcResult<SessionData>> PassTime(PassTimeCommand request, string token);
+    Task<RpcResult<SessionData>> TimeCondition(TimeConditionCommand request, string token);
+    Task<RpcResult<SessionData>> CancelTimer(CancelTimerCommand request, string token);
     Task<RpcResult<SessionSceneData>> SetTokenLight(SetTokenLightCommand request, string token);
     Task<RpcResult<SessionSceneData>> PlaceSceneDoor(PlaceSceneDoorCommand request, string token);
     Task<RpcResult<SessionSceneData>> SetSceneLock(SetSceneLockCommand request, string token);
@@ -154,7 +162,14 @@ public record SessionData(
     List<SessionPlayerData> Players,
     List<SessionLogData> Log,
     // Characters that share sight (automatic sight).
-    List<VisionGroupData>? VisionGroups = null);
+    List<VisionGroupData>? VisionGroups = null,
+    // The game time: Seconds as of At (out of a fight it runs on at Scale times the real
+    // time; in a fight a round is 6 seconds), and what ends when.
+    SessionClockData? Clock = null);
+
+// Kind: "spell" | "condition" | "wake"; EndsAt: in game seconds.
+public record SessionClockData(double Seconds, DateTime? At, double Scale, List<SessionTimerData> Timers);
+public record SessionTimerData(Guid Id, string Kind, string Name, double EndsAt, Guid? TokenId, Guid? CharacterId, string? Condition);
 
 public record VisionGroupData(Guid Id, string Name, List<Guid> CharacterIds);
 public record VisionGroupInputData(string Name, List<Guid> CharacterIds);
