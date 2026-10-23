@@ -1,3 +1,5 @@
+using Application.Commands.User.Session.SetBreakableWalls;
+using Application.Commands.User.Session.SetWallPiece;
 using Application.Commands.User.Session.SetObjectToughness;
 using Application.Commands.User.Session.SetTimeScale;
 using Application.Commands.User.Session.PassTime;
@@ -191,6 +193,12 @@ public class SessionRpcClient : DotnetRpcClient, ISessionRpcClient
 
     public Task<RpcResult<SessionSceneData>> PlaceSceneDoor(PlaceSceneDoorCommand request, string token)
         => SendData<SessionSceneData>("PlaceSceneDoor", request, token);
+
+    public Task<RpcResult<SessionSceneData>> SetBreakableWalls(SetBreakableWallsCommand request, string token)
+        => SendData<SessionSceneData>("SetBreakableWalls", request, token);
+
+    public Task<RpcResult<SessionSceneData>> SetWallPiece(SetWallPieceCommand request, string token)
+        => SendData<SessionSceneData>("SetWallPiece", request, token);
 
     public Task<RpcResult<SessionSceneData>> SetObjectToughness(SetObjectToughnessCommand request, string token)
         => SendData<SessionSceneData>("SetObjectToughness", request, token);

@@ -1,3 +1,5 @@
+using Application.Commands.User.Session.SetBreakableWalls;
+using Application.Commands.User.Session.SetWallPiece;
 using Application.Commands.User.Session.SetObjectToughness;
 using Application.Commands.User.Session.SetTimeScale;
 using Application.Commands.User.Session.PassTime;
@@ -618,6 +620,23 @@ public class SessionController : BaseController
     {
         command.SessionId = id;
         command.TargetId = targetId;
+        return HandleResponse(command);
+    }
+
+    [HttpPut]
+    [Route("sessions/{id:guid}/scene/walls/breakable")]
+    public Task<IActionResult> SetBreakableWalls(Guid id, SetBreakableWallsCommand command)
+    {
+        command.SessionId = id;
+        return HandleResponse(command);
+    }
+
+    [HttpPut]
+    [Route("sessions/{id:guid}/scene/walls/pieces/{pieceId:guid}")]
+    public Task<IActionResult> SetWallPiece(Guid id, Guid pieceId, SetWallPieceCommand command)
+    {
+        command.SessionId = id;
+        command.PieceId = pieceId;
         return HandleResponse(command);
     }
 }

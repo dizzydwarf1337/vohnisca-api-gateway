@@ -1,3 +1,5 @@
+using Application.Commands.User.Session.SetBreakableWalls;
+using Application.Commands.User.Session.SetWallPiece;
 using Application.Commands.User.Session.SetObjectToughness;
 using Application.Commands.User.Session.SetTimeScale;
 using Application.Commands.User.Session.PassTime;
@@ -100,6 +102,8 @@ public interface ISessionRpcClient
     Task<RpcResult<SessionSceneData>> PlaceSceneDoor(PlaceSceneDoorCommand request, string token);
     Task<RpcResult<SessionSceneData>> SetSceneLock(SetSceneLockCommand request, string token);
     Task<RpcResult<SessionSceneData>> SetObjectToughness(SetObjectToughnessCommand request, string token);
+    Task<RpcResult<SessionSceneData>> SetBreakableWalls(SetBreakableWallsCommand request, string token);
+    Task<RpcResult<SessionSceneData>> SetWallPiece(SetWallPieceCommand request, string token);
     Task<RpcResult<SessionSceneData>> SetContainerContents(SetContainerContentsCommand request, string token);
     Task<RpcResult<SessionData>> UseDoor(UseDoorCommand request, string token);
     Task<RpcResult<SessionData>> OpenContainer(OpenContainerCommand request, string token);
@@ -364,7 +368,12 @@ public record SceneData(
     List<SceneDoorData>? Doors = null,
     SceneVisionData? Vision = null,
     // Automatic sight: the squares (row * cols + col) the viewer's characters see now.
-    List<int>? Visible = null);
+    List<int>? Visible = null,
+    // Breakable walls (players: those the GM showed, and the broken ones).
+    List<SceneWallPieceData>? BreakableWalls = null);
+
+// A breakable wall square: Ac only for the GM; Hidden: the players don't know of it; Broken: a gap now.
+public record SceneWallPieceData(Guid Id, int Col, int Row, int? Ac, int Hp, int MaxHp, bool Hidden, bool Broken);
 
 // A lock: its DCs (pick, force) and key only for the GM.
 public record SceneLockData(bool Locked, int? Dc, int? BreakDc, Guid? KeyItemId, string? KeyName);
