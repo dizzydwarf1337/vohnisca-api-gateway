@@ -1,3 +1,11 @@
+using Application.Commands.User.Session.PlaceSceneDoor;
+using Application.Commands.User.Session.SetSceneLock;
+using Application.Commands.User.Session.SetContainerContents;
+using Application.Commands.User.Session.UseDoor;
+using Application.Commands.User.Session.OpenContainer;
+using Application.Commands.User.Session.TakeFromContainer;
+using Application.Commands.User.Session.PutIntoContainer;
+using Application.Commands.User.Session.UnlockLock;
 using Application.Commands.User.Session.GatherSpill;
 using Application.Commands.User.Session.IgniteSceneTerrain;
 using Application.Commands.User.Session.SetSceneWalls;
@@ -74,6 +82,14 @@ public interface ISessionRpcClient
     Task<RpcResult<SessionData>> UnequipSessionItem(UnequipSessionItemCommand request, string token);
     Task<RpcResult<SessionData>> DropItem(DropItemCommand request, string token);
     Task<RpcResult<SessionData>> PickUpItem(PickUpItemCommand request, string token);
+    Task<RpcResult<SessionSceneData>> PlaceSceneDoor(PlaceSceneDoorCommand request, string token);
+    Task<RpcResult<SessionSceneData>> SetSceneLock(SetSceneLockCommand request, string token);
+    Task<RpcResult<SessionSceneData>> SetContainerContents(SetContainerContentsCommand request, string token);
+    Task<RpcResult<SessionData>> UseDoor(UseDoorCommand request, string token);
+    Task<RpcResult<SessionData>> OpenContainer(OpenContainerCommand request, string token);
+    Task<RpcResult<SessionData>> TakeFromContainer(TakeFromContainerCommand request, string token);
+    Task<RpcResult<SessionData>> PutIntoContainer(PutIntoContainerCommand request, string token);
+    Task<RpcResult<CombatResultData>> UnlockLock(UnlockLockCommand request, string token);
     Task<RpcResult<CombatResultData>> UseItem(UseItemCommand request, string token);
     Task<RpcResult<CombatResultData>> ThrowItem(ThrowItemCommand request, string token);
     Task<RpcResult<SessionSceneData>> AddSceneTerrain(AddSceneTerrainCommand request, string token);
@@ -305,7 +321,24 @@ public record SceneData(
     List<SceneAreaData> Areas,
     List<SceneTerrainData> Terrain,
     // Wall squares as [col, row] (nobody walks into them).
-    List<int[]> Walls);
+    List<int[]> Walls,
+    // Doors: closed, a wall; Broken: forced open for good.
+    List<SceneDoorData>? Doors = null);
+
+// A lock: its DCs (pick, force) and key only for the GM.
+public record SceneLockData(bool Locked, int? Dc, int? BreakDc, Guid? KeyItemId, string? KeyName);
+
+public record SceneDoorData(Guid Id, int Col, int Row, bool Open, bool Broken, SceneLockData? Lock);
+
+// A container (a chest, a pile): what's in it (for players once someone opened it).
+public record ContainedItemData(Guid ItemId, string Name, int Quantity);
+
+public record SceneContainerData(List<ContainedItemData>? Contents, bool Opened, bool Pile, SceneLockData? Lock);
+
+// What the GM sets on a lock, and in a container.
+public record LockSettingsData(bool Locked, int Dc, int? BreakDc, Guid? KeyItemId);
+
+public record ContentRowData(Guid ItemId, int Quantity);
 
 // Terrain the GM painted or something spilled: squares as [col, row]; Hidden: a trap (the
 // GM only); FromItem: spilled (Caltrops, Ball Bearings).
@@ -340,7 +373,7 @@ public record SceneAreaData(
     Guid? CasterTokenId,
     ZoneEffectData? Effect);
 
-// Kind: "character" | "npc" | "item" | "marker"; OwnerUserId: the player of a character token.
+// Kind: "character" | "npc" | "item" | "marker" | "container"; OwnerUserId: the player of a character token.
 // An NPC's numbers (MaxHp, Hp, Ac, Speed, InitiativeBonus) come to the GM; its Health and
 // Conditions to everyone; its Sheet to the GM, and to players while SheetShown.
 public record SceneTokenData(
@@ -363,7 +396,8 @@ public record SceneTokenData(
     string? Health,
     List<string> Conditions,
     bool SheetShown,
-    TokenSheetData? Sheet);
+    TokenSheetData? Sheet,
+    SceneContainerData? Container = null);
 
 // An NPC's sheet: saving throw bonuses, damage resistances / immunities /
 // vulnerabilities, condition immunities, and what lasts on it (spells, the GM's notes).
