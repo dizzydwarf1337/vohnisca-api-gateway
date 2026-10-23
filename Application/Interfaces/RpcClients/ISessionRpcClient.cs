@@ -397,7 +397,9 @@ public record SceneTokenData(
     List<string> Conditions,
     bool SheetShown,
     TokenSheetData? Sheet,
-    SceneContainerData? Container = null);
+    SceneContainerData? Container = null,
+    // A character's or an NPC's side: "party", "hostile", "neutral" or a faction's name.
+    string? Team = null);
 
 // An NPC's sheet: saving throw bonuses, damage resistances / immunities /
 // vulnerabilities, condition immunities, and what lasts on it (spells, the GM's notes).

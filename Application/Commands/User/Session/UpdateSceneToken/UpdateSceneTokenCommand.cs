@@ -18,6 +18,8 @@ public class UpdateSceneTokenCommand : UserRequest<SessionSceneData>
     public int? Ac { get; set; }
     public int? Speed { get; set; }
     public int? InitiativeBonus { get; set; }
+    // An NPC's side ("" back to hostile; null: as it is).
+    public string? Team { get; set; }
     // Saving throw bonuses by ability ("dexterity": 2); the NPC's conditions ("prone"...).
     public Dictionary<string, int>? Saves { get; set; }
     public List<string>? Conditions { get; set; }
