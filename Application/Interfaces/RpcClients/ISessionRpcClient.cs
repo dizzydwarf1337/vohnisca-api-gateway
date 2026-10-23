@@ -254,7 +254,10 @@ public record SpellEffectData(
     SpellAreaData? Area,
     bool AreaStays,
     // Its caster picks creatures it leaves alone (Spirit Guardians).
-    bool Spares);
+    bool Spares,
+    // It brings the dead back (Revivify), or makes the dying Stable (Spare the Dying).
+    bool Revives,
+    bool Stabilizes);
 
 // The area a spell fills: Shape "sphere" | "cylinder" | "cone" | "cube" | "line" |
 // "emanation"; Size: radius, length or side in feet; Width: a line's; FromCaster: it
