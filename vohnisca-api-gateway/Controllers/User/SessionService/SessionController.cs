@@ -1,3 +1,13 @@
+using Application.Commands.User.Session.SetLongRest;
+using Application.Commands.User.Session.EquipSessionItem;
+using Application.Commands.User.Session.UnequipSessionItem;
+using Application.Commands.User.Session.DropItem;
+using Application.Commands.User.Session.PickUpItem;
+using Application.Commands.User.Session.UseItem;
+using Application.Commands.User.Session.ThrowItem;
+using Application.Commands.User.Session.AddSceneTerrain;
+using Application.Commands.User.Session.UpdateSceneTerrain;
+using Application.Commands.User.Session.RemoveSceneTerrain;
 using Application.Queries.User.Session.GetEncounter;
 using Application.Commands.User.Session.StartCombat;
 using Application.Commands.User.Session.JoinCombat;
@@ -218,6 +228,94 @@ public class SessionController : BaseController
         command.SessionId = id;
         return HandleResponse(command);
     }
+
+    [HttpPut]
+    [Route("sessions/{id:guid}/rest/long")]
+    public Task<IActionResult> SetLongRest(Guid id, SetLongRestCommand command)
+    {
+        command.SessionId = id;
+        return HandleResponse(command);
+    }
+
+    // ---- Gear: what a character wears, carries, drops, picks up, uses, throws ----
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/characters/{characterId:guid}/gear/equip")]
+    public Task<IActionResult> EquipSessionItem(Guid id, Guid characterId, EquipSessionItemCommand command)
+    {
+        command.SessionId = id;
+        command.CharacterId = characterId;
+        return HandleResponse(command);
+    }
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/characters/{characterId:guid}/gear/unequip")]
+    public Task<IActionResult> UnequipSessionItem(Guid id, Guid characterId, UnequipSessionItemCommand command)
+    {
+        command.SessionId = id;
+        command.CharacterId = characterId;
+        return HandleResponse(command);
+    }
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/characters/{characterId:guid}/gear/drop")]
+    public Task<IActionResult> DropItem(Guid id, Guid characterId, DropItemCommand command)
+    {
+        command.SessionId = id;
+        command.CharacterId = characterId;
+        return HandleResponse(command);
+    }
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/characters/{characterId:guid}/gear/pick-up")]
+    public Task<IActionResult> PickUpItem(Guid id, Guid characterId, PickUpItemCommand command)
+    {
+        command.SessionId = id;
+        command.CharacterId = characterId;
+        return HandleResponse(command);
+    }
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/characters/{characterId:guid}/gear/use")]
+    public Task<IActionResult> UseItem(Guid id, Guid characterId, UseItemCommand command)
+    {
+        command.SessionId = id;
+        command.CharacterId = characterId;
+        return HandleResponse(command);
+    }
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/characters/{characterId:guid}/gear/throw")]
+    public Task<IActionResult> ThrowItem(Guid id, Guid characterId, ThrowItemCommand command)
+    {
+        command.SessionId = id;
+        command.CharacterId = characterId;
+        return HandleResponse(command);
+    }
+
+    // ---- Terrain the GM paints ----
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/scene/terrain")]
+    public Task<IActionResult> AddSceneTerrain(Guid id, AddSceneTerrainCommand command)
+    {
+        command.SessionId = id;
+        return HandleResponse(command);
+    }
+
+    [HttpPut]
+    [Route("sessions/{id:guid}/scene/terrain/{terrainId:guid}")]
+    public Task<IActionResult> UpdateSceneTerrain(Guid id, Guid terrainId, UpdateSceneTerrainCommand command)
+    {
+        command.SessionId = id;
+        command.TerrainId = terrainId;
+        return HandleResponse(command);
+    }
+
+    [HttpDelete]
+    [Route("sessions/{id:guid}/scene/terrain/{terrainId:guid}")]
+    public Task<IActionResult> RemoveSceneTerrain(Guid id, Guid terrainId)
+        => HandleResponse(new RemoveSceneTerrainCommand { SessionId = id, TerrainId = terrainId });
 
     [HttpPost]
     [Route("sessions/{id:guid}/rest/long")]

@@ -1,3 +1,13 @@
+using Application.Commands.User.Session.SetLongRest;
+using Application.Commands.User.Session.EquipSessionItem;
+using Application.Commands.User.Session.UnequipSessionItem;
+using Application.Commands.User.Session.DropItem;
+using Application.Commands.User.Session.PickUpItem;
+using Application.Commands.User.Session.UseItem;
+using Application.Commands.User.Session.ThrowItem;
+using Application.Commands.User.Session.AddSceneTerrain;
+using Application.Commands.User.Session.UpdateSceneTerrain;
+using Application.Commands.User.Session.RemoveSceneTerrain;
 using Application.Queries.User.Session.GetEncounter;
 using Application.Commands.User.Session.CastSpell;
 using Application.Commands.User.Session.SetShortRest;
@@ -51,6 +61,16 @@ public interface ISessionRpcClient
     Task<RpcResult<SessionData>> ApplySessionAction(ApplySessionActionCommand request, string token);
     Task<RpcResult<bool>> EndSession(EndSessionCommand request, string token);
     Task<RpcResult<SessionData>> SetShortRest(SetShortRestCommand request, string token);
+    Task<RpcResult<SessionData>> SetLongRest(SetLongRestCommand request, string token);
+    Task<RpcResult<SessionData>> EquipSessionItem(EquipSessionItemCommand request, string token);
+    Task<RpcResult<SessionData>> UnequipSessionItem(UnequipSessionItemCommand request, string token);
+    Task<RpcResult<SessionData>> DropItem(DropItemCommand request, string token);
+    Task<RpcResult<SessionData>> PickUpItem(PickUpItemCommand request, string token);
+    Task<RpcResult<CombatResultData>> UseItem(UseItemCommand request, string token);
+    Task<RpcResult<CombatResultData>> ThrowItem(ThrowItemCommand request, string token);
+    Task<RpcResult<SessionSceneData>> AddSceneTerrain(AddSceneTerrainCommand request, string token);
+    Task<RpcResult<SessionSceneData>> UpdateSceneTerrain(UpdateSceneTerrainCommand request, string token);
+    Task<RpcResult<SessionSceneData>> RemoveSceneTerrain(RemoveSceneTerrainCommand request, string token);
     Task<RpcResult<SessionData>> TakeLongRest(TakeLongRestCommand request, string token);
     Task<RpcResult<CombatResultData>> CastSpell(CastSpellCommand request, string token);
 
@@ -93,6 +113,8 @@ public record SessionData(
     DateTime OpenedAt,
     DateTime? StartedAt,
     bool ShortRest,
+    // The GM called a long rest: players change their prepared spells until it ends.
+    bool LongRest,
     List<SessionPlayerData> Players,
     List<SessionLogData> Log);
 
@@ -142,7 +164,23 @@ public record SessionCharacterData(
     List<SessionHitDiceData> HitDice,
     List<SessionSpellData> Spells,
     List<AttackOptionData> Attacks,
-    int? SpellAttackBonus);
+    int? SpellAttackBonus,
+    List<InventoryRowData> Inventory,
+    // Only during a long rest: the spells each class may prepare.
+    List<PrepClassData>? Preparation);
+
+// What a character carries. Kind: "weapon" | "armor" | "shield" | "gear"; Slot: where it's
+// worn ("mainHand", "offHand", "armor", "shield", "accessory"; null in the pack); Throw: what
+// throwing it does ("acid", "fire", "holy", "net", "oil", "caltrops", "bearings"; "item": it
+// just lands; null: a weapon thrown with an attack); Use: "heal" (a Potion of Healing).
+public record InventoryRowData(
+    Guid ItemId, string Name, string Kind, int Quantity, string? Slot, bool Light, bool TwoHanded, bool Wearable,
+    string? Throw, int ThrowRange, string? Use);
+
+// Rule: "all" (change any), "one" (replace one this rest), "levelUp" (changes on a level up).
+public record PrepClassData(Guid ClassId, string ClassName, string Rule, int Max, int Prepared, List<PrepSpellData> Spells);
+
+public record PrepSpellData(Guid Id, string Name, int Level, string School, bool Prepared, bool Concentration, bool Ritual);
 
 // An attack the character can make (CombatRules.AttackOption): damage is DiceCount dice of
 // DieFaces + DamageBonus (DamageMin: a die below it counts as it); Reach in feet for
@@ -230,7 +268,20 @@ public record SceneData(
     bool Fog,
     List<int> Revealed,
     List<SceneTokenData> Tokens,
-    List<SceneAreaData> Areas);
+    List<SceneAreaData> Areas,
+    List<SceneTerrainData> Terrain);
+
+// Terrain the GM painted or something spilled: squares as [col, row]; Hidden: a trap (the
+// GM only); FromItem: spilled (Caltrops, Ball Bearings).
+public record SceneTerrainData(Guid Id, string Name, string Color, List<int[]> Cells, ZoneEffectData Effect, bool Hidden, bool FromItem);
+
+// What a zone does to a creature in it: when (entering, the start or the end of its turn
+// there), its save and DC, damage (dice and type; half on a save if HalfOnSave), a
+// condition on a failure, Difficult Terrain, Stops (a failure ends its move), damage for
+// every 5 feet moved through it. Abilities, damage types, conditions lower-case.
+public record ZoneEffectData(
+    bool OnEnter = false, bool OnStartTurn = false, bool OnEndTurn = false, string? Save = null, int? Dc = null, string? Damage = null,
+    string? DamageType = null, bool HalfOnSave = false, string? Condition = null, bool Difficult = false, bool Stops = false, bool PerFiveFeet = false);
 
 // A spell's area that stays on the map (everyone sees it): Origin is where the caster
 // stood when it was cast; an emanation follows CasterTokenId.
@@ -247,7 +298,8 @@ public record SceneAreaData(
     int OriginRow,
     int OriginSize,
     string Color,
-    Guid? CasterTokenId);
+    Guid? CasterTokenId,
+    ZoneEffectData? Effect);
 
 // Kind: "character" | "npc" | "item" | "marker"; OwnerUserId: the player of a character token.
 // An NPC's numbers (MaxHp, Hp, Ac, Speed, InitiativeBonus) come to the GM; its Health and
