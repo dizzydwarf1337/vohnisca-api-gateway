@@ -2,8 +2,10 @@ using Application.Queries.User.Catalog.GetBackgroundById;
 using Application.Queries.User.Catalog.GetClassById;
 using Application.Queries.User.Catalog.GetFeatureById;
 using Application.Queries.User.Catalog.GetItemById;
+using Application.Queries.User.Catalog.GetItemInfo;
 using Application.Queries.User.Catalog.GetRaceById;
 using Application.Queries.User.Catalog.GetSpellById;
+using Application.Queries.User.Catalog.GetSpellInfo;
 using Application.Queries.User.Catalog.ListBackgrounds;
 using Application.Queries.User.Catalog.ListClasses;
 using Application.Queries.User.Catalog.ListFeatures;
@@ -79,6 +81,10 @@ public class ItemController : BaseController
     [HttpGet("{id:guid}")]
     public Task<IActionResult> GetItem(Guid id)
         => HandleResponse(new GetItemByIdQuery { Id = id });
+
+    [HttpGet("{id:guid}/info")]
+    public Task<IActionResult> GetItemInfo(Guid id)
+        => HandleResponse(new GetItemInfoQuery { ItemId = id });
 }
 
 [Route("spells")]
@@ -94,4 +100,9 @@ public class SpellController : BaseController
     [HttpGet("{id:guid}")]
     public Task<IActionResult> GetSpell(Guid id)
         => HandleResponse(new GetSpellByIdQuery { Id = id });
+
+    // characterId: whose sheet it's opened from (how the character has the spell).
+    [HttpGet("{id:guid}/info")]
+    public Task<IActionResult> GetSpellInfo(Guid id, [FromQuery] Guid? characterId = null)
+        => HandleResponse(new GetSpellInfoQuery { SpellId = id, CharacterId = characterId });
 }
