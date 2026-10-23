@@ -89,6 +89,8 @@ public interface ICharacterRpcClient
     Task<RpcResult<ItemDetail>> GetItemById(Guid id, string token);
     Task<RpcResult<PaginationResponse<SpellListRow>>> ListSpells(int page, int pageSize, int? level, string token);
     Task<RpcResult<SpellDetail>> GetSpellById(Guid id, string token);
+    Task<RpcResult<CatalogSpellInfo>> GetSpellInfo(Guid spellId, Guid? characterId, string token);
+    Task<RpcResult<CatalogItemInfo>> GetItemInfo(Guid itemId, string token);
 }
 
 // Wraps the character service's RpcResponse<T> envelope ({ IsSuccess, Data, Error, StatusCode }).
@@ -219,7 +221,7 @@ public record CharacterSheetData(
     SheetResourceRow[]? Resources = null);
 
 // ---- Creation options (level 1 choices, SRD 5.2) ----
-public record CreationChoiceOption(string Value, string Label, string? Description, string? Group);
+public record CreationChoiceOption(string Value, string Label, string? Description, string? Group, Guid? SpellId = null, Guid? ItemId = null);
 public record CreationChoiceRow(
     string Key,
     string Step,
@@ -402,3 +404,12 @@ public record LevelResourceChange(string Name, LevelChange Max, string? Die);
 public record LevelUpPreviewData(
     string ClassName, LevelChange ClassLevel, LevelChange HitPoints, LevelChange ProficiencyBonus, LevelChange AttacksPerAction,
     LevelChange WeaponMasteries, List<LevelFeatureGain> Features, List<LevelCastingChange> Spellcasting, List<LevelResourceChange> Resources, string? Error);
+
+// A spell's and an item's details for a window (the sheet, choosing spells, creation).
+public record CatalogSpellInfo(
+    Guid Id, string Name, int Level, string School, string CastingTime, string Range, string Components, string Duration,
+    bool Concentration, bool Ritual, string Description, string AtHigherLevels, string Source, List<string> Classes, List<string> From);
+public record CatalogItemInfo(
+    Guid Id, string Name, string Kind, string? Category, string Rarity, double Weight, string Value, string Description, string Source,
+    string? Damage, string? Range, List<string> Properties, string? Mastery, string? ArmorClass, int? StrengthNeeded, bool StealthDisadvantage,
+    List<string> Magic);

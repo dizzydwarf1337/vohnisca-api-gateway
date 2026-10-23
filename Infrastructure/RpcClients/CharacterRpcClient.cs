@@ -180,6 +180,12 @@ public class CharacterRpcClient : DotnetRpcClient, ICharacterRpcClient
     public Task<RpcResult<SpellDetail>> GetSpellById(Guid id, string token)
         => SendData<SpellDetail>("GetSpellById", new { Id = id }, token);
 
+    public Task<RpcResult<CatalogSpellInfo>> GetSpellInfo(Guid spellId, Guid? characterId, string token)
+        => SendData<CatalogSpellInfo>("GetSpellInfo", new { SpellId = spellId, CharacterId = characterId }, token);
+
+    public Task<RpcResult<CatalogItemInfo>> GetItemInfo(Guid itemId, string token)
+        => SendData<CatalogItemInfo>("GetItemInfo", new { ItemId = itemId }, token);
+
     private static object Paged(int page, int pageSize)
         => new { Pagination = new { Page = page, PageSize = pageSize } };
 }
