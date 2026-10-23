@@ -25,6 +25,7 @@ using Application.Commands.User.Session.EndTurn;
 using Application.Commands.User.Session.EndCombat;
 using Application.Commands.User.Session.SetSpent;
 using Application.Commands.User.Session.Dash;
+using Application.Commands.User.Session.AnswerReaction;
 using Application.Commands.User.Session.Attack;
 using Application.Queries.User.Session.GetDiceRolls;
 using Application.Commands.User.Session.RollDice;
@@ -109,6 +110,7 @@ public interface ISessionRpcClient
     Task<RpcResult<SessionEncounterData>> SetSpent(SetSpentCommand request, string token);
     Task<RpcResult<SessionEncounterData>> Dash(DashCommand request, string token);
     Task<RpcResult<CombatResultData>> Attack(AttackCommand request, string token);
+    Task<RpcResult<CombatResultData>> AnswerReaction(AnswerReactionCommand request, string token);
 }
 
 // The session as the user may see it. Status: "lobby" | "live"; ShortRest: the GM called
@@ -383,7 +385,16 @@ public record DiceRollsData(List<DiceRollData> Rolls);
 // The fight (Encounter is null when there's none).
 public record SessionEncounterData(EncounterData? Encounter);
 
-public record EncounterData(int Round, Guid? CurrentTokenId, List<CombatantData> Order);
+// Offers: the reactions on offer to this user (their character's; the NPCs' to the GM).
+public record EncounterData(int Round, Guid? CurrentTokenId, List<CombatantData> Order, List<ReactionOfferData> Offers);
+
+// A reaction its trigger put on offer: Kind "opportunity" (a blow at an enemy leaving
+// reach) | "spell" (SpellId, cast back at whoever hurt the reactor); Options: how it may be
+// taken.
+public record ReactionOfferData(
+    Guid Id, Guid ReactorTokenId, string ReactorName, string Kind, Guid TriggerTokenId, Guid? SpellId, string Text, List<ReactionOptionData> Options);
+
+public record ReactionOptionData(string Id, string Label);
 
 // Health: how hurt an NPC looks. What's spent this turn: action, bonus action, reaction,
 // movement (MovementLeft of Speed), attacks left in an Attack action already taken.

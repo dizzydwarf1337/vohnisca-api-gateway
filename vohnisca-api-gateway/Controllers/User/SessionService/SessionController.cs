@@ -22,6 +22,7 @@ using Application.Commands.User.Session.EndTurn;
 using Application.Commands.User.Session.EndCombat;
 using Application.Commands.User.Session.SetSpent;
 using Application.Commands.User.Session.Dash;
+using Application.Commands.User.Session.AnswerReaction;
 using Application.Commands.User.Session.Attack;
 using Application.Commands.User.Session.CastSpell;
 using Application.Commands.User.Session.SetShortRest;
@@ -408,6 +409,16 @@ public class SessionController : BaseController
     public Task<IActionResult> Attack(Guid id, AttackCommand command)
     {
         command.SessionId = id;
+        return HandleResponse(command);
+    }
+
+    // A reaction on offer: taken (OptionId: how) or let pass (no OptionId).
+    [HttpPost]
+    [Route("sessions/{id:guid}/combat/reactions/{offerId:guid}")]
+    public Task<IActionResult> AnswerReaction(Guid id, Guid offerId, AnswerReactionCommand command)
+    {
+        command.SessionId = id;
+        command.OfferId = offerId;
         return HandleResponse(command);
     }
 
