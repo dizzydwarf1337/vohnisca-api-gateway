@@ -1,3 +1,6 @@
+using Application.Commands.User.Session.SetSceneWalls;
+using Application.Queries.User.Session.GetSpellInfo;
+using Application.Queries.User.Session.GetItemInfo;
 using Application.Commands.User.Session.SetLongRest;
 using Application.Commands.User.Session.EquipSessionItem;
 using Application.Commands.User.Session.UnequipSessionItem;
@@ -90,6 +93,15 @@ public class SessionRpcClient : DotnetRpcClient, ISessionRpcClient
 
     public Task<RpcResult<SessionSceneData>> GetScene(GetSceneQuery request, string token)
         => SendData<SessionSceneData>("GetScene", request, token);
+
+    public Task<RpcResult<SessionSceneData>> SetSceneWalls(SetSceneWallsCommand request, string token)
+        => SendData<SessionSceneData>("SetSceneWalls", request, token);
+
+    public Task<RpcResult<SpellInfoData>> GetSpellInfo(GetSpellInfoQuery request, string token)
+        => SendData<SpellInfoData>("GetSpellInfo", request, token);
+
+    public Task<RpcResult<ItemInfoData>> GetItemInfo(GetItemInfoQuery request, string token)
+        => SendData<ItemInfoData>("GetItemInfo", request, token);
 
     public Task<RpcResult<SessionSceneData>> SetScene(SetSceneCommand request, string token)
         => SendData<SessionSceneData>("SetScene", request, token);

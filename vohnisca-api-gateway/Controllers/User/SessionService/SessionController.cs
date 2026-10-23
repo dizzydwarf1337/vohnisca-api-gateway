@@ -1,3 +1,6 @@
+using Application.Commands.User.Session.SetSceneWalls;
+using Application.Queries.User.Session.GetSpellInfo;
+using Application.Queries.User.Session.GetItemInfo;
 using Application.Commands.User.Session.SetLongRest;
 using Application.Commands.User.Session.EquipSessionItem;
 using Application.Commands.User.Session.UnequipSessionItem;
@@ -123,6 +126,26 @@ public class SessionController : BaseController
     [Route("sessions/{id:guid}/scene")]
     public Task<IActionResult> GetScene(Guid id)
         => HandleResponse(new GetSceneQuery { SessionId = id });
+
+    [HttpPut]
+    [Route("sessions/{id:guid}/scene/walls")]
+    public Task<IActionResult> SetSceneWalls(Guid id, SetSceneWallsCommand command)
+    {
+        command.SessionId = id;
+        return HandleResponse(command);
+    }
+
+    // ---- Details for the table: a spell, an item ----
+
+    [HttpGet]
+    [Route("sessions/{id:guid}/spells/{spellId:guid}")]
+    public Task<IActionResult> GetSpellInfo(Guid id, Guid spellId, [FromQuery] Guid? characterId)
+        => HandleResponse(new GetSpellInfoQuery { SessionId = id, SpellId = spellId, CharacterId = characterId });
+
+    [HttpGet]
+    [Route("sessions/{id:guid}/items/{itemId:guid}")]
+    public Task<IActionResult> GetItemInfo(Guid id, Guid itemId)
+        => HandleResponse(new GetItemInfoQuery { SessionId = id, ItemId = itemId });
 
     // Multipart: name, cols, rows, fog, and optionally "file" (the background image).
     [HttpPut]

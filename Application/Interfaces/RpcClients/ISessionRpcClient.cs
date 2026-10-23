@@ -1,3 +1,6 @@
+using Application.Commands.User.Session.SetSceneWalls;
+using Application.Queries.User.Session.GetSpellInfo;
+using Application.Queries.User.Session.GetItemInfo;
 using Application.Commands.User.Session.SetLongRest;
 using Application.Commands.User.Session.EquipSessionItem;
 using Application.Commands.User.Session.UnequipSessionItem;
@@ -75,6 +78,9 @@ public interface ISessionRpcClient
     Task<RpcResult<CombatResultData>> CastSpell(CastSpellCommand request, string token);
 
     Task<RpcResult<SessionSceneData>> GetScene(GetSceneQuery request, string token);
+    Task<RpcResult<SessionSceneData>> SetSceneWalls(SetSceneWallsCommand request, string token);
+    Task<RpcResult<SpellInfoData>> GetSpellInfo(GetSpellInfoQuery request, string token);
+    Task<RpcResult<ItemInfoData>> GetItemInfo(GetItemInfoQuery request, string token);
     Task<RpcResult<SessionSceneData>> SetScene(SetSceneCommand request, string token);
     Task<RpcResult<SessionSceneData>> SetSceneFog(SetSceneFogCommand request, string token);
     Task<RpcResult<SessionSceneData>> RevealSceneCells(RevealSceneCellsCommand request, string token);
@@ -269,7 +275,9 @@ public record SceneData(
     List<int> Revealed,
     List<SceneTokenData> Tokens,
     List<SceneAreaData> Areas,
-    List<SceneTerrainData> Terrain);
+    List<SceneTerrainData> Terrain,
+    // Wall squares as [col, row] (nobody walks into them).
+    List<int[]> Walls);
 
 // Terrain the GM painted or something spilled: squares as [col, row]; Hidden: a trap (the
 // GM only); FromItem: spilled (Caltrops, Ball Bearings).
@@ -395,3 +403,19 @@ public record CustomAttackData(string Name, int Bonus, string Damage, string Dam
 
 // What an attack or a spell did, as the user may read it (the same goes to the log).
 public record CombatResultData(List<string> Log);
+
+// A spell's details: the SRD text and what it does at the table (Effect: for the character
+// asked about — its cantrip damage; SaveDc / AttackBonus its own); Classes: whose lists have
+// it; From: how the character has it (prepared as a Wizard, granted by a feat...).
+public record SpellInfoData(
+    Guid Id, string Name, int Level, string School, string CastingTime, string Range, string Components, string Duration,
+    bool Concentration, bool Ritual, string Description, string AtHigherLevels, string Source, List<string> Classes,
+    List<string> From, SpellEffectData? Effect, int? SaveDc, int? AttackBonus);
+
+// An item's details: Kind "weapon" | "armor" | "shield" | "gear"; Damage, Range,
+// Properties, Mastery for a weapon; ArmorClass, StrengthNeeded, StealthDisadvantage for
+// armor; Magic: what makes it more than mundane; Throw / Use: what they do at the table.
+public record ItemInfoData(
+    Guid Id, string Name, string Kind, string? Category, string Rarity, double Weight, string Value, string Description, string Source,
+    string? Damage, string? Range, List<string> Properties, string? Mastery, string? ArmorClass, int? StrengthNeeded, bool StealthDisadvantage,
+    List<string> Magic, string? Throw, string? Use);
