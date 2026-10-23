@@ -21,6 +21,8 @@ public class AddSceneTokenCommand : UserRequest<SessionSceneData>
     public int? Ac { get; set; }
     public int? Speed { get; set; }
     public int? InitiativeBonus { get; set; }
+    // An NPC's side: "party" (with the characters), "hostile" (default), "neutral" or a faction's name.
+    public string? Team { get; set; }
     // Saving throw bonuses by ability ("dexterity": 2).
     public Dictionary<string, int>? Saves { get; set; }
 }
