@@ -62,7 +62,7 @@ public class FeatureController : BaseController
         [FromQuery] int pageSize = 100,
         [FromQuery] bool onlySelectableAsFeat = false)
         => HandleResponse(new ListFeaturesQuery
-            { Page = page, PageSize = pageSize, OnlySelectableAsFeat = onlySelectableAsFeat });
+        { Page = page, PageSize = pageSize, OnlySelectableAsFeat = onlySelectableAsFeat });
 
     [HttpGet("{id:guid}")]
     public Task<IActionResult> GetFeature(Guid id)

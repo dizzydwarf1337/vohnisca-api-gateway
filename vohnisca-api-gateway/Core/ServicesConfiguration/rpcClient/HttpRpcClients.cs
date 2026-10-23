@@ -2,6 +2,7 @@ using Application.Interfaces.RpcClients;
 using Infrastructure.RpcClients;
 
 namespace vohnisca_api_gateway.Core.ServicesConfiguration.rpcClient;
+
 public static class HttpRpcClients
 {
     public static IServiceCollection AddHttpRpcClients(this IServiceCollection services)

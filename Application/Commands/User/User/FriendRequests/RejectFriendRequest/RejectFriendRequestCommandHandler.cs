@@ -10,7 +10,7 @@ public class RejectFriendRequestCommandHandler : IRequestHandler<RejectFriendReq
 
     public RejectFriendRequestCommandHandler(IUserRpcClient userRpcClient)
         => _userRpcClient = userRpcClient;
-    
+
     public async Task<ApiResponse<Unit>> Handle(RejectFriendRequestCommand request, CancellationToken cancellationToken)
     {
         var result = await _userRpcClient.RejectFriendRequest(request.Id, request.Token);

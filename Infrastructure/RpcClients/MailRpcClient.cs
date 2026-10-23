@@ -5,7 +5,7 @@ namespace Infrastructure.RpcClients;
 
 public class MailRpcClient : DotnetRpcClient, IMailRpcClient
 {
-    public MailRpcClient(IConfiguration configuration) 
+    public MailRpcClient(IConfiguration configuration)
         : base(configuration["RpcServices:MailService"] ?? throw new Exception("MailService URI not set")) { }
 
     public Task<RpcResult<DefaultRpcResponse>> SendMail(string email, string subject, string content, string token)

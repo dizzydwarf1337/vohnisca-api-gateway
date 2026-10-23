@@ -6,11 +6,11 @@ namespace Application.Commands.Public.Auth.ConfirmEmail;
 
 public class ConfirmEmailCommandHandler : IRequestHandler<ConfirmEmailCommand, ApiResponse<Unit>>
 {
-    private readonly IAuthRpcClient  _rpcClient;
-    
+    private readonly IAuthRpcClient _rpcClient;
+
     public ConfirmEmailCommandHandler(IAuthRpcClient rpcClient)
         => _rpcClient = rpcClient;
-    
+
     public async Task<ApiResponse<Unit>> Handle(ConfirmEmailCommand request, CancellationToken cancellationToken)
     {
         var result = await _rpcClient.ConfirmEmailAsync(request.UserMail, request.Token);
