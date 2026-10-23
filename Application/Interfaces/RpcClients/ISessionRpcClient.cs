@@ -328,7 +328,9 @@ public record SpellEffectData(
     bool Spares,
     // It brings the dead back (Revivify), or makes the dying Stable (Spare the Dying).
     bool Revives,
-    bool Stabilizes);
+    bool Stabilizes,
+    // A spell attack that may target a door or a chest.
+    bool HitsObjects = false);
 
 // The area a spell fills: Shape "sphere" | "cylinder" | "cone" | "cube" | "line" |
 // "emanation"; Size: radius, length or side in feet; Width: a line's; FromCaster: it
