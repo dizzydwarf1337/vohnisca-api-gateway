@@ -30,8 +30,17 @@ HTTP (REST) → Controller → MediatR Send(Command)
 
 - Интерфейсы — `Application/Interfaces/RpcClients/`; реализации — `Infrastructure/RpcClients/`;
   регистрация — `HttpRpcClients.cs`.
-- Базовый класс по downstream-стеку: **`LaravelRpcClient`** (плоские params → auth-service) или
-  **`DotnetRpcClient`** (params в обёртке `request` → user/mail).
+- Базовый класс по downstream-стеку: **`LaravelRpcClient`** (плоские params → auth, campaign) или
+  **`DotnetRpcClient`** (params в обёртке `request` → user, mail, character, session).
+
+| Клиент | Сервис | Контроллеры |
+|---|---|---|
+| `AuthRpcClient` | auth (Laravel) | `Public/Auth` |
+| `UserRpcClient` | user (.NET) | `User/UserService` (профиль, друзья, заявки) |
+| `MailRpcClient` | mail (.NET) | `Admin/Mail` |
+| `CampaignRpcClient` | campaign (Laravel) | `User/CampaignService` (кампании, главы, заметки) |
+| `CharacterRpcClient` | character (.NET) | `User/CharacterService` (персонажи, каталог SRD 5.2) |
+| `SessionRpcClient` | session (.NET, в репо character-service) | `User/SessionService` (сессия, сцена, бой, кубы, игровое время) |
 - DTO результата лежат рядом с интерфейсом; поле массива — `Data`.
 
 ## Контракт наружу
@@ -44,9 +53,10 @@ HTTP (REST) → Controller → MediatR Send(Command)
 Порты downstream — `appsettings.Development.json` (`RpcServices`) и env docker-compose
 (`RpcServices__<Service>`). CORS — только `http(s)://localhost`.
 
-Хабы реального времени проксируются как есть (YARP, `Core/ServicesConfiguration/Proxy`):
+Хабы реального времени проксируются как есть (YARP, `Core/ServicesConfiguration/Proxy/HubProxy.cs`):
 `/hubs/session` → session service (`RpcServices:SessionService`). Фронтенд по-прежнему ходит
-только в gateway.
+только в gateway. Список RPC сессии и соответствующих маршрутов — в
+`vohnisca-character-service/docs/SESSION-SERVICE.md`.
 
 ## Известный долг
 
