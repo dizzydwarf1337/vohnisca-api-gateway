@@ -1,3 +1,4 @@
+using Application.Queries.User.Character.GetLevelUpPreview;
 using Application.Commands.User.Character.AddClassToCharacter;
 using Application.Commands.User.Character.AddFeatureToCharacter;
 using Application.Commands.User.Character.AddItemToCharacter;
@@ -42,6 +43,7 @@ public interface ICharacterRpcClient
     Task<RpcResult<List<SharedCharacterRow>>> GetSharedCharactersList(string token);
     Task<RpcResult<List<CharacterShareRow>>> GetCharacterShares(Guid characterId, string token);
     Task<RpcResult<List<CreationChoiceRow>>> GetCreationOptions(GetCreationOptionsQuery request, string token);
+    Task<RpcResult<LevelUpPreviewData>> GetLevelUpPreview(GetLevelUpPreviewQuery request, string token);
     Task<RpcResult<List<CreationChoiceRow>>> GetLevelUpOptions(GetLevelUpOptionsQuery request, string token);
 
     // Progression
@@ -130,7 +132,10 @@ public record SheetAbilityRow(
     bool SavingThrowProficient,
     int SavingThrowModifier,
     SheetSkillRow[] Skills);
-public record SheetFeatureRow(Guid Id, string Name, string Type);
+public record SheetFeatureRow(Guid Id, string Name, string Type, string Source = "", string Description = "");
+
+// A class feature's uses or numbers (Rage 3 / 3 each long rest; the Martial Arts die).
+public record SheetResourceRow(string Type, string Name, int Current, int Max, string Recharge, string? Die);
 public record SheetSpellRow(Guid Id, string Name, int Level, string School, string? ImagePath);
 public record SheetSpellcastingRow(
     Guid ClassId,
@@ -210,7 +215,8 @@ public record CharacterSheetData(
     int AttacksPerAction,
     int? PactWeaponAttacks,
     Guid? ActiveSessionId,
-    string Access);
+    string Access,
+    SheetResourceRow[]? Resources = null);
 
 // ---- Creation options (level 1 choices, SRD 5.2) ----
 public record CreationChoiceOption(string Value, string Label, string? Description, string? Group);
@@ -386,3 +392,13 @@ public record SpellDetail(
     OwnerRef? Owner,
     string Visibility,
     string? ImagePath);
+
+// What a level would give: each number before and after; features gained (with what they
+// do); spellcasting and class resources that change. Error: it couldn't be tried.
+public record LevelChange(int Before, int After);
+public record LevelFeatureGain(string Name, string Description);
+public record LevelCastingChange(string ClassName, LevelChange Cantrips, LevelChange Prepared, Dictionary<int, LevelChange> Slots);
+public record LevelResourceChange(string Name, LevelChange Max, string? Die);
+public record LevelUpPreviewData(
+    string ClassName, LevelChange ClassLevel, LevelChange HitPoints, LevelChange ProficiencyBonus, LevelChange AttacksPerAction,
+    LevelChange WeaponMasteries, List<LevelFeatureGain> Features, List<LevelCastingChange> Spellcasting, List<LevelResourceChange> Resources, string? Error);

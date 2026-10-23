@@ -1,3 +1,4 @@
+using Application.Queries.User.Character.GetLevelUpPreview;
 using Application.Queries.User.Character.GetCreationOptions;
 using Application.Queries.User.Character.GetLevelUpOptions;
 using Application.Commands.User.Character.AddClassToCharacter;
@@ -126,6 +127,9 @@ public class CharacterRpcClient : DotnetRpcClient, ICharacterRpcClient
 
     public Task<RpcResult<List<CreationChoiceRow>>> GetCreationOptions(GetCreationOptionsQuery request, string token)
         => SendData<List<CreationChoiceRow>>("GetCreationOptions", request, token);
+
+    public Task<RpcResult<LevelUpPreviewData>> GetLevelUpPreview(GetLevelUpPreviewQuery request, string token)
+        => SendData<LevelUpPreviewData>("GetLevelUpPreview", request, token);
 
     public Task<RpcResult<List<CreationChoiceRow>>> GetLevelUpOptions(GetLevelUpOptionsQuery request, string token)
         => SendData<List<CreationChoiceRow>>("GetLevelUpOptions", request, token);
