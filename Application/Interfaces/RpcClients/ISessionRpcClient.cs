@@ -446,7 +446,13 @@ public record CombatantData(
     // Raging (Barbarian), attacking recklessly this turn, Action Surge taken this turn.
     bool Raging,
     bool Reckless,
-    bool ActionSurged);
+    bool ActionSurged,
+    // Steady Aim taken this turn, Unarmed Strikes left from Flurry of Blows, Sacred Weapon
+    // and Innate Sorcery on for the fight.
+    bool SteadyAim = false,
+    int FlurryLeft = 0,
+    bool SacredWeapon = false,
+    bool InnateSorcery = false);
 
 // An NPC's attack made up by the GM: Damage in dice notation ("1d6+2").
 public record CustomAttackData(string Name, int Bonus, string Damage, string DamageType, int RangeFeet = 5);
