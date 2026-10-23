@@ -374,7 +374,11 @@ public record TokenSheetData(
     List<string> Effects,
     List<NpcAttackData> Attacks,
     // How many of its attacks one Attack action makes (Multiattack).
-    int AttacksPerAction);
+    int AttacksPerAction,
+    // At 0 Hit Points it makes death saves (else it dies), and where they stand.
+    bool DeathSaves,
+    int DeathSaveSuccesses,
+    int DeathSaveFailures);
 
 // An NPC's attack the GM keeps on it: to hit, damage dice ("1d6+2"), type, reach or range.
 public record NpcAttackData(Guid Id, string Name, int Bonus, string Damage, string DamageType, int RangeFeet);

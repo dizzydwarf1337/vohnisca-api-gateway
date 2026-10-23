@@ -34,4 +34,6 @@ public class UpdateSceneTokenCommand : UserRequest<SessionSceneData>
     public List<CustomAttackData>? Attacks { get; set; }
     // How many of them one Attack action makes (Multiattack), 1 to 10.
     public int? AttacksPerAction { get; set; }
+    // At 0 Hit Points it makes death saves (else it dies, as most monsters do).
+    public bool? DeathSaves { get; set; }
 }
