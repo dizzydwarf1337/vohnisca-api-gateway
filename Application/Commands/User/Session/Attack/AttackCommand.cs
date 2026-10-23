@@ -8,6 +8,7 @@ public class AttackCommand : UserRequest<CombatResultData>
 {
     public Guid SessionId { get; set; }
     public Guid AttackerTokenId { get; set; }
+    // A creature on the map — or a door or a chest (an object to break).
     public Guid TargetTokenId { get; set; }
     // One of the attacker's weapons (a character's attacks), or a custom attack (the GM's).
     public string? OptionId { get; set; }

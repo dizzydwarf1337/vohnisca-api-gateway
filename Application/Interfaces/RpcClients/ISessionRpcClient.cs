@@ -1,3 +1,4 @@
+using Application.Commands.User.Session.SetObjectToughness;
 using Application.Commands.User.Session.SetTimeScale;
 using Application.Commands.User.Session.PassTime;
 using Application.Commands.User.Session.TimeCondition;
@@ -98,6 +99,7 @@ public interface ISessionRpcClient
     Task<RpcResult<SessionSceneData>> SetTokenLight(SetTokenLightCommand request, string token);
     Task<RpcResult<SessionSceneData>> PlaceSceneDoor(PlaceSceneDoorCommand request, string token);
     Task<RpcResult<SessionSceneData>> SetSceneLock(SetSceneLockCommand request, string token);
+    Task<RpcResult<SessionSceneData>> SetObjectToughness(SetObjectToughnessCommand request, string token);
     Task<RpcResult<SessionSceneData>> SetContainerContents(SetContainerContentsCommand request, string token);
     Task<RpcResult<SessionData>> UseDoor(UseDoorCommand request, string token);
     Task<RpcResult<SessionData>> OpenContainer(OpenContainerCommand request, string token);
@@ -165,7 +167,11 @@ public record SessionData(
     List<VisionGroupData>? VisionGroups = null,
     // The game time: Seconds as of At (out of a fight it runs on at Scale times the real
     // time; in a fight a round is 6 seconds), and what ends when.
-    SessionClockData? Clock = null);
+    SessionClockData? Clock = null,
+    // Out of a fight: what each token readied ("hiding", "rage"...); the characters helped
+    // (advantage on their next ability check).
+    Dictionary<Guid, List<string>>? Readied = null,
+    List<Guid>? Helped = null);
 
 // Kind: "spell" | "condition" | "wake"; EndsAt: in game seconds.
 public record SessionClockData(double Seconds, DateTime? At, double Scale, List<SessionTimerData> Timers);
@@ -361,12 +367,13 @@ public record SceneData(
 // A lock: its DCs (pick, force) and key only for the GM.
 public record SceneLockData(bool Locked, int? Dc, int? BreakDc, Guid? KeyItemId, string? KeyName);
 
-public record SceneDoorData(Guid Id, int Col, int Row, bool Open, bool Broken, SceneLockData? Lock);
+// As an object: Ac (the GM's to know), Hp of MaxHp (what it takes to break).
+public record SceneDoorData(Guid Id, int Col, int Row, bool Open, bool Broken, SceneLockData? Lock, int? Ac = null, int Hp = 0, int MaxHp = 0);
 
 // A container (a chest, a pile): what's in it (for players once someone opened it).
 public record ContainedItemData(Guid ItemId, string Name, int Quantity);
 
-public record SceneContainerData(List<ContainedItemData>? Contents, bool Opened, bool Pile, SceneLockData? Lock);
+public record SceneContainerData(List<ContainedItemData>? Contents, bool Opened, bool Pile, SceneLockData? Lock, bool Broken = false, int? Ac = null, int Hp = 0, int MaxHp = 0);
 
 // What the GM sets on a lock, and in a container.
 public record LockSettingsData(bool Locked, int Dc, int? BreakDc, Guid? KeyItemId);
