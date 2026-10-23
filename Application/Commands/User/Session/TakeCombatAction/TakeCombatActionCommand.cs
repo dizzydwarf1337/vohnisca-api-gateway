@@ -8,7 +8,7 @@ public class TakeCombatActionCommand : UserRequest<CombatResultData>
 {
     public Guid SessionId { get; set; }
     public Guid TokenId { get; set; }
-    // "dodge" | "disengage" | "help" | "hide" | "rage" | ... | "breathWeapon" (the session service's names).
+    // "dodge" | "disengage" | "help" | "hide" | "stabilize" | "rage" | ... | "breathWeapon" (the session service's names).
     public string Action { get; set; } = string.Empty;
     // Help: the enemy helped against; Lay On Hands, Divine Spark: who it goes to.
     public Guid? TargetTokenId { get; set; }
