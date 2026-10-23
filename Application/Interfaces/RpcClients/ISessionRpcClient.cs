@@ -372,7 +372,9 @@ public record TokenSheetData(
     List<string> Vulnerabilities,
     List<string> ConditionImmunities,
     List<string> Effects,
-    List<NpcAttackData> Attacks);
+    List<NpcAttackData> Attacks,
+    // How many of its attacks one Attack action makes (Multiattack).
+    int AttacksPerAction);
 
 // An NPC's attack the GM keeps on it: to hit, damage dice ("1d6+2"), type, reach or range.
 public record NpcAttackData(Guid Id, string Name, int Bonus, string Damage, string DamageType, int RangeFeet);

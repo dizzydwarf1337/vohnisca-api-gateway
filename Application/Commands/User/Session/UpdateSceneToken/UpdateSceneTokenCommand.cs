@@ -32,4 +32,6 @@ public class UpdateSceneTokenCommand : UserRequest<SessionSceneData>
     public bool? SheetShown { get; set; }
     // All of an NPC's attacks (replacing the ones it had).
     public List<CustomAttackData>? Attacks { get; set; }
+    // How many of them one Attack action makes (Multiattack), 1 to 10.
+    public int? AttacksPerAction { get; set; }
 }
