@@ -1,3 +1,5 @@
+using Application.Commands.User.Session.GatherSpill;
+using Application.Commands.User.Session.IgniteSceneTerrain;
 using Application.Commands.User.Session.SetSceneWalls;
 using Application.Queries.User.Session.GetSpellInfo;
 using Application.Queries.User.Session.GetItemInfo;
@@ -93,6 +95,12 @@ public class SessionRpcClient : DotnetRpcClient, ISessionRpcClient
 
     public Task<RpcResult<SessionSceneData>> GetScene(GetSceneQuery request, string token)
         => SendData<SessionSceneData>("GetScene", request, token);
+
+    public Task<RpcResult<SessionData>> GatherSpill(GatherSpillCommand request, string token)
+        => SendData<SessionData>("GatherSpill", request, token);
+
+    public Task<RpcResult<SessionSceneData>> IgniteSceneTerrain(IgniteSceneTerrainCommand request, string token)
+        => SendData<SessionSceneData>("IgniteSceneTerrain", request, token);
 
     public Task<RpcResult<SessionSceneData>> SetSceneWalls(SetSceneWallsCommand request, string token)
         => SendData<SessionSceneData>("SetSceneWalls", request, token);

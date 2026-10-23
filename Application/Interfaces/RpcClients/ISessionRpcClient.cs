@@ -1,3 +1,5 @@
+using Application.Commands.User.Session.GatherSpill;
+using Application.Commands.User.Session.IgniteSceneTerrain;
 using Application.Commands.User.Session.SetSceneWalls;
 using Application.Queries.User.Session.GetSpellInfo;
 using Application.Queries.User.Session.GetItemInfo;
@@ -78,6 +80,8 @@ public interface ISessionRpcClient
     Task<RpcResult<CombatResultData>> CastSpell(CastSpellCommand request, string token);
 
     Task<RpcResult<SessionSceneData>> GetScene(GetSceneQuery request, string token);
+    Task<RpcResult<SessionData>> GatherSpill(GatherSpillCommand request, string token);
+    Task<RpcResult<SessionSceneData>> IgniteSceneTerrain(IgniteSceneTerrainCommand request, string token);
     Task<RpcResult<SessionSceneData>> SetSceneWalls(SetSceneWallsCommand request, string token);
     Task<RpcResult<SpellInfoData>> GetSpellInfo(GetSpellInfoQuery request, string token);
     Task<RpcResult<ItemInfoData>> GetItemInfo(GetItemInfoQuery request, string token);
@@ -248,7 +252,9 @@ public record SpellEffectData(
     int? RangeFeet,
     bool Lasting,
     SpellAreaData? Area,
-    bool AreaStays);
+    bool AreaStays,
+    // Its caster picks creatures it leaves alone (Spirit Guardians).
+    bool Spares);
 
 // The area a spell fills: Shape "sphere" | "cylinder" | "cone" | "cube" | "line" |
 // "emanation"; Size: radius, length or side in feet; Width: a line's; FromCaster: it
@@ -281,7 +287,10 @@ public record SceneData(
 
 // Terrain the GM painted or something spilled: squares as [col, row]; Hidden: a trap (the
 // GM only); FromItem: spilled (Caltrops, Ball Bearings).
-public record SceneTerrainData(Guid Id, string Name, string Color, List<int[]> Cells, ZoneEffectData Effect, bool Hidden, bool FromItem);
+// Fuel: poured oil, not lit; Gatherable: spilled Caltrops or Ball Bearings; BurnsOut: it
+// burns for a few rounds.
+public record SceneTerrainData(
+    Guid Id, string Name, string Color, List<int[]> Cells, ZoneEffectData Effect, bool Hidden, bool FromItem, bool Fuel, bool Gatherable, bool BurnsOut);
 
 // What a zone does to a creature in it: when (entering, the start or the end of its turn
 // there), its save and DC, damage (dice and type; half on a save if HalfOnSave), a

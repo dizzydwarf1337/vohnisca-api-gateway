@@ -1,3 +1,5 @@
+using Application.Commands.User.Session.GatherSpill;
+using Application.Commands.User.Session.IgniteSceneTerrain;
 using Application.Commands.User.Session.SetSceneWalls;
 using Application.Queries.User.Session.GetSpellInfo;
 using Application.Queries.User.Session.GetItemInfo;
@@ -332,6 +334,20 @@ public class SessionController : BaseController
     {
         command.SessionId = id;
         command.TerrainId = terrainId;
+        return HandleResponse(command);
+    }
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/scene/terrain/{terrainId:guid}/ignite")]
+    public Task<IActionResult> IgniteSceneTerrain(Guid id, Guid terrainId)
+        => HandleResponse(new IgniteSceneTerrainCommand { SessionId = id, TerrainId = terrainId });
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/characters/{characterId:guid}/gear/gather")]
+    public Task<IActionResult> GatherSpill(Guid id, Guid characterId, GatherSpillCommand command)
+    {
+        command.SessionId = id;
+        command.CharacterId = characterId;
         return HandleResponse(command);
     }
 
