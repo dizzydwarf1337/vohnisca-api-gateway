@@ -12,4 +12,6 @@ public class AddSceneTerrainCommand : UserRequest<SessionSceneData>
     public List<int[]> Cells { get; set; } = [];
     public ZoneEffectData Effect { get; set; } = new();
     public bool Hidden { get; set; }
+    // "water" | "ice" | "brush" | "oil": what it does comes with it (the effect is set for it).
+    public string? Material { get; set; }
 }

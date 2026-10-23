@@ -396,7 +396,9 @@ public record ContentRowData(Guid ItemId, int Quantity);
 // Fuel: poured oil, not lit; Gatherable: spilled Caltrops or Ball Bearings; BurnsOut: it
 // burns for a few rounds.
 public record SceneTerrainData(
-    Guid Id, string Name, string Color, List<int[]> Cells, ZoneEffectData Effect, bool Hidden, bool FromItem, bool Fuel, bool Gatherable, bool BurnsOut);
+    Guid Id, string Name, string Color, List<int[]> Cells, ZoneEffectData Effect, bool Hidden, bool FromItem, bool Fuel, bool Gatherable, bool BurnsOut,
+    // "water" | "ice" | "brush" | "fire": what fire, cold and water do to it.
+    string? Material = null);
 
 // What a zone does to a creature in it: when (entering, the start or the end of its turn
 // there), its save and DC, damage (dice and type; half on a save if HalfOnSave), a
