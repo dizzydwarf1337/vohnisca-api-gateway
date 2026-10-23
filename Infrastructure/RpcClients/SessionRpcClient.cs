@@ -51,6 +51,7 @@ using Application.Interfaces.RpcClients;
 using Application.Queries.User.Session.GetCampaignSession;
 using Application.Queries.User.Session.GetSession;
 using Application.Queries.User.Session.ListMySessions;
+using Application.Queries.User.Session.GetSessionDashboard;
 using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.RpcClients;
@@ -73,6 +74,9 @@ public class SessionRpcClient : DotnetRpcClient, ISessionRpcClient
 
     public Task<RpcResult<List<SessionNoticeData>>> ListMySessions(ListMySessionsQuery request, string token)
         => SendData<List<SessionNoticeData>>("ListMySessions", request, token);
+
+    public Task<RpcResult<SessionDashboardData>> GetSessionDashboard(GetSessionDashboardQuery request, string token)
+        => SendData<SessionDashboardData>("GetSessionDashboard", request, token);
 
     public Task<RpcResult<SessionData>> JoinSession(JoinSessionCommand request, string token)
         => SendData<SessionData>("JoinSession", request, token);

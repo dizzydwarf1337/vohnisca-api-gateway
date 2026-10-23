@@ -50,6 +50,7 @@ using Application.Commands.User.Session.StartSession;
 using Application.Queries.User.Session.GetCampaignSession;
 using Application.Queries.User.Session.GetSession;
 using Application.Queries.User.Session.ListMySessions;
+using Application.Queries.User.Session.GetSessionDashboard;
 
 namespace Application.Interfaces.RpcClients;
 
@@ -60,6 +61,7 @@ public interface ISessionRpcClient
     Task<RpcResult<CampaignSessionData>> GetCampaignSession(GetCampaignSessionQuery request, string token);
     Task<RpcResult<SessionData>> GetSession(GetSessionQuery request, string token);
     Task<RpcResult<List<SessionNoticeData>>> ListMySessions(ListMySessionsQuery request, string token);
+    Task<RpcResult<SessionDashboardData>> GetSessionDashboard(GetSessionDashboardQuery request, string token);
     Task<RpcResult<SessionData>> JoinSession(JoinSessionCommand request, string token);
     Task<RpcResult<SessionData>> LeaveSession(LeaveSessionCommand request, string token);
     Task<RpcResult<SessionData>> SetSessionReady(SetSessionReadyCommand request, string token);
@@ -150,6 +152,19 @@ public record SessionMemberData(
 
 // Kind "combat": what an attack or a spell did (Text may run over several lines).
 public record SessionLogData(DateTime At, Guid UserId, Guid? CharacterId, string Text, string? Kind);
+
+// The dashboard: Open — sessions in the user's campaigns now; Recent — the latest ones over
+// that they ran or played in, newest first; PlaytimeMinutes — played in sessions over.
+public record SessionDashboardData(List<SessionSummaryData> Open, List<SessionSummaryData> Recent, int SessionsPlayed, int PlaytimeMinutes);
+
+// Gm: the user ran it. Status: "lobby" | "live" | "ended" | "cancelled". Fights: how many
+// were started. Log: its last lines, as the user may read them.
+public record SessionSummaryData(
+    Guid Id, Guid CampaignId, string CampaignTitle, Guid GmUserId, string GmName, bool Gm, string Status,
+    DateTime OpenedAt, DateTime? StartedAt, DateTime? EndedAt, bool KeptGameState, List<SessionSummaryPlayerData> Players,
+    int DiceRolled, int Fights, List<SessionLogData> Log);
+
+public record SessionSummaryPlayerData(Guid UserId, string Username, Guid CharacterId, string? CharacterName);
 
 public record SessionCharacterData(
     Guid Id,

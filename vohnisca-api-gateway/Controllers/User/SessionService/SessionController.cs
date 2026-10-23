@@ -50,6 +50,7 @@ using Application.Commands.User.Session.StartSession;
 using Application.Queries.User.Session.GetCampaignSession;
 using Application.Queries.User.Session.GetSession;
 using Application.Queries.User.Session.ListMySessions;
+using Application.Queries.User.Session.GetSessionDashboard;
 using Microsoft.AspNetCore.Mvc;
 using vohnisca_api_gateway.Core.Requests;
 
@@ -74,6 +75,11 @@ public class SessionController : BaseController
     [Route("sessions/my")]
     public Task<IActionResult> ListMySessions()
         => HandleResponse(new ListMySessionsQuery());
+
+    [HttpGet]
+    [Route("sessions/dashboard")]
+    public Task<IActionResult> GetSessionDashboard()
+        => HandleResponse(new GetSessionDashboardQuery());
 
     [HttpGet]
     [Route("sessions/{id:guid}")]
