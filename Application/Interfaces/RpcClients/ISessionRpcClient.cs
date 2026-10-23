@@ -194,7 +194,9 @@ public record SessionCharacterData(
     int? SpellAttackBonus,
     List<InventoryRowData> Inventory,
     // Only during a long rest: the spells each class may prepare.
-    List<PrepClassData>? Preparation);
+    List<PrepClassData>? Preparation,
+    // Its class features' actions at the table: "rage", "reckless", "secondWind", "actionSurge", "layOnHands".
+    List<string> ClassActions);
 
 // What a character carries. Kind: "weapon" | "armor" | "shield" | "gear"; Slot: where it's
 // worn ("mainHand", "offHand", "armor", "shield", "accessory"; null in the pack); Throw: what
@@ -440,7 +442,11 @@ public record CombatantData(
     bool Assisted,
     bool Hiding,
     // It attacked with its main-hand weapon this turn: the off-hand attack may follow.
-    bool OffHandReady);
+    bool OffHandReady,
+    // Raging (Barbarian), attacking recklessly this turn, Action Surge taken this turn.
+    bool Raging,
+    bool Reckless,
+    bool ActionSurged);
 
 // An NPC's attack made up by the GM: Damage in dice notation ("1d6+2").
 public record CustomAttackData(string Name, int Bonus, string Damage, string DamageType, int RangeFeet = 5);
