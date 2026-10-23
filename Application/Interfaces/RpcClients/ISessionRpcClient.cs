@@ -1,3 +1,6 @@
+using Application.Commands.User.Session.SetSceneVision;
+using Application.Commands.User.Session.SetVisionGroups;
+using Application.Commands.User.Session.SetTokenLight;
 using Application.Commands.User.Session.PlaceSceneDoor;
 using Application.Commands.User.Session.SetSceneLock;
 using Application.Commands.User.Session.SetContainerContents;
@@ -82,6 +85,9 @@ public interface ISessionRpcClient
     Task<RpcResult<SessionData>> UnequipSessionItem(UnequipSessionItemCommand request, string token);
     Task<RpcResult<SessionData>> DropItem(DropItemCommand request, string token);
     Task<RpcResult<SessionData>> PickUpItem(PickUpItemCommand request, string token);
+    Task<RpcResult<SessionSceneData>> SetSceneVision(SetSceneVisionCommand request, string token);
+    Task<RpcResult<SessionData>> SetVisionGroups(SetVisionGroupsCommand request, string token);
+    Task<RpcResult<SessionSceneData>> SetTokenLight(SetTokenLightCommand request, string token);
     Task<RpcResult<SessionSceneData>> PlaceSceneDoor(PlaceSceneDoorCommand request, string token);
     Task<RpcResult<SessionSceneData>> SetSceneLock(SetSceneLockCommand request, string token);
     Task<RpcResult<SessionSceneData>> SetContainerContents(SetContainerContentsCommand request, string token);
@@ -146,7 +152,16 @@ public record SessionData(
     // The GM called a long rest: players change their prepared spells until it ends.
     bool LongRest,
     List<SessionPlayerData> Players,
-    List<SessionLogData> Log);
+    List<SessionLogData> Log,
+    // Characters that share sight (automatic sight).
+    List<VisionGroupData>? VisionGroups = null);
+
+public record VisionGroupData(Guid Id, string Name, List<Guid> CharacterIds);
+public record VisionGroupInputData(string Name, List<Guid> CharacterIds);
+
+// The scene's sight: automatic or by hand, its light ("bright" | "dim" | "dark"), how far
+// anyone sees (null: the whole map).
+public record SceneVisionData(bool Auto, string Light, int? RangeFeet);
 
 // Character: the whole sheet in play (the user's own, or every one for the GM); Member:
 // what the table sees of it.
@@ -323,7 +338,10 @@ public record SceneData(
     // Wall squares as [col, row] (nobody walks into them).
     List<int[]> Walls,
     // Doors: closed, a wall; Broken: forced open for good.
-    List<SceneDoorData>? Doors = null);
+    List<SceneDoorData>? Doors = null,
+    SceneVisionData? Vision = null,
+    // Automatic sight: the squares (row * cols + col) the viewer's characters see now.
+    List<int>? Visible = null);
 
 // A lock: its DCs (pick, force) and key only for the GM.
 public record SceneLockData(bool Locked, int? Dc, int? BreakDc, Guid? KeyItemId, string? KeyName);
@@ -399,7 +417,10 @@ public record SceneTokenData(
     TokenSheetData? Sheet,
     SceneContainerData? Container = null,
     // A character's or an NPC's side: "party", "hostile", "neutral" or a faction's name.
-    string? Team = null);
+    string? Team = null,
+    // The light it sheds: bright, then dim, in feet.
+    int LightBright = 0,
+    int LightDim = 0);
 
 // An NPC's sheet: saving throw bonuses, damage resistances / immunities /
 // vulnerabilities, condition immunities, and what lasts on it (spells, the GM's notes).
