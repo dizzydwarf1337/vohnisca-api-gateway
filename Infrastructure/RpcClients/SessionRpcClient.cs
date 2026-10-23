@@ -1,3 +1,4 @@
+using Application.Commands.User.Session.SetObjectToughness;
 using Application.Commands.User.Session.SetTimeScale;
 using Application.Commands.User.Session.PassTime;
 using Application.Commands.User.Session.TimeCondition;
@@ -190,6 +191,9 @@ public class SessionRpcClient : DotnetRpcClient, ISessionRpcClient
 
     public Task<RpcResult<SessionSceneData>> PlaceSceneDoor(PlaceSceneDoorCommand request, string token)
         => SendData<SessionSceneData>("PlaceSceneDoor", request, token);
+
+    public Task<RpcResult<SessionSceneData>> SetObjectToughness(SetObjectToughnessCommand request, string token)
+        => SendData<SessionSceneData>("SetObjectToughness", request, token);
 
     public Task<RpcResult<SessionSceneData>> SetSceneLock(SetSceneLockCommand request, string token)
         => SendData<SessionSceneData>("SetSceneLock", request, token);

@@ -1,3 +1,4 @@
+using Application.Commands.User.Session.SetObjectToughness;
 using Application.Commands.User.Session.SetTimeScale;
 using Application.Commands.User.Session.PassTime;
 using Application.Commands.User.Session.TimeCondition;
@@ -610,4 +611,13 @@ public class SessionController : BaseController
     [Route("sessions/{id:guid}/clock/timers/{timerId:guid}")]
     public Task<IActionResult> CancelTimer(Guid id, Guid timerId)
         => HandleResponse(new CancelTimerCommand { SessionId = id, TimerId = timerId });
+
+    [HttpPut]
+    [Route("sessions/{id:guid}/scene/objects/{targetId:guid}/toughness")]
+    public Task<IActionResult> SetObjectToughness(Guid id, Guid targetId, SetObjectToughnessCommand command)
+    {
+        command.SessionId = id;
+        command.TargetId = targetId;
+        return HandleResponse(command);
+    }
 }
