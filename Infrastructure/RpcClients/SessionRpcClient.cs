@@ -1,3 +1,6 @@
+using Application.Commands.User.Session.SetSceneVision;
+using Application.Commands.User.Session.SetVisionGroups;
+using Application.Commands.User.Session.SetTokenLight;
 using Application.Commands.User.Session.PlaceSceneDoor;
 using Application.Commands.User.Session.SetSceneLock;
 using Application.Commands.User.Session.SetContainerContents;
@@ -159,6 +162,15 @@ public class SessionRpcClient : DotnetRpcClient, ISessionRpcClient
 
     public Task<RpcResult<SessionData>> PickUpItem(PickUpItemCommand request, string token)
         => SendData<SessionData>("PickUpItem", request, token);
+
+    public Task<RpcResult<SessionSceneData>> SetSceneVision(SetSceneVisionCommand request, string token)
+        => SendData<SessionSceneData>("SetSceneVision", request, token);
+
+    public Task<RpcResult<SessionData>> SetVisionGroups(SetVisionGroupsCommand request, string token)
+        => SendData<SessionData>("SetVisionGroups", request, token);
+
+    public Task<RpcResult<SessionSceneData>> SetTokenLight(SetTokenLightCommand request, string token)
+        => SendData<SessionSceneData>("SetTokenLight", request, token);
 
     public Task<RpcResult<SessionSceneData>> PlaceSceneDoor(PlaceSceneDoorCommand request, string token)
         => SendData<SessionSceneData>("PlaceSceneDoor", request, token);

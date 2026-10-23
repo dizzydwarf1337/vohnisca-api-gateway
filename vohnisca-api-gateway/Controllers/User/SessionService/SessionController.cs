@@ -1,3 +1,6 @@
+using Application.Commands.User.Session.SetSceneVision;
+using Application.Commands.User.Session.SetVisionGroups;
+using Application.Commands.User.Session.SetTokenLight;
 using Application.Commands.User.Session.PlaceSceneDoor;
 using Application.Commands.User.Session.SetSceneLock;
 using Application.Commands.User.Session.SetContainerContents;
@@ -542,6 +545,33 @@ public class SessionController : BaseController
         command.SessionId = id;
         command.CharacterId = characterId;
         command.TargetId = targetId;
+        return HandleResponse(command);
+    }
+
+    // ---- Sight ----
+
+    [HttpPut]
+    [Route("sessions/{id:guid}/scene/vision")]
+    public Task<IActionResult> SetSceneVision(Guid id, SetSceneVisionCommand command)
+    {
+        command.SessionId = id;
+        return HandleResponse(command);
+    }
+
+    [HttpPut]
+    [Route("sessions/{id:guid}/vision-groups")]
+    public Task<IActionResult> SetVisionGroups(Guid id, SetVisionGroupsCommand command)
+    {
+        command.SessionId = id;
+        return HandleResponse(command);
+    }
+
+    [HttpPut]
+    [Route("sessions/{id:guid}/scene/tokens/{tokenId:guid}/light")]
+    public Task<IActionResult> SetTokenLight(Guid id, Guid tokenId, SetTokenLightCommand command)
+    {
+        command.SessionId = id;
+        command.TokenId = tokenId;
         return HandleResponse(command);
     }
 }
