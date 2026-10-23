@@ -179,7 +179,8 @@ public record SessionData(
 
 // Kind: "spell" | "condition" | "wake"; EndsAt: in game seconds.
 public record SessionClockData(double Seconds, DateTime? At, double Scale, List<SessionTimerData> Timers);
-public record SessionTimerData(Guid Id, string Kind, string Name, double EndsAt, Guid? TokenId, Guid? CharacterId, string? Condition);
+public record SessionTimerData(Guid Id, string Kind, string Name, double EndsAt, Guid? TokenId, Guid? CharacterId, string? Condition,
+    Guid? SpellId = null, Guid? CasterId = null, string? SpellName = null);
 
 public record VisionGroupData(Guid Id, string Name, List<Guid> CharacterIds);
 public record VisionGroupInputData(string Name, List<Guid> CharacterIds);
