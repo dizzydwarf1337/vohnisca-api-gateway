@@ -1,3 +1,13 @@
+using Application.Commands.User.Session.SetLongRest;
+using Application.Commands.User.Session.EquipSessionItem;
+using Application.Commands.User.Session.UnequipSessionItem;
+using Application.Commands.User.Session.DropItem;
+using Application.Commands.User.Session.PickUpItem;
+using Application.Commands.User.Session.UseItem;
+using Application.Commands.User.Session.ThrowItem;
+using Application.Commands.User.Session.AddSceneTerrain;
+using Application.Commands.User.Session.UpdateSceneTerrain;
+using Application.Commands.User.Session.RemoveSceneTerrain;
 using Application.Queries.User.Session.GetEncounter;
 using Application.Commands.User.Session.StartCombat;
 using Application.Commands.User.Session.JoinCombat;
@@ -101,6 +111,36 @@ public class SessionRpcClient : DotnetRpcClient, ISessionRpcClient
 
     public Task<RpcResult<SessionSceneData>> RemoveSceneArea(RemoveSceneAreaCommand request, string token)
         => SendData<SessionSceneData>("RemoveSceneArea", request, token);
+
+    public Task<RpcResult<SessionData>> SetLongRest(SetLongRestCommand request, string token)
+        => SendData<SessionData>("SetLongRest", request, token);
+
+    public Task<RpcResult<SessionData>> EquipSessionItem(EquipSessionItemCommand request, string token)
+        => SendData<SessionData>("EquipItem", request, token);
+
+    public Task<RpcResult<SessionData>> UnequipSessionItem(UnequipSessionItemCommand request, string token)
+        => SendData<SessionData>("UnequipItem", request, token);
+
+    public Task<RpcResult<SessionData>> DropItem(DropItemCommand request, string token)
+        => SendData<SessionData>("DropItem", request, token);
+
+    public Task<RpcResult<SessionData>> PickUpItem(PickUpItemCommand request, string token)
+        => SendData<SessionData>("PickUpItem", request, token);
+
+    public Task<RpcResult<CombatResultData>> UseItem(UseItemCommand request, string token)
+        => SendData<CombatResultData>("UseItem", request, token);
+
+    public Task<RpcResult<CombatResultData>> ThrowItem(ThrowItemCommand request, string token)
+        => SendData<CombatResultData>("ThrowItem", request, token);
+
+    public Task<RpcResult<SessionSceneData>> AddSceneTerrain(AddSceneTerrainCommand request, string token)
+        => SendData<SessionSceneData>("AddSceneTerrain", request, token);
+
+    public Task<RpcResult<SessionSceneData>> UpdateSceneTerrain(UpdateSceneTerrainCommand request, string token)
+        => SendData<SessionSceneData>("UpdateSceneTerrain", request, token);
+
+    public Task<RpcResult<SessionSceneData>> RemoveSceneTerrain(RemoveSceneTerrainCommand request, string token)
+        => SendData<SessionSceneData>("RemoveSceneTerrain", request, token);
 
     public Task<RpcResult<CombatResultData>> TakeCombatAction(TakeCombatActionCommand request, string token)
         => SendData<CombatResultData>("TakeCombatAction", request, token);
