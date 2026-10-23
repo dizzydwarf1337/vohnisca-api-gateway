@@ -1,3 +1,4 @@
+using Application.Queries.User.Character.GetLevelUpPreview;
 using Application.Commands.User.Character.AddClassToCharacter;
 using Application.Commands.User.Character.AddFeatureToCharacter;
 using Application.Commands.User.Character.AddItemToCharacter;
@@ -144,6 +145,14 @@ public class CharacterController : BaseController
     // Choices for the next level of a class; the dialog re-asks as choices change.
     [HttpPost("{id:guid}/level-up-options")]
     public Task<IActionResult> GetLevelUpOptions(Guid id, GetLevelUpOptionsQuery query)
+    {
+        query.CharacterId = id;
+        return HandleResponse(query);
+    }
+
+    // What the next level would give with the choices so far.
+    [HttpPost("{id:guid}/level-up-preview")]
+    public Task<IActionResult> GetLevelUpPreview(Guid id, GetLevelUpPreviewQuery query)
     {
         query.CharacterId = id;
         return HandleResponse(query);
