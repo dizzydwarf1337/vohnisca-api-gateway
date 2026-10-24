@@ -19,6 +19,8 @@ public class CastSpellCommand : UserRequest<CombatResultData>
     public string Mode { get; set; } = "normal";
     // The caster's pick when the spell lets them choose ("fire", "cold"...).
     public string? DamageType { get; set; }
+    // What a buff asks its caster to pick (Resistance: a damage type; Guidance: a skill).
+    public string? Choice { get; set; }
     // Where an area spell is placed or pointed, in cells: its targets are whoever is in it.
     public double? AimCol { get; set; }
     public double? AimRow { get; set; }
