@@ -50,6 +50,9 @@ using Application.Commands.User.Session.RollDice;
 using Application.Commands.User.Session.RollCheck;
 using Application.Queries.User.Session.GetScene;
 using Application.Commands.User.Session.SetScene;
+using Application.Commands.User.Session.LoadMapLevel;
+using Application.Commands.User.Session.SaveSceneToMap;
+using Application.Commands.User.Session.PlaceWorkshopNpc;
 using Application.Commands.User.Session.SetSceneFog;
 using Application.Commands.User.Session.RevealSceneCells;
 using Application.Commands.User.Session.AddSceneToken;
@@ -125,6 +128,10 @@ public interface ISessionRpcClient
     Task<RpcResult<SpellInfoData>> GetSpellInfo(GetSpellInfoQuery request, string token);
     Task<RpcResult<ItemInfoData>> GetItemInfo(GetItemInfoQuery request, string token);
     Task<RpcResult<SessionSceneData>> SetScene(SetSceneCommand request, string token);
+    // The workshop's maps and NPCs at the table.
+    Task<RpcResult<SessionSceneData>> LoadMapLevel(LoadMapLevelCommand request, string token);
+    Task<RpcResult<SessionSceneData>> SaveSceneToMap(SaveSceneToMapCommand request, string token);
+    Task<RpcResult<SessionSceneData>> PlaceWorkshopNpc(PlaceWorkshopNpcCommand request, string token);
     Task<RpcResult<SessionSceneData>> SetSceneFog(SetSceneFogCommand request, string token);
     Task<RpcResult<SessionSceneData>> RevealSceneCells(RevealSceneCellsCommand request, string token);
     Task<RpcResult<SessionSceneData>> AddSceneToken(AddSceneTokenCommand request, string token);
@@ -377,7 +384,11 @@ public record SceneData(
     // Automatic sight: the squares (row * cols + col) the viewer's characters see now.
     List<int>? Visible = null,
     // Breakable walls (players: those the GM showed, and the broken ones).
-    List<SceneWallPieceData>? BreakableWalls = null);
+    List<SceneWallPieceData>? BreakableWalls = null,
+    // The workshop map level it came from or was saved to (only the GM gets it).
+    SceneSourceData? Source = null);
+
+public record SceneSourceData(Guid MapId, string MapName, Guid LevelId, string LevelName);
 
 // A breakable wall square: Ac only for the GM; Hidden: the players don't know of it; Broken: a gap now.
 public record SceneWallPieceData(Guid Id, int Col, int Row, int? Ac, int Hp, int MaxHp, bool Hidden, bool Broken);

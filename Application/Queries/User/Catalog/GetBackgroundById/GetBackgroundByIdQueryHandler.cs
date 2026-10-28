@@ -6,8 +6,8 @@ namespace Application.Queries.User.Catalog.GetBackgroundById;
 
 public class GetBackgroundByIdQueryHandler : IRequestHandler<GetBackgroundByIdQuery, ApiResponse<BackgroundDetail>>
 {
-    private readonly ICharacterRpcClient _client;
-    public GetBackgroundByIdQueryHandler(ICharacterRpcClient client) => _client = client;
+    private readonly IWorkshopRpcClient _client;
+    public GetBackgroundByIdQueryHandler(IWorkshopRpcClient client) => _client = client;
 
     public async Task<ApiResponse<BackgroundDetail>> Handle(GetBackgroundByIdQuery request, CancellationToken cancellationToken)
     {

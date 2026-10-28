@@ -51,6 +51,9 @@ using Application.Commands.User.Session.RollCheck;
 using Application.Queries.User.Session.GetScene;
 using Application.Commands.User.Session.SetScene;
 using Application.Commands.User.Session.SetSceneFog;
+using Application.Commands.User.Session.LoadMapLevel;
+using Application.Commands.User.Session.SaveSceneToMap;
+using Application.Commands.User.Session.PlaceWorkshopNpc;
 using Application.Commands.User.Session.RevealSceneCells;
 using Application.Commands.User.Session.AddSceneToken;
 using Application.Commands.User.Session.UpdateSceneToken;
@@ -153,6 +156,32 @@ public class SessionController : BaseController
     [Route("sessions/{id:guid}/scene")]
     public Task<IActionResult> GetScene(Guid id)
         => HandleResponse(new GetSceneQuery { SessionId = id });
+
+    // The workshop's maps and NPCs: a map level as the scene, the scene into a map level, a
+    // workshop NPC on the map.
+    [HttpPost]
+    [Route("sessions/{id:guid}/scene/map-level")]
+    public Task<IActionResult> LoadMapLevel(Guid id, LoadMapLevelCommand command)
+    {
+        command.SessionId = id;
+        return HandleResponse(command);
+    }
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/scene/save-to-map")]
+    public Task<IActionResult> SaveSceneToMap(Guid id, SaveSceneToMapCommand command)
+    {
+        command.SessionId = id;
+        return HandleResponse(command);
+    }
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/scene/workshop-npcs")]
+    public Task<IActionResult> PlaceWorkshopNpc(Guid id, PlaceWorkshopNpcCommand command)
+    {
+        command.SessionId = id;
+        return HandleResponse(command);
+    }
 
     [HttpPut]
     [Route("sessions/{id:guid}/scene/walls")]

@@ -6,8 +6,8 @@ namespace Application.Queries.User.Catalog.GetItemById;
 
 public class GetItemByIdQueryHandler : IRequestHandler<GetItemByIdQuery, ApiResponse<ItemDetail>>
 {
-    private readonly ICharacterRpcClient _client;
-    public GetItemByIdQueryHandler(ICharacterRpcClient client) => _client = client;
+    private readonly IWorkshopRpcClient _client;
+    public GetItemByIdQueryHandler(IWorkshopRpcClient client) => _client = client;
 
     public async Task<ApiResponse<ItemDetail>> Handle(GetItemByIdQuery request, CancellationToken cancellationToken)
     {

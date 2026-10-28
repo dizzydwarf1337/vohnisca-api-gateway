@@ -13,6 +13,7 @@ public static class HttpRpcClients
         services.AddScoped<ICampaignRpcClient, CampaignRpcClient>();
         services.AddScoped<ICharacterRpcClient, CharacterRpcClient>();
         services.AddScoped<ISessionRpcClient, SessionRpcClient>();
+        services.AddScoped<IWorkshopRpcClient, WorkshopRpcClient>();
 
         return services;
     }

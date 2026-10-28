@@ -7,8 +7,8 @@ namespace Application.Queries.User.Catalog.ListFeatures;
 
 public class ListFeaturesQueryHandler : IRequestHandler<ListFeaturesQuery, ApiResponse<PaginationResponse<FeatureListRow>>>
 {
-    private readonly ICharacterRpcClient _client;
-    public ListFeaturesQueryHandler(ICharacterRpcClient client) => _client = client;
+    private readonly IWorkshopRpcClient _client;
+    public ListFeaturesQueryHandler(IWorkshopRpcClient client) => _client = client;
 
     public async Task<ApiResponse<PaginationResponse<FeatureListRow>>> Handle(ListFeaturesQuery request, CancellationToken cancellationToken)
     {

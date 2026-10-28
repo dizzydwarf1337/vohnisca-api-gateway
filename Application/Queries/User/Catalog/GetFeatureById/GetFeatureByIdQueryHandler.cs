@@ -6,8 +6,8 @@ namespace Application.Queries.User.Catalog.GetFeatureById;
 
 public class GetFeatureByIdQueryHandler : IRequestHandler<GetFeatureByIdQuery, ApiResponse<FeatureDetail>>
 {
-    private readonly ICharacterRpcClient _client;
-    public GetFeatureByIdQueryHandler(ICharacterRpcClient client) => _client = client;
+    private readonly IWorkshopRpcClient _client;
+    public GetFeatureByIdQueryHandler(IWorkshopRpcClient client) => _client = client;
 
     public async Task<ApiResponse<FeatureDetail>> Handle(GetFeatureByIdQuery request, CancellationToken cancellationToken)
     {

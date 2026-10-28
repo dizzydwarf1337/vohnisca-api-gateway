@@ -7,8 +7,8 @@ namespace Application.Queries.User.Catalog.ListBackgrounds;
 
 public class ListBackgroundsQueryHandler : IRequestHandler<ListBackgroundsQuery, ApiResponse<PaginationResponse<BackgroundListRow>>>
 {
-    private readonly ICharacterRpcClient _client;
-    public ListBackgroundsQueryHandler(ICharacterRpcClient client) => _client = client;
+    private readonly IWorkshopRpcClient _client;
+    public ListBackgroundsQueryHandler(IWorkshopRpcClient client) => _client = client;
 
     public async Task<ApiResponse<PaginationResponse<BackgroundListRow>>> Handle(ListBackgroundsQuery request, CancellationToken cancellationToken)
     {
