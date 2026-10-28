@@ -50,6 +50,9 @@ using Application.Commands.User.Session.RollDice;
 using Application.Commands.User.Session.RollCheck;
 using Application.Queries.User.Session.GetScene;
 using Application.Commands.User.Session.SetScene;
+using Application.Commands.User.Session.LoadMapLevel;
+using Application.Commands.User.Session.SaveSceneToMap;
+using Application.Commands.User.Session.PlaceWorkshopNpc;
 using Application.Commands.User.Session.SetSceneFog;
 using Application.Commands.User.Session.RevealSceneCells;
 using Application.Commands.User.Session.AddSceneToken;
@@ -136,6 +139,15 @@ public class SessionRpcClient : DotnetRpcClient, ISessionRpcClient
 
     public Task<RpcResult<SessionSceneData>> SetScene(SetSceneCommand request, string token)
         => SendData<SessionSceneData>("SetScene", request, token);
+
+    public Task<RpcResult<SessionSceneData>> LoadMapLevel(LoadMapLevelCommand request, string token)
+        => SendData<SessionSceneData>("LoadMapLevel", request, token);
+
+    public Task<RpcResult<SessionSceneData>> SaveSceneToMap(SaveSceneToMapCommand request, string token)
+        => SendData<SessionSceneData>("SaveSceneToMap", request, token);
+
+    public Task<RpcResult<SessionSceneData>> PlaceWorkshopNpc(PlaceWorkshopNpcCommand request, string token)
+        => SendData<SessionSceneData>("PlaceWorkshopNpc", request, token);
 
     public Task<RpcResult<SessionSceneData>> SetSceneFog(SetSceneFogCommand request, string token)
         => SendData<SessionSceneData>("SetSceneFog", request, token);

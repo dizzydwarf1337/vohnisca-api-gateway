@@ -25,6 +25,17 @@
 - Workshop service (`WorkshopRpcClient`, `Controllers/User/WorkshopService`, `RpcServices:WorkshopService`):
   свои заклинания и предметы — `POST spells`, `PUT spells/{id}`, `PUT spells/{id}/visibility`,
   `DELETE spells/{id}` и то же для `items` (multipart: `payload` + `file` для иконки).
+- Карты воркшопа: `GET maps?mine=`, `GET maps/{id}`, `POST maps`, `PUT maps/{id}`,
+  `PUT maps/{id}/visibility`, `DELETE maps/{id}`, `PUT maps/{id}/levels/{levelId}` (имя),
+  `PUT maps/{id}/levels/{levelId}/position`, `DELETE maps/{id}/levels/{levelId}`.
+- NPC воркшопа: `GET npcs?mine=`, `GET npcs/{id}`, `POST npcs`, `PUT npcs/{id}`,
+  `PUT npcs/{id}/abilities`, `PUT npcs/{id}/profile`, `PUT npcs/{id}/image` (multipart `file` /
+  `remove`), `POST npcs/{id}/actions`, `DELETE npcs/{id}/actions/{actionId}`, `POST npcs/{id}/traits`,
+  `DELETE npcs/{id}/traits/{traitId}`, `PUT npcs/{id}/visibility`, `DELETE npcs/{id}`.
+- Стол и воркшоп (session service): `POST sessions/{id}/scene/map-level` (уровень карты на стол),
+  `POST sessions/{id}/scene/save-to-map` (сцена в уровень своей карты),
+  `POST sessions/{id}/scene/workshop-npcs` (NPC воркшопа на клетку); у сцены — `source`
+  (карта и уровень, только мастеру).
 
 ### Changed
 - Каталог правил (`races`, `classes`, `backgrounds`, `features`, `items`, `spells` — списки и

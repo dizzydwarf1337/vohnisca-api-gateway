@@ -1,3 +1,25 @@
+using Application.Commands.User.Workshop.AddNpcAction;
+using Application.Commands.User.Workshop.AddNpcTrait;
+using Application.Commands.User.Workshop.CreateMap;
+using Application.Commands.User.Workshop.CreateNpc;
+using Application.Commands.User.Workshop.DeleteMap;
+using Application.Commands.User.Workshop.DeleteNpc;
+using Application.Commands.User.Workshop.MoveMapLevel;
+using Application.Commands.User.Workshop.RemoveMapLevel;
+using Application.Commands.User.Workshop.RemoveNpcAction;
+using Application.Commands.User.Workshop.RemoveNpcTrait;
+using Application.Commands.User.Workshop.RenameMapLevel;
+using Application.Commands.User.Workshop.SetMapVisibility;
+using Application.Commands.User.Workshop.SetNpcAbilityScores;
+using Application.Commands.User.Workshop.SetNpcImage;
+using Application.Commands.User.Workshop.SetNpcProfile;
+using Application.Commands.User.Workshop.SetNpcVisibility;
+using Application.Commands.User.Workshop.UpdateMap;
+using Application.Commands.User.Workshop.UpdateNpcDetails;
+using Application.Queries.User.Workshop.GetWorkshopMap;
+using Application.Queries.User.Workshop.GetWorkshopNpc;
+using Application.Queries.User.Workshop.ListWorkshopMaps;
+using Application.Queries.User.Workshop.ListWorkshopNpcs;
 using Application.Commands.User.Workshop.CreateItem;
 using Application.Commands.User.Workshop.CreateSpell;
 using Application.Commands.User.Workshop.DeleteItem;
@@ -87,6 +109,73 @@ public class WorkshopRpcClient : DotnetRpcClient, IWorkshopRpcClient
 
     public Task<RpcResult<bool>> DeleteItem(DeleteWorkshopItemCommand request, string token)
         => SendCommand("DeleteItem", request, token);
+
+    // --- Maps and NPCs ---
+    public Task<RpcResult<CreatedContent>> CreateMap(CreateMapCommand request, string token)
+        => SendData<CreatedContent>("CreateMap", request, token);
+
+    public Task<RpcResult<bool>> UpdateMap(UpdateMapCommand request, string token)
+        => SendCommand("UpdateMap", request, token);
+
+    public Task<RpcResult<bool>> SetMapVisibility(SetMapVisibilityCommand request, string token)
+        => SendCommand("SetMapVisibility", request, token);
+
+    public Task<RpcResult<bool>> DeleteMap(DeleteMapCommand request, string token)
+        => SendCommand("DeleteMap", request, token);
+
+    public Task<RpcResult<bool>> RenameMapLevel(RenameMapLevelCommand request, string token)
+        => SendCommand("RenameMapLevel", request, token);
+
+    public Task<RpcResult<bool>> MoveMapLevel(MoveMapLevelCommand request, string token)
+        => SendCommand("MoveMapLevel", request, token);
+
+    public Task<RpcResult<bool>> RemoveMapLevel(RemoveMapLevelCommand request, string token)
+        => SendCommand("RemoveMapLevel", request, token);
+
+    public Task<RpcResult<CreatedContent>> CreateNpc(CreateNpcCommand request, string token)
+        => SendData<CreatedContent>("CreateNpc", request, token);
+
+    public Task<RpcResult<bool>> UpdateNpcDetails(UpdateNpcDetailsCommand request, string token)
+        => SendCommand("UpdateNpcDetails", request, token);
+
+    public Task<RpcResult<bool>> SetNpcAbilityScores(SetNpcAbilityScoresCommand request, string token)
+        => SendCommand("SetNpcAbilityScores", request, token);
+
+    public Task<RpcResult<bool>> SetNpcProfile(SetNpcProfileCommand request, string token)
+        => SendCommand("SetNpcProfile", request, token);
+
+    public Task<RpcResult<bool>> SetNpcImage(SetNpcImageCommand request, string token)
+        => SendCommand("SetNpcImage", request, token);
+
+    public Task<RpcResult<NpcActionAdded>> AddNpcAction(AddNpcActionCommand request, string token)
+        => SendData<NpcActionAdded>("AddNpcAction", request, token);
+
+    public Task<RpcResult<bool>> RemoveNpcAction(RemoveNpcActionCommand request, string token)
+        => SendCommand("RemoveNpcAction", request, token);
+
+    public Task<RpcResult<NpcTraitAdded>> AddNpcTrait(AddNpcTraitCommand request, string token)
+        => SendData<NpcTraitAdded>("AddNpcTrait", request, token);
+
+    public Task<RpcResult<bool>> RemoveNpcTrait(RemoveNpcTraitCommand request, string token)
+        => SendCommand("RemoveNpcTrait", request, token);
+
+    public Task<RpcResult<bool>> SetNpcVisibility(SetNpcVisibilityCommand request, string token)
+        => SendCommand("SetNpcVisibility", request, token);
+
+    public Task<RpcResult<bool>> DeleteNpc(DeleteNpcCommand request, string token)
+        => SendCommand("DeleteNpc", request, token);
+
+    public Task<RpcResult<PaginationResponse<WorkshopMapRow>>> ListWorkshopMaps(ListWorkshopMapsQuery request, string token)
+        => SendData<PaginationResponse<WorkshopMapRow>>("ListMaps", new { Pagination = new { Page = request.Page, PageSize = request.PageSize }, Mine = request.Mine }, token);
+
+    public Task<RpcResult<WorkshopMapRow>> GetWorkshopMap(GetWorkshopMapQuery request, string token)
+        => SendData<WorkshopMapRow>("GetMapById", new { Id = request.Id }, token);
+
+    public Task<RpcResult<PaginationResponse<WorkshopNpcRow>>> ListWorkshopNpcs(ListWorkshopNpcsQuery request, string token)
+        => SendData<PaginationResponse<WorkshopNpcRow>>("ListNpcs", new { Pagination = new { Page = request.Page, PageSize = request.PageSize }, Mine = request.Mine }, token);
+
+    public Task<RpcResult<WorkshopNpcDetail>> GetWorkshopNpc(GetWorkshopNpcQuery request, string token)
+        => SendData<WorkshopNpcDetail>("GetNpcById", new { Id = request.Id }, token);
 
     private static object Paged(int page, int pageSize)
         => new { Pagination = new { Page = page, PageSize = pageSize } };

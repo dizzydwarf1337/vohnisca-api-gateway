@@ -46,8 +46,10 @@
   Campaign 8878, Character 5040, Session 5060, Workshop 5070. CORS — только `localhost`.
 - **Каталог правил — workshop service** (`WorkshopRpcClient`, `Controllers/User/WorkshopService`):
   списки и карточки рас, классов, предысторий, фич, предметов, заклинаний и свои заклинания и
-  предметы. Character service — персонажи и `/info` (как заклинание у персонажа); его копия каталога
-  обновляется из воркшопа сама.
+  предметы; карты (`maps`, уровни — сцены стола) и NPC (`npcs`) — `WorkshopContentController`.
+  Character service — персонажи и `/info` (как заклинание у персонажа); его копия каталога
+  обновляется из воркшопа сама (RabbitMQ). Сервисы между собой говорят только через RabbitMQ —
+  gateway в эти связи не вмешивается.
 - Форматирование: `dotnet format whitespace vohnisca-api-gateway/vohnisca-api-gateway.sln`.
 - Известный долг: авторизация `AdminRequest`/`SuperadminRequest` в `AuthorizationBehavior` не полна.
 

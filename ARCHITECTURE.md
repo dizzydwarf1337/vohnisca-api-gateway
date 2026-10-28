@@ -40,7 +40,7 @@ HTTP (REST) → Controller → MediatR Send(Command)
 | `MailRpcClient` | mail (.NET) | `Admin/Mail` |
 | `CampaignRpcClient` | campaign (Laravel) | `User/CampaignService` (кампании, главы, заметки) |
 | `CharacterRpcClient` | character (.NET) | `User/CharacterService` (персонажи; сведения о заклинании и предмете `/info`) |
-| `WorkshopRpcClient` | workshop (.NET) | `User/WorkshopService` (каталог правил: расы, классы, предыстории, фичи, предметы, заклинания; свои заклинания и предметы) |
+| `WorkshopRpcClient` | workshop (.NET) | `User/WorkshopService` (каталог правил: расы, классы, предыстории, фичи, предметы, заклинания; свои заклинания и предметы; карты и NPC) |
 | `SessionRpcClient` | session (.NET, в репо character-service) | `User/SessionService` (сессия, сцена, бой, кубы, игровое время) |
 - DTO результата лежат рядом с интерфейсом; поле массива — `Data`.
 
