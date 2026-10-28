@@ -52,7 +52,8 @@ HTTP (REST) → Controller → MediatR Send(Command)
 ## Внешние точки
 
 Порты downstream — `appsettings.Development.json` (`RpcServices`) и env docker-compose
-(`RpcServices__<Service>`). CORS — только `http(s)://localhost`.
+(`RpcServices__<Service>`; воркшоп — `RpcServices__WorkshopService`, локально 5070). CORS —
+только `http(s)://localhost`. Сервисы между собой говорят через RabbitMQ, не через gateway.
 
 Хабы реального времени проксируются как есть (YARP, `Core/ServicesConfiguration/Proxy/HubProxy.cs`):
 `/hubs/session` → session service (`RpcServices:SessionService`). Фронтенд по-прежнему ходит
