@@ -205,7 +205,8 @@ public record SessionMemberData(
     bool IsDead,
     List<string> Conditions,
     string? Concentration,
-    List<string> Effects);
+    List<string> Effects,
+    Dictionary<string, string>? EffectChoices = null);
 
 // Kind "combat": what an attack or a spell did (Text may run over several lines).
 public record SessionLogData(DateTime At, Guid UserId, Guid? CharacterId, string Text, string? Kind);
@@ -253,7 +254,9 @@ public record SessionCharacterData(
     // Only during a long rest: the spells each class may prepare.
     List<PrepClassData>? Preparation,
     // Its class features' actions at the table: "rage", "reckless", "secondWind", "actionSurge", "layOnHands".
-    List<string> ClassActions);
+    List<string> ClassActions,
+    // What the caster of a spell on it picked, by the effect's name (Resistance: "Fire").
+    Dictionary<string, string>? EffectChoices = null);
 
 // What a character carries. Kind: "weapon" | "armor" | "shield" | "gear"; Slot: where it's
 // worn ("mainHand", "offHand", "armor", "shield", "accessory"; null in the pack); Throw: what
@@ -335,7 +338,10 @@ public record SpellEffectData(
     bool Revives,
     bool Stabilizes,
     // A spell attack that may target a door or a chest.
-    bool HitsObjects = false);
+    bool HitsObjects = false,
+    // A buff whose caster picks something: "damageType" | "skill" | "ability", from these.
+    string? Choose = null,
+    List<string>? ChooseFrom = null);
 
 // The area a spell fills: Shape "sphere" | "cylinder" | "cone" | "cube" | "line" |
 // "emanation"; Size: radius, length or side in feet; Width: a line's; FromCaster: it
@@ -473,7 +479,9 @@ public record TokenSheetData(
     // At 0 Hit Points it makes death saves (else it dies), and where they stand.
     bool DeathSaves,
     int DeathSaveSuccesses,
-    int DeathSaveFailures);
+    int DeathSaveFailures,
+    // What the caster of a spell on it picked, by the effect's name.
+    Dictionary<string, string>? EffectChoices = null);
 
 // An NPC's attack the GM keeps on it: to hit, damage dice ("1d6+2"), type, reach or range.
 public record NpcAttackData(Guid Id, string Name, int Bonus, string Damage, string DamageType, int RangeFeet);

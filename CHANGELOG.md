@@ -18,6 +18,7 @@
   местности (вода, лёд, кустарник, масло).
 - Сведения о заклинании и предмете вне сессии: `GET spells/{id}/info?characterId=`, `GET items/{id}/info`;
   варианты выбора при создании и level-up несут `spellId` / `itemId`.
+- Каст заклинания с выбором бафа (`choice`); у эффектов заклинаний `choose`/`chooseFrom`, у листов — `effectChoices`.
 - Прокси хаба `/hubs/session` в session service (YARP).
 - `SetNoteColor`, доступы заметки и перенос главы в корень (campaign).
 
