@@ -6,8 +6,8 @@ namespace Application.Queries.User.Catalog.GetClassById;
 
 public class GetClassByIdQueryHandler : IRequestHandler<GetClassByIdQuery, ApiResponse<ClassDetail>>
 {
-    private readonly ICharacterRpcClient _client;
-    public GetClassByIdQueryHandler(ICharacterRpcClient client) => _client = client;
+    private readonly IWorkshopRpcClient _client;
+    public GetClassByIdQueryHandler(IWorkshopRpcClient client) => _client = client;
 
     public async Task<ApiResponse<ClassDetail>> Handle(GetClassByIdQuery request, CancellationToken cancellationToken)
     {

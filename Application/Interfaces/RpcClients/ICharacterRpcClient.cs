@@ -76,19 +76,8 @@ public interface ICharacterRpcClient
     Task<RpcResult<bool>> ShareCharacter(ShareCharacterCommand request, string token);
     Task<RpcResult<bool>> RevokeCharacterShare(RevokeCharacterShareCommand request, string token);
 
-    // Catalog reads (needed by the character creator and the management screens)
-    Task<RpcResult<PaginationResponse<RaceListRow>>> ListRaces(int page, int pageSize, string token);
-    Task<RpcResult<RaceDetail>> GetRaceById(Guid id, string token);
-    Task<RpcResult<PaginationResponse<ClassListRow>>> ListClasses(int page, int pageSize, string token);
-    Task<RpcResult<ClassDetail>> GetClassById(Guid id, string token);
-    Task<RpcResult<PaginationResponse<BackgroundListRow>>> ListBackgrounds(int page, int pageSize, string token);
-    Task<RpcResult<BackgroundDetail>> GetBackgroundById(Guid id, string token);
-    Task<RpcResult<PaginationResponse<FeatureListRow>>> ListFeatures(int page, int pageSize, bool onlySelectableAsFeat, string token);
-    Task<RpcResult<FeatureDetail>> GetFeatureById(Guid id, string token);
-    Task<RpcResult<PaginationResponse<ItemListRow>>> ListItems(int page, int pageSize, string token);
-    Task<RpcResult<ItemDetail>> GetItemById(Guid id, string token);
-    Task<RpcResult<PaginationResponse<SpellListRow>>> ListSpells(int page, int pageSize, int? level, string token);
-    Task<RpcResult<SpellDetail>> GetSpellById(Guid id, string token);
+    // Spell and item details (how a character has a spell); the rest of the catalog is the
+    // workshop service's (IWorkshopRpcClient).
     Task<RpcResult<CatalogSpellInfo>> GetSpellInfo(Guid spellId, Guid? characterId, string token);
     Task<RpcResult<CatalogItemInfo>> GetItemInfo(Guid itemId, string token);
 }

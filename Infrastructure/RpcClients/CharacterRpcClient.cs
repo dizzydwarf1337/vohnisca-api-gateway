@@ -137,49 +137,7 @@ public class CharacterRpcClient : DotnetRpcClient, ICharacterRpcClient
     public Task<RpcResult<List<CharacterShareRow>>> GetCharacterShares(Guid characterId, string token)
         => SendData<List<CharacterShareRow>>("GetCharacterShares", new { CharacterId = characterId }, token);
 
-    // --- Catalog reads ---
-    public Task<RpcResult<PaginationResponse<RaceListRow>>> ListRaces(int page, int pageSize, string token)
-        => SendData<PaginationResponse<RaceListRow>>("ListRaces", Paged(page, pageSize), token);
-
-    public Task<RpcResult<RaceDetail>> GetRaceById(Guid id, string token)
-        => SendData<RaceDetail>("GetRaceById", new { Id = id }, token);
-
-    public Task<RpcResult<PaginationResponse<ClassListRow>>> ListClasses(int page, int pageSize, string token)
-        => SendData<PaginationResponse<ClassListRow>>("ListClasses", Paged(page, pageSize), token);
-
-    public Task<RpcResult<ClassDetail>> GetClassById(Guid id, string token)
-        => SendData<ClassDetail>("GetClassById", new { Id = id }, token);
-
-    public Task<RpcResult<PaginationResponse<BackgroundListRow>>> ListBackgrounds(int page, int pageSize, string token)
-        => SendData<PaginationResponse<BackgroundListRow>>("ListBackgrounds", Paged(page, pageSize), token);
-
-    public Task<RpcResult<BackgroundDetail>> GetBackgroundById(Guid id, string token)
-        => SendData<BackgroundDetail>("GetBackgroundById", new { Id = id }, token);
-
-    public Task<RpcResult<PaginationResponse<FeatureListRow>>> ListFeatures(int page, int pageSize, bool onlySelectableAsFeat, string token)
-        => SendData<PaginationResponse<FeatureListRow>>(
-            "ListFeatures",
-            new { Pagination = new { Page = page, PageSize = pageSize }, OnlySelectableAsFeat = onlySelectableAsFeat },
-            token);
-
-    public Task<RpcResult<FeatureDetail>> GetFeatureById(Guid id, string token)
-        => SendData<FeatureDetail>("GetFeatureById", new { Id = id }, token);
-
-    public Task<RpcResult<PaginationResponse<ItemListRow>>> ListItems(int page, int pageSize, string token)
-        => SendData<PaginationResponse<ItemListRow>>("ListItems", Paged(page, pageSize), token);
-
-    public Task<RpcResult<ItemDetail>> GetItemById(Guid id, string token)
-        => SendData<ItemDetail>("GetItemById", new { Id = id }, token);
-
-    public Task<RpcResult<PaginationResponse<SpellListRow>>> ListSpells(int page, int pageSize, int? level, string token)
-        => SendData<PaginationResponse<SpellListRow>>(
-            "ListSpells",
-            new { Pagination = new { Page = page, PageSize = pageSize }, Level = level },
-            token);
-
-    public Task<RpcResult<SpellDetail>> GetSpellById(Guid id, string token)
-        => SendData<SpellDetail>("GetSpellById", new { Id = id }, token);
-
+    // --- Spell and item details (the rest of the catalog: WorkshopRpcClient) ---
     public Task<RpcResult<CatalogSpellInfo>> GetSpellInfo(Guid spellId, Guid? characterId, string token)
         => SendData<CatalogSpellInfo>("GetSpellInfo", new { SpellId = spellId, CharacterId = characterId }, token);
 

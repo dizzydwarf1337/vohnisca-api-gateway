@@ -6,8 +6,8 @@ namespace Application.Queries.User.Catalog.GetSpellById;
 
 public class GetSpellByIdQueryHandler : IRequestHandler<GetSpellByIdQuery, ApiResponse<SpellDetail>>
 {
-    private readonly ICharacterRpcClient _client;
-    public GetSpellByIdQueryHandler(ICharacterRpcClient client) => _client = client;
+    private readonly IWorkshopRpcClient _client;
+    public GetSpellByIdQueryHandler(IWorkshopRpcClient client) => _client = client;
 
     public async Task<ApiResponse<SpellDetail>> Handle(GetSpellByIdQuery request, CancellationToken cancellationToken)
     {

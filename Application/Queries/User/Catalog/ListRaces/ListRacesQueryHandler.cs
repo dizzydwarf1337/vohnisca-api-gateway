@@ -7,8 +7,8 @@ namespace Application.Queries.User.Catalog.ListRaces;
 
 public class ListRacesQueryHandler : IRequestHandler<ListRacesQuery, ApiResponse<PaginationResponse<RaceListRow>>>
 {
-    private readonly ICharacterRpcClient _client;
-    public ListRacesQueryHandler(ICharacterRpcClient client) => _client = client;
+    private readonly IWorkshopRpcClient _client;
+    public ListRacesQueryHandler(IWorkshopRpcClient client) => _client = client;
 
     public async Task<ApiResponse<PaginationResponse<RaceListRow>>> Handle(ListRacesQuery request, CancellationToken cancellationToken)
     {

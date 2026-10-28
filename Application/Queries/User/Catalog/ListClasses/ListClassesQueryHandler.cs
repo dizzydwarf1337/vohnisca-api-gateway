@@ -7,8 +7,8 @@ namespace Application.Queries.User.Catalog.ListClasses;
 
 public class ListClassesQueryHandler : IRequestHandler<ListClassesQuery, ApiResponse<PaginationResponse<ClassListRow>>>
 {
-    private readonly ICharacterRpcClient _client;
-    public ListClassesQueryHandler(ICharacterRpcClient client) => _client = client;
+    private readonly IWorkshopRpcClient _client;
+    public ListClassesQueryHandler(IWorkshopRpcClient client) => _client = client;
 
     public async Task<ApiResponse<PaginationResponse<ClassListRow>>> Handle(ListClassesQuery request, CancellationToken cancellationToken)
     {

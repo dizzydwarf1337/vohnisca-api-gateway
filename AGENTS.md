@@ -2,7 +2,7 @@
 
 ## Identity
 Единственная точка входа со стороны фронтенда. Принимает REST, транслирует в **JSON-RPC 2.0**
-(EdjCase) к downstream-сервисам: auth, user, mail, campaign, character, session. Здесь источник
+(EdjCase) к downstream-сервисам: auth, user, mail, campaign, character, session, workshop. Здесь источник
 правды по контракту ответа `ApiResponse<T>` и по RPC-клиентам к сервисам. Хаб сессии
 (`/hubs/session`, SignalR) проксируется в session service как есть (YARP).
 
@@ -36,14 +36,18 @@
   Authorization → ExceptionHandling → Handler.
 - **`Token`/`UserId` — `[JsonIgnore]`** на авторизованных Request (защита от подмены через body).
 - **Выбор базового RPC-клиента:** `LaravelRpcClient` (плоские params, для auth и campaign) vs
-  `DotnetRpcClient` (params обёрнуты в `request`, для user, mail, character, session). RPC-методы —
+  `DotnetRpcClient` (params обёрнуты в `request`, для user, mail, character, session, workshop). RPC-методы —
   PascalCase без точек.
 - **Раскладка по сервисам:** `Commands|Queries/<Public|User|Admin>/<Сервис>/<Действие>/`,
   контроллеры пользователя — `Controllers/User/<Сервис>Service/` (`Public/Auth`, `Admin/Mail` — свои).
 - Поле массива в RPC-DTO называется `Data`. `RpcResult<T>` → `ApiResponse<T>` только через `.ToApiResponse(...)`.
 - **`ApiResponse<T>` (isSuccess/value/error/statusCode) не менять без синхронизации с фронтом.**
 - Порты downstream — в `appsettings.Development.json` (`RpcServices`): Mail 5001, Auth 8876, User 8877,
-  Campaign 8878, Character 5040, Session 5060. CORS — только `localhost`.
+  Campaign 8878, Character 5040, Session 5060, Workshop 5070. CORS — только `localhost`.
+- **Каталог правил — workshop service** (`WorkshopRpcClient`, `Controllers/User/WorkshopService`):
+  списки и карточки рас, классов, предысторий, фич, предметов, заклинаний и свои заклинания и
+  предметы. Character service — персонажи и `/info` (как заклинание у персонажа); его копия каталога
+  обновляется из воркшопа сама.
 - Форматирование: `dotnet format whitespace vohnisca-api-gateway/vohnisca-api-gateway.sln`.
 - Известный долг: авторизация `AdminRequest`/`SuperadminRequest` в `AuthorizationBehavior` не полна.
 

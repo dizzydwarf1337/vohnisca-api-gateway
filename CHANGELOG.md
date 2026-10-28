@@ -22,7 +22,14 @@
 - Прокси хаба `/hubs/session` в session service (YARP).
 - `SetNoteColor`, доступы заметки и перенос главы в корень (campaign).
 
+- Workshop service (`WorkshopRpcClient`, `Controllers/User/WorkshopService`, `RpcServices:WorkshopService`):
+  свои заклинания и предметы — `POST spells`, `PUT spells/{id}`, `PUT spells/{id}/visibility`,
+  `DELETE spells/{id}` и то же для `items` (multipart: `payload` + `file` для иконки).
+
 ### Changed
+- Каталог правил (`races`, `classes`, `backgrounds`, `features`, `items`, `spells` — списки и
+  карточки) читается из workshop service; маршруты и ответы прежние. `spells/{id}/info` и
+  `items/{id}/info` остались в character service.
 - Ошибки character service отображаются в корректные HTTP-статусы; в ответе видна причина
   ошибки RPC-транспорта.
 - Session service локально на порту 5060 (5050 занят pgAdmin).

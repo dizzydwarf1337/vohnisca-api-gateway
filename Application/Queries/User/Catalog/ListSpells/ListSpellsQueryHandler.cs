@@ -7,8 +7,8 @@ namespace Application.Queries.User.Catalog.ListSpells;
 
 public class ListSpellsQueryHandler : IRequestHandler<ListSpellsQuery, ApiResponse<PaginationResponse<SpellListRow>>>
 {
-    private readonly ICharacterRpcClient _client;
-    public ListSpellsQueryHandler(ICharacterRpcClient client) => _client = client;
+    private readonly IWorkshopRpcClient _client;
+    public ListSpellsQueryHandler(IWorkshopRpcClient client) => _client = client;
 
     public async Task<ApiResponse<PaginationResponse<SpellListRow>>> Handle(ListSpellsQuery request, CancellationToken cancellationToken)
     {
