@@ -9,4 +9,5 @@ public class CreateChapterCommand : UserRequest<ChapterData>
     public Guid? ParentId { get; set; }
     public string Title { get; set; }
     public string Content { get; set; }
+    public string? ContentFormat { get; set; }
 }

@@ -8,4 +8,5 @@ public class UpdateChapterCommand : UserRequest<ChapterData>
     public Guid ChapterId { get; set; }
     public string Title { get; set; }
     public string Content { get; set; }
+    public string? ContentFormat { get; set; }
 }

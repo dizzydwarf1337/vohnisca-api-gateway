@@ -15,9 +15,9 @@ public interface ICampaignRpcClient
     Task<RpcResult<DefaultRpcResponse>> UpdateMemberRole(Guid campaignId, Guid targetUserId, string role, string token);
     Task<RpcResult<MembersResponse>> ListMembers(Guid campaignId, string token);
 
-    Task<RpcResult<ChapterResponse>> CreateChapter(Guid campaignId, Guid? parentId, string title, string? content, string token);
+    Task<RpcResult<ChapterResponse>> CreateChapter(Guid campaignId, Guid? parentId, string title, string? content, string? contentFormat, string token);
     Task<RpcResult<ChapterResponse>> GetChapter(Guid chapterId, string token);
-    Task<RpcResult<ChapterResponse>> UpdateChapter(Guid chapterId, string title, string? content, string token);
+    Task<RpcResult<ChapterResponse>> UpdateChapter(Guid chapterId, string title, string? content, string? contentFormat, string token);
     Task<RpcResult<DefaultRpcResponse>> DeleteChapter(Guid chapterId, string token);
     Task<RpcResult<DefaultRpcResponse>> MoveChapter(Guid chapterId, Guid? newParentId, string token);
     Task<RpcResult<DefaultRpcResponse>> ReorderChapters(Guid campaignId, Guid? parentId, List<string> orderedIds, string token);
@@ -27,9 +27,9 @@ public interface ICampaignRpcClient
     Task<RpcResult<DefaultRpcResponse>> SetCurrentChapter(Guid campaignId, Guid chapterId, string token);
     Task<RpcResult<ChaptersResponse>> ListCampaignChapters(Guid campaignId, string token);
 
-    Task<RpcResult<NoteResponse>> CreateNote(Guid chapterId, string title, string? content, string token);
+    Task<RpcResult<NoteResponse>> CreateNote(Guid chapterId, string title, string? content, string? contentFormat, string token);
     Task<RpcResult<NoteResponse>> GetNote(Guid noteId, string token);
-    Task<RpcResult<NoteResponse>> UpdateNote(Guid noteId, string title, string? content, string token);
+    Task<RpcResult<NoteResponse>> UpdateNote(Guid noteId, string title, string? content, string? contentFormat, string token);
     Task<RpcResult<DefaultRpcResponse>> DeleteNote(Guid noteId, string token);
     Task<RpcResult<NotesResponse>> ListChapterNotes(Guid chapterId, string token);
     Task<RpcResult<DefaultRpcResponse>> ReorderNotes(Guid chapterId, List<string> orderedIds, string token);
@@ -37,6 +37,9 @@ public interface ICampaignRpcClient
     Task<RpcResult<DefaultRpcResponse>> GrantNoteAccess(Guid noteId, Guid targetUserId, string token);
     Task<RpcResult<DefaultRpcResponse>> RevokeNoteAccess(Guid noteId, Guid targetUserId, string token);
     Task<RpcResult<NoteResponse>> SetNoteColor(Guid noteId, string? backgroundColor, string token);
+
+    Task<RpcResult<CampaignImageResponse>> UploadCampaignImage(Guid campaignId, string mimeType, string data, string token);
+    Task<RpcResult<CampaignImageContentResponse>> GetCampaignImage(Guid imageId, string token);
 }
 
 public record CampaignResponse(CampaignData Campaign);
@@ -65,6 +68,7 @@ public record ChapterData(
     string? ParentId,
     string Title,
     string? Content,
+    string? ContentFormat,
     int Order,
     bool IsVisibleToAll,
     bool IsCurrent,
@@ -76,12 +80,19 @@ public record ChapterData(
 
 public record ChapterAccessUserData(string UserId, string? UserName);
 
+public record CampaignImageResponse(CampaignImageData Image);
+public record CampaignImageContentResponse(CampaignImageContentData Image);
+
+public record CampaignImageData(string Id, string CampaignId, string MimeType, DateTime CreatedAt);
+public record CampaignImageContentData(string Id, string MimeType, string Data);
+
 public record NoteData(
     string Id,
     string ChapterId,
     string AuthorId,
     string Title,
     string? Content,
+    string? ContentFormat,
     bool IsPublic,
     int Order,
     DateTime CreatedAt,
