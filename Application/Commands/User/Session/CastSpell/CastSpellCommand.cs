@@ -26,4 +26,6 @@ public class CastSpellCommand : UserRequest<CombatResultData>
     public double? AimRow { get; set; }
     // The creatures a spell that lets its caster pick leaves alone (the party when none).
     public List<Guid>? SparedTokenIds { get; set; }
+    // Metamagic (a Sorcerer's, for Sorcery Points): "quickened", "distant", "careful"...
+    public List<string>? Metamagic { get; set; }
 }

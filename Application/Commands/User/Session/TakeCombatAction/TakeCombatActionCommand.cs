@@ -17,4 +17,6 @@ public class TakeCombatActionCommand : UserRequest<CombatResultData>
     public double? AimRow { get; set; }
     // Grapple, Shove by an NPC: the GM's DC (its stat block's escape DC).
     public int? Dc { get; set; }
+    // Font of Magic: the spell slot's level (into points, or made of them).
+    public int? Level { get; set; }
 }
