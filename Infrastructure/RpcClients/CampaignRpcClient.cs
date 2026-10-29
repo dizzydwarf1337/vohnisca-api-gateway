@@ -23,6 +23,7 @@ public class CampaignRpcClient : LaravelRpcClient, ICampaignRpcClient
         -32001 => 409,
         -32002 => 403,
         -32003 => 404,
+        -32006 => 404,
         -32602 => 422,
         -32601 => 404,
         _ => 500
@@ -75,21 +76,23 @@ public class CampaignRpcClient : LaravelRpcClient, ICampaignRpcClient
     public Task<RpcResult<MembersResponse>> ListMembers(Guid campaignId, string token)
         => Send<MembersResponse>("ListMembers", new() { { "campaignId", campaignId } }, token);
 
-    public Task<RpcResult<ChapterResponse>> CreateChapter(Guid campaignId, Guid? parentId, string title, string? content, string token)
+    public Task<RpcResult<ChapterResponse>> CreateChapter(Guid campaignId, Guid? parentId, string title, string? content, string? contentFormat, string token)
     {
         var p = new Dictionary<string, object> { { "campaignId", campaignId }, { "title", title } };
         if (parentId != null) p["parentId"] = parentId;
         if (content != null) p["content"] = content;
+        if (contentFormat != null) p["contentFormat"] = contentFormat;
         return Send<ChapterResponse>("CreateChapter", p, token);
     }
 
     public Task<RpcResult<ChapterResponse>> GetChapter(Guid chapterId, string token)
         => Send<ChapterResponse>("GetChapter", new() { { "chapterId", chapterId } }, token);
 
-    public Task<RpcResult<ChapterResponse>> UpdateChapter(Guid chapterId, string title, string? content, string token)
+    public Task<RpcResult<ChapterResponse>> UpdateChapter(Guid chapterId, string title, string? content, string? contentFormat, string token)
     {
         var p = new Dictionary<string, object> { { "chapterId", chapterId }, { "title", title } };
         if (content != null) p["content"] = content;
+        if (contentFormat != null) p["contentFormat"] = contentFormat;
         return Send<ChapterResponse>("UpdateChapter", p, token);
     }
 
@@ -125,20 +128,22 @@ public class CampaignRpcClient : LaravelRpcClient, ICampaignRpcClient
     public Task<RpcResult<ChaptersResponse>> ListCampaignChapters(Guid campaignId, string token)
         => Send<ChaptersResponse>("ListCampaignChapters", new() { { "campaignId", campaignId } }, token);
 
-    public Task<RpcResult<NoteResponse>> CreateNote(Guid chapterId, string title, string? content, string token)
+    public Task<RpcResult<NoteResponse>> CreateNote(Guid chapterId, string title, string? content, string? contentFormat, string token)
     {
         var p = new Dictionary<string, object> { { "chapterId", chapterId }, { "title", title } };
         if (content != null) p["content"] = content;
+        if (contentFormat != null) p["contentFormat"] = contentFormat;
         return Send<NoteResponse>("CreateNote", p, token);
     }
 
     public Task<RpcResult<NoteResponse>> GetNote(Guid noteId, string token)
         => Send<NoteResponse>("GetNote", new() { { "noteId", noteId } }, token);
 
-    public Task<RpcResult<NoteResponse>> UpdateNote(Guid noteId, string title, string? content, string token)
+    public Task<RpcResult<NoteResponse>> UpdateNote(Guid noteId, string title, string? content, string? contentFormat, string token)
     {
         var p = new Dictionary<string, object> { { "noteId", noteId }, { "title", title } };
         if (content != null) p["content"] = content;
+        if (contentFormat != null) p["contentFormat"] = contentFormat;
         return Send<NoteResponse>("UpdateNote", p, token);
     }
 
@@ -166,4 +171,15 @@ public class CampaignRpcClient : LaravelRpcClient, ICampaignRpcClient
         if (backgroundColor != null) p["backgroundColor"] = backgroundColor;
         return Send<NoteResponse>("SetNoteColor", p, token);
     }
+
+    public Task<RpcResult<CampaignImageResponse>> UploadCampaignImage(Guid campaignId, string mimeType, string data, string token)
+        => Send<CampaignImageResponse>("UploadCampaignImage", new()
+        {
+            { "campaignId", campaignId },
+            { "mimeType", mimeType },
+            { "data", data },
+        }, token);
+
+    public Task<RpcResult<CampaignImageContentResponse>> GetCampaignImage(Guid imageId, string token)
+        => Send<CampaignImageContentResponse>("GetCampaignImage", new() { { "imageId", imageId } }, token);
 }
