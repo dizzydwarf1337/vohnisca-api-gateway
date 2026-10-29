@@ -19,4 +19,6 @@ public class AttackCommand : UserRequest<CombatResultData>
     public bool Reaction { get; set; }
     // The GM's custom attack is kept on the NPC for the next time.
     public bool Remember { get; set; }
+    // Brutal Strike (a Barbarian's, with Reckless Attack): "forceful" | "hamstring" | "staggering" | "sundering".
+    public List<string>? Brutal { get; set; }
 }
