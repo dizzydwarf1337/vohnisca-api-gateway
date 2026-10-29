@@ -265,7 +265,12 @@ public record SessionCharacterData(
     // Its class features' actions at the table: "rage", "reckless", "secondWind", "actionSurge", "layOnHands".
     List<string> ClassActions,
     // What the caster of a spell on it picked, by the effect's name (Resistance: "Fire").
-    Dictionary<string, string>? EffectChoices = null);
+    Dictionary<string, string>? EffectChoices = null,
+    // The Metamagic options it knows ("quickened", "distant"...).
+    List<string>? Metamagic = null,
+    // Brutal Strike: the effects it may pick, and how many at once.
+    List<string>? BrutalStrike = null,
+    int BrutalEffects = 0);
 
 // What a character carries. Kind: "weapon" | "armor" | "shield" | "gear"; Slot: where it's
 // worn ("mainHand", "offHand", "armor", "shield", "accessory"; null in the pack); Throw: what
@@ -296,7 +301,9 @@ public record AttackOptionData(
     int Reach,
     int? RangeNormal,
     int? RangeLong,
-    bool BonusAction);
+    bool BonusAction,
+    // A Strength attack (Rage, Reckless Attack, Brutal Strike).
+    bool UsesStrength = false);
 
 public record SessionSpellRef(Guid Id, string Name);
 
@@ -494,7 +501,9 @@ public record TokenSheetData(
     int DeathSaveSuccesses,
     int DeathSaveFailures,
     // What the caster of a spell on it picked, by the effect's name.
-    Dictionary<string, string>? EffectChoices = null);
+    Dictionary<string, string>? EffectChoices = null,
+    // "Undead", "Fiend"... (Turn Undead, Divine Smite, Protection from Evil and Good).
+    string? CreatureType = null);
 
 // An NPC's attack the GM keeps on it: to hit, damage dice ("1d6+2"), type, reach or range.
 public record NpcAttackData(Guid Id, string Name, int Bonus, string Damage, string DamageType, int RangeFeet);

@@ -38,4 +38,6 @@ public class UpdateSceneTokenCommand : UserRequest<SessionSceneData>
     public int? AttacksPerAction { get; set; }
     // At 0 Hit Points it makes death saves (else it dies, as most monsters do).
     public bool? DeathSaves { get; set; }
+    // Its creature type ("Undead", "Fiend"...; "" clears it).
+    public string? CreatureType { get; set; }
 }
