@@ -73,6 +73,7 @@ using Application.Queries.User.Session.GetCampaignSession;
 using Application.Queries.User.Session.GetSession;
 using Application.Queries.User.Session.ListMySessions;
 using Application.Queries.User.Session.GetSessionDashboard;
+using Application.Queries.User.Session.GetCampaignHistory;
 using Microsoft.AspNetCore.Mvc;
 using vohnisca_api_gateway.Core.Requests;
 
@@ -87,6 +88,11 @@ public class SessionController : BaseController
     [Route("campaigns/{campaignId:guid}/session")]
     public Task<IActionResult> GetCampaignSession(Guid campaignId)
         => HandleResponse(new GetCampaignSessionQuery { CampaignId = campaignId });
+
+    [HttpGet]
+    [Route("campaigns/{campaignId:guid}/sessions")]
+    public Task<IActionResult> GetCampaignHistory(Guid campaignId)
+        => HandleResponse(new GetCampaignHistoryQuery { CampaignId = campaignId });
 
     [HttpPost]
     [Route("campaigns/{campaignId:guid}/session")]

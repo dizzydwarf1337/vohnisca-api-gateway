@@ -43,6 +43,7 @@
   для захвата NPC) и `level` (Font of Magic). `CastSpellCommand.metamagic`, `AttackCommand.brutal`.
 - В виде персонажа — `metamagic`, `brutalStrike`, `brutalEffects`, у атак — `usesStrength`; у листа NPC — `creatureType`,
   `UpdateSceneTokenCommand.creatureType`.
+- `GET campaigns/{campaignId}/sessions` — прошлые сессии кампании и итоги (участникам кампании).
 
 ### Changed
 - Каталог правил (`races`, `classes`, `backgrounds`, `features`, `items`, `spells` — списки и

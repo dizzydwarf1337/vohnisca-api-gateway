@@ -73,6 +73,7 @@ using Application.Queries.User.Session.GetCampaignSession;
 using Application.Queries.User.Session.GetSession;
 using Application.Queries.User.Session.ListMySessions;
 using Application.Queries.User.Session.GetSessionDashboard;
+using Application.Queries.User.Session.GetCampaignHistory;
 
 namespace Application.Interfaces.RpcClients;
 
@@ -84,6 +85,7 @@ public interface ISessionRpcClient
     Task<RpcResult<SessionData>> GetSession(GetSessionQuery request, string token);
     Task<RpcResult<List<SessionNoticeData>>> ListMySessions(ListMySessionsQuery request, string token);
     Task<RpcResult<SessionDashboardData>> GetSessionDashboard(GetSessionDashboardQuery request, string token);
+    Task<RpcResult<CampaignHistoryData>> GetCampaignHistory(GetCampaignHistoryQuery request, string token);
     Task<RpcResult<SessionData>> JoinSession(JoinSessionCommand request, string token);
     Task<RpcResult<SessionData>> LeaveSession(LeaveSessionCommand request, string token);
     Task<RpcResult<SessionData>> SetSessionReady(SetSessionReadyCommand request, string token);
@@ -222,6 +224,9 @@ public record SessionLogData(DateTime At, Guid UserId, Guid? CharacterId, string
 
 // The dashboard: Open — sessions in the user's campaigns now; Recent — the latest ones over
 // that they ran or played in, newest first; PlaytimeMinutes — played in sessions over.
+// A campaign's sessions over (newest first) and its totals.
+public record CampaignHistoryData(List<SessionSummaryData> Sessions, int SessionsPlayed, int PlaytimeMinutes);
+
 public record SessionDashboardData(List<SessionSummaryData> Open, List<SessionSummaryData> Recent, int SessionsPlayed, int PlaytimeMinutes);
 
 // Gm: the user ran it. Status: "lobby" | "live" | "ended" | "cancelled". Fights: how many
