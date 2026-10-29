@@ -8,11 +8,13 @@ public class TakeCombatActionCommand : UserRequest<CombatResultData>
 {
     public Guid SessionId { get; set; }
     public Guid TokenId { get; set; }
-    // "dodge" | "disengage" | "help" | "hide" | "stabilize" | "rage" | ... | "breathWeapon" (the session service's names).
+    // "dodge" | "disengage" | "help" | "hide" | "stabilize" | "grapple" | "shoveProne" | "shoveAway" | "release" | "rage" | ... | "breathWeapon" (the session service's names).
     public string Action { get; set; } = string.Empty;
-    // Help: the enemy helped against; Lay On Hands, Divine Spark: who it goes to.
+    // Help: the enemy helped against; Lay On Hands, Divine Spark, Grapple, Shove: who it goes to.
     public Guid? TargetTokenId { get; set; }
     // Breath Weapon: where the cone points, in cells.
     public double? AimCol { get; set; }
     public double? AimRow { get; set; }
+    // Grapple, Shove by an NPC: the GM's DC (its stat block's escape DC).
+    public int? Dc { get; set; }
 }
