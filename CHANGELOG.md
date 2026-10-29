@@ -38,6 +38,9 @@
   (карта и уровень, только мастеру).
 - Объявление заклинания NPC для Counterspell: `POST sessions/{id}/combat/{tokenId}/announce-spell`
   (`spellName`, `level`; мастер, в бою).
+- Боевые действия: `grapple`, `shoveProne`, `shoveAway`, `release`, `bardicInspiration`,
+  `turnUndead`, `fontToPoints` / `fontToSlot`; в `TakeCombatActionCommand` — `dc` (КС мастера
+  для захвата NPC) и `level` (Font of Magic). `CastSpellCommand.metamagic`, `AttackCommand.brutal`.
 
 ### Changed
 - Каталог правил (`races`, `classes`, `backgrounds`, `features`, `items`, `spells` — списки и
