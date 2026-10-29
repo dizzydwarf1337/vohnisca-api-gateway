@@ -41,6 +41,7 @@ using Application.Commands.User.Session.EndCombat;
 using Application.Commands.User.Session.SetSpent;
 using Application.Commands.User.Session.Dash;
 using Application.Commands.User.Session.AnswerReaction;
+using Application.Commands.User.Session.AnnounceSpell;
 using Application.Commands.User.Session.Attack;
 using Application.Commands.User.Session.CastSpell;
 using Application.Commands.User.Session.SetShortRest;
@@ -492,6 +493,16 @@ public class SessionController : BaseController
     [HttpPut]
     [Route("sessions/{id:guid}/combat/{tokenId:guid}/spent")]
     public Task<IActionResult> SetSpent(Guid id, Guid tokenId, SetSpentCommand command)
+    {
+        command.SessionId = id;
+        command.TokenId = tokenId;
+        return HandleResponse(command);
+    }
+
+    // The GM says an NPC begins to cast a spell: who may Counterspell it is offered to.
+    [HttpPost]
+    [Route("sessions/{id:guid}/combat/{tokenId:guid}/announce-spell")]
+    public Task<IActionResult> AnnounceSpell(Guid id, Guid tokenId, AnnounceSpellCommand command)
     {
         command.SessionId = id;
         command.TokenId = tokenId;

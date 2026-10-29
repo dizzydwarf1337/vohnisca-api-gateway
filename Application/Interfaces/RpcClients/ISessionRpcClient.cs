@@ -44,6 +44,7 @@ using Application.Commands.User.Session.EndCombat;
 using Application.Commands.User.Session.SetSpent;
 using Application.Commands.User.Session.Dash;
 using Application.Commands.User.Session.AnswerReaction;
+using Application.Commands.User.Session.AnnounceSpell;
 using Application.Commands.User.Session.Attack;
 using Application.Queries.User.Session.GetDiceRolls;
 using Application.Commands.User.Session.RollDice;
@@ -156,6 +157,7 @@ public interface ISessionRpcClient
     Task<RpcResult<SessionEncounterData>> Dash(DashCommand request, string token);
     Task<RpcResult<CombatResultData>> Attack(AttackCommand request, string token);
     Task<RpcResult<CombatResultData>> AnswerReaction(AnswerReactionCommand request, string token);
+    Task<RpcResult<CombatResultData>> AnnounceSpell(AnnounceSpellCommand request, string token);
 }
 
 // The session as the user may see it. Status: "lobby" | "live"; ShortRest: the GM called
