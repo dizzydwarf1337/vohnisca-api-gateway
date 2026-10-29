@@ -69,6 +69,7 @@ using Application.Commands.User.Session.LeaveSession;
 using Application.Commands.User.Session.OpenSession;
 using Application.Commands.User.Session.SetSessionReady;
 using Application.Commands.User.Session.StartSession;
+using Application.Commands.User.Session.SetSessionJoinable;
 using Application.Queries.User.Session.GetCampaignSession;
 using Application.Queries.User.Session.GetSession;
 using Application.Queries.User.Session.ListMySessions;
@@ -90,6 +91,7 @@ public interface ISessionRpcClient
     Task<RpcResult<SessionData>> LeaveSession(LeaveSessionCommand request, string token);
     Task<RpcResult<SessionData>> SetSessionReady(SetSessionReadyCommand request, string token);
     Task<RpcResult<SessionData>> StartSession(StartSessionCommand request, string token);
+    Task<RpcResult<SessionData>> SetSessionJoinable(SetSessionJoinableCommand request, string token);
     Task<RpcResult<SessionData>> ApplySessionAction(ApplySessionActionCommand request, string token);
     Task<RpcResult<bool>> EndSession(EndSessionCommand request, string token);
     Task<RpcResult<SessionData>> SetShortRest(SetShortRestCommand request, string token);
@@ -186,7 +188,9 @@ public record SessionData(
     // Out of a fight: what each token readied ("hiding", "rage"...); the characters helped
     // (advantage on their next ability check).
     Dictionary<Guid, List<string>>? Readied = null,
-    List<Guid>? Helped = null);
+    List<Guid>? Helped = null,
+    // Players may join it now (the GM opens and closes it).
+    bool Joinable = true);
 
 // Kind: "spell" | "condition" | "wake"; EndsAt: in game seconds.
 public record SessionClockData(double Seconds, DateTime? At, double Scale, List<SessionTimerData> Timers);

@@ -69,6 +69,7 @@ using Application.Commands.User.Session.LeaveSession;
 using Application.Commands.User.Session.OpenSession;
 using Application.Commands.User.Session.SetSessionReady;
 using Application.Commands.User.Session.StartSession;
+using Application.Commands.User.Session.SetSessionJoinable;
 using Application.Interfaces.RpcClients;
 using Application.Queries.User.Session.GetCampaignSession;
 using Application.Queries.User.Session.GetSession;
@@ -115,6 +116,9 @@ public class SessionRpcClient : DotnetRpcClient, ISessionRpcClient
 
     public Task<RpcResult<SessionData>> StartSession(StartSessionCommand request, string token)
         => SendData<SessionData>("StartSession", request, token);
+
+    public Task<RpcResult<SessionData>> SetSessionJoinable(SetSessionJoinableCommand request, string token)
+        => SendData<SessionData>("SetSessionJoinable", request, token);
 
     // The action goes as its JSON text (the RPC client doesn't serialize a JsonElement).
     public Task<RpcResult<SessionData>> ApplySessionAction(ApplySessionActionCommand request, string token)

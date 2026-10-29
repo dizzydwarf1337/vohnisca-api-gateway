@@ -44,6 +44,9 @@
 - В виде персонажа — `metamagic`, `brutalStrike`, `brutalEffects`, у атак — `usesStrength`; у листа NPC — `creatureType`,
   `UpdateSceneTokenCommand.creatureType`.
 - `GET campaigns/{campaignId}/sessions` — прошлые сессии кампании и итоги (участникам кампании).
+- `POST sessions/{id}/start?anyway=true` — старт без ожидания неготовых (и один, без игроков);
+  `POST sessions/{id}/joinable` `{ joinable }` — мастер открывает и закрывает сессию для новых
+  игроков; у сессии — `joinable`.
 
 ### Changed
 - Каталог правил (`races`, `classes`, `backgrounds`, `features`, `items`, `spells` — списки и

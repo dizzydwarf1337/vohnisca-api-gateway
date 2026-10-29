@@ -69,6 +69,7 @@ using Application.Commands.User.Session.LeaveSession;
 using Application.Commands.User.Session.OpenSession;
 using Application.Commands.User.Session.SetSessionReady;
 using Application.Commands.User.Session.StartSession;
+using Application.Commands.User.Session.SetSessionJoinable;
 using Application.Queries.User.Session.GetCampaignSession;
 using Application.Queries.User.Session.GetSession;
 using Application.Queries.User.Session.ListMySessions;
@@ -135,10 +136,19 @@ public class SessionController : BaseController
         return HandleResponse(command);
     }
 
+    // anyway: without waiting on the players who aren't ready (the GM may start alone).
     [HttpPost]
     [Route("sessions/{id:guid}/start")]
-    public Task<IActionResult> StartSession(Guid id)
-        => HandleResponse(new StartSessionCommand { SessionId = id });
+    public Task<IActionResult> StartSession(Guid id, [FromQuery] bool anyway = false)
+        => HandleResponse(new StartSessionCommand { SessionId = id, Anyway = anyway });
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/joinable")]
+    public Task<IActionResult> SetSessionJoinable(Guid id, SetSessionJoinableCommand command)
+    {
+        command.SessionId = id;
+        return HandleResponse(command);
+    }
 
     [HttpPost]
     [Route("sessions/{id:guid}/characters/{characterId:guid}/actions")]
