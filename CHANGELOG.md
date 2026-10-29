@@ -36,6 +36,8 @@
   `POST sessions/{id}/scene/save-to-map` (сцена в уровень своей карты),
   `POST sessions/{id}/scene/workshop-npcs` (NPC воркшопа на клетку); у сцены — `source`
   (карта и уровень, только мастеру).
+- Объявление заклинания NPC для Counterspell: `POST sessions/{id}/combat/{tokenId}/announce-spell`
+  (`spellName`, `level`; мастер, в бою).
 
 ### Changed
 - Каталог правил (`races`, `classes`, `backgrounds`, `features`, `items`, `spells` — списки и
