@@ -265,7 +265,9 @@ public record RaceDetail(
     List<SubRaceDetail> SubRaces);
 
 // ---- Classes ----
-public record ClassListRow(Guid Id, string Name, string Source, string HitDie, string PrimaryStat, bool IsSpellcaster);
+// IsSystem: the SRD's; otherwise a user's class (Owner: its author), offered from the library.
+public record ClassListRow(Guid Id, string Name, string Source, string HitDie, string PrimaryStat, bool IsSpellcaster,
+    bool IsSystem = true, OwnerRef? Owner = null);
 public record StartingEquipmentDto(CatalogItemDto Item, int Quantity);
 public record EquipmentOptionDto(string Label, List<StartingEquipmentDto> Items);
 public record EquipmentChoiceDto(string Name, List<EquipmentOptionDto> Options);
