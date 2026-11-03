@@ -18,7 +18,11 @@
 
 ## Verification
 - Сборка: `dotnet build vohnisca-api-gateway/vohnisca-api-gateway.sln`
-- Тестов пока нет (проект `*.Tests` планируется). «Зелёно» = чистая сборка.
+- Своих тестов пока нет (проект `*.Tests` планируется). «Зелёно» = чистая сборка; CI
+  (`.github/workflows/ci.yml`) собирает решение на каждый PR и пуш в `main`.
+- Меняя контракт с сервисом (DTO, `*RpcClient`), прогнать тесты и сборку того сервиса
+  (`dotnet test` в character-service и workshop-service) и `npm test && npm run build` во фронте:
+  их тесты ловят, что сломалось по ту сторону.
 
 ## Эталон
 - Команда целиком: `vohnisca-api-gateway/Application/Commands/Public/Auth/Login/` (Command + Handler + Validator).

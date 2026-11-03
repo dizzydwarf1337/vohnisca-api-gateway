@@ -5,6 +5,7 @@
 
 ## [Unreleased]
 ### Added
+- CI на GitHub Actions: сборка решения на каждый PR и пуш в `main`.
 - `AGENTS.md` — роутер репозитория для воркспейса Vohnisca.
 - `ARCHITECTURE.md` — слои, поток запроса, RPC-клиенты, контракт `ApiResponse<T>`.
 - Character service (`CharacterRpcClient`, `Controllers/User/CharacterService`): персонажи
