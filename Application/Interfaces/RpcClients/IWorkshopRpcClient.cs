@@ -83,6 +83,9 @@ public interface IWorkshopRpcClient
     Task<RpcResult<WorkshopMapRow>> GetWorkshopMap(GetWorkshopMapQuery request, string token);
     Task<RpcResult<PaginationResponse<WorkshopNpcRow>>> ListWorkshopNpcs(ListWorkshopNpcsQuery request, string token);
     Task<RpcResult<WorkshopNpcDetail>> GetWorkshopNpc(GetWorkshopNpcQuery request, string token);
+
+    // The class builder (WorkshopBuilderRequest): JSON in, JSON out.
+    Task<RpcResult<System.Text.Json.JsonElement>> Builder(string method, System.Text.Json.JsonElement request, string token);
 }
 
 public record CreatedContent(Guid Id);

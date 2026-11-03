@@ -179,4 +179,29 @@ public class WorkshopRpcClient : DotnetRpcClient, IWorkshopRpcClient
 
     private static object Paged(int page, int pageSize)
         => new { Pagination = new { Page = page, PageSize = pageSize } };
+
+    // --- Class builder: the JSON passes through (the RPC client writes Newtonsoft tokens) ---
+
+    public async Task<RpcResult<System.Text.Json.JsonElement>> Builder(string method, System.Text.Json.JsonElement request, string token)
+    {
+        var body = request.ValueKind == System.Text.Json.JsonValueKind.Object
+            ? Newtonsoft.Json.Linq.JObject.Parse(request.GetRawText())
+            : new Newtonsoft.Json.Linq.JObject();
+        var parameters = body.Properties().ToDictionary(p => p.Name, p => (object)p.Value);
+        var result = await SendRpcRequest<RpcDataResponse<Newtonsoft.Json.Linq.JToken>>(method, parameters, token: token);
+        if (!result.IsSuccess || result.Data is null)
+            return RpcResult<System.Text.Json.JsonElement>.Failure(result.Error, ToHttpStatus(result.StatusCode));
+        var data = Camel(result.Data.Data ?? Newtonsoft.Json.Linq.JValue.CreateNull());
+        using var document = System.Text.Json.JsonDocument.Parse(data.ToString(Newtonsoft.Json.Formatting.None));
+        return RpcResult<System.Text.Json.JsonElement>.Success(document.RootElement.Clone());
+    }
+
+    // The workshop answers in PascalCase; the frontend reads camelCase.
+    private static Newtonsoft.Json.Linq.JToken Camel(Newtonsoft.Json.Linq.JToken token) => token switch
+    {
+        Newtonsoft.Json.Linq.JObject o => new Newtonsoft.Json.Linq.JObject(o.Properties().Select(p =>
+            new Newtonsoft.Json.Linq.JProperty(p.Name.Length > 0 ? char.ToLowerInvariant(p.Name[0]) + p.Name[1..] : p.Name, Camel(p.Value)))),
+        Newtonsoft.Json.Linq.JArray a => new Newtonsoft.Json.Linq.JArray(a.Select(Camel)),
+        _ => token,
+    };
 }
