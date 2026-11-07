@@ -2,6 +2,7 @@ using Application.Commands.User.Workshop.AddNpcAction;
 using Application.Commands.User.Workshop.AddNpcTrait;
 using Application.Commands.User.Workshop.CreateMap;
 using Application.Commands.User.Workshop.CreateNpc;
+using Application.Commands.User.Workshop.SaveMapLevel;
 using Application.Commands.User.Workshop.DeleteMap;
 using Application.Commands.User.Workshop.DeleteNpc;
 using Application.Commands.User.Workshop.MoveMapLevel;
@@ -45,7 +46,7 @@ public interface IWorkshopRpcClient
     Task<RpcResult<BackgroundDetail>> GetBackgroundById(Guid id, string token);
     Task<RpcResult<PaginationResponse<FeatureListRow>>> ListFeatures(int page, int pageSize, bool onlySelectableAsFeat, string token);
     Task<RpcResult<FeatureDetail>> GetFeatureById(Guid id, string token);
-    Task<RpcResult<PaginationResponse<ItemListRow>>> ListItems(int page, int pageSize, string token);
+    Task<RpcResult<PaginationResponse<ItemListRow>>> ListItems(int page, int pageSize, string? scope, string? search, string token);
     Task<RpcResult<ItemDetail>> GetItemById(Guid id, string token);
     Task<RpcResult<PaginationResponse<SpellListRow>>> ListSpells(int page, int pageSize, int? level, string token);
     Task<RpcResult<SpellDetail>> GetSpellById(Guid id, string token);
@@ -68,6 +69,7 @@ public interface IWorkshopRpcClient
     Task<RpcResult<bool>> RenameMapLevel(RenameMapLevelCommand request, string token);
     Task<RpcResult<bool>> MoveMapLevel(MoveMapLevelCommand request, string token);
     Task<RpcResult<bool>> RemoveMapLevel(RemoveMapLevelCommand request, string token);
+    Task<RpcResult<WorkshopMapLevelSaved>> SaveMapLevel(SaveMapLevelCommand request, string token);
     Task<RpcResult<CreatedContent>> CreateNpc(CreateNpcCommand request, string token);
     Task<RpcResult<bool>> UpdateNpcDetails(UpdateNpcDetailsCommand request, string token);
     Task<RpcResult<bool>> SetNpcAbilityScores(SetNpcAbilityScoresCommand request, string token);
@@ -99,7 +101,7 @@ public record WorkshopMapRow(Guid Id, string Name, string Description, string Vi
 
 public record WorkshopMapLevel(Guid Id, string Name, int Order, int Cols, int Rows, string ImageUrl, DateTime SavedAt);
 
-public record WorkshopNpcRow(Guid Id, string Name, string CreatureType, double ChallengeRating, string Visibility, OwnerRef? Owner, string? ImagePath);
+public record WorkshopNpcRow(Guid Id, string Name, string CreatureType, double ChallengeRating, string Visibility, OwnerRef? Owner, string? ImagePath, string? Role = null);
 
 public record WorkshopNpcTrait(Guid Id, string Name, string Description);
 

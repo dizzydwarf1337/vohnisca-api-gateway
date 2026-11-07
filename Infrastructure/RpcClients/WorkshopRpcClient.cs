@@ -2,6 +2,7 @@ using Application.Commands.User.Workshop.AddNpcAction;
 using Application.Commands.User.Workshop.AddNpcTrait;
 using Application.Commands.User.Workshop.CreateMap;
 using Application.Commands.User.Workshop.CreateNpc;
+using Application.Commands.User.Workshop.SaveMapLevel;
 using Application.Commands.User.Workshop.DeleteMap;
 using Application.Commands.User.Workshop.DeleteNpc;
 using Application.Commands.User.Workshop.MoveMapLevel;
@@ -69,8 +70,13 @@ public class WorkshopRpcClient : DotnetRpcClient, IWorkshopRpcClient
     public Task<RpcResult<FeatureDetail>> GetFeatureById(Guid id, string token)
         => SendData<FeatureDetail>("GetFeatureById", new { Id = id }, token);
 
-    public Task<RpcResult<PaginationResponse<ItemListRow>>> ListItems(int page, int pageSize, string token)
-        => SendData<PaginationResponse<ItemListRow>>("ListItems", Paged(page, pageSize), token);
+    public Task<RpcResult<PaginationResponse<ItemListRow>>> ListItems(int page, int pageSize, string? scope, string? search, string token)
+        => SendData<PaginationResponse<ItemListRow>>("ListItems", new
+        {
+            Pagination = new { Page = page, PageSize = pageSize },
+            Scope = scope,
+            Search = search,
+        }, token);
 
     public Task<RpcResult<ItemDetail>> GetItemById(Guid id, string token)
         => SendData<ItemDetail>("GetItemById", new { Id = id }, token);
@@ -165,14 +171,29 @@ public class WorkshopRpcClient : DotnetRpcClient, IWorkshopRpcClient
     public Task<RpcResult<bool>> DeleteNpc(DeleteNpcCommand request, string token)
         => SendCommand("DeleteNpc", request, token);
 
+    public Task<RpcResult<WorkshopMapLevelSaved>> SaveMapLevel(SaveMapLevelCommand request, string token)
+        => SendData<WorkshopMapLevelSaved>("SaveMapLevel", request, token);
+
     public Task<RpcResult<PaginationResponse<WorkshopMapRow>>> ListWorkshopMaps(ListWorkshopMapsQuery request, string token)
-        => SendData<PaginationResponse<WorkshopMapRow>>("ListMaps", new { Pagination = new { Page = request.Page, PageSize = request.PageSize }, Mine = request.Mine }, token);
+        => SendData<PaginationResponse<WorkshopMapRow>>("ListMaps", new
+        {
+            Pagination = new { Page = request.Page, PageSize = request.PageSize },
+            Mine = request.Mine,
+            Scope = request.Scope,
+            Search = request.Search,
+        }, token);
 
     public Task<RpcResult<WorkshopMapRow>> GetWorkshopMap(GetWorkshopMapQuery request, string token)
         => SendData<WorkshopMapRow>("GetMapById", new { Id = request.Id }, token);
 
     public Task<RpcResult<PaginationResponse<WorkshopNpcRow>>> ListWorkshopNpcs(ListWorkshopNpcsQuery request, string token)
-        => SendData<PaginationResponse<WorkshopNpcRow>>("ListNpcs", new { Pagination = new { Page = request.Page, PageSize = request.PageSize }, Mine = request.Mine }, token);
+        => SendData<PaginationResponse<WorkshopNpcRow>>("ListNpcs", new
+        {
+            Pagination = new { Page = request.Page, PageSize = request.PageSize },
+            Mine = request.Mine,
+            Scope = request.Scope,
+            Search = request.Search,
+        }, token);
 
     public Task<RpcResult<WorkshopNpcDetail>> GetWorkshopNpc(GetWorkshopNpcQuery request, string token)
         => SendData<WorkshopNpcDetail>("GetNpcById", new { Id = request.Id }, token);
