@@ -83,11 +83,15 @@ public class FeatureController : BaseController
         => HandleResponse(new GetFeatureByIdQuery { Id = id });
 }
 
+// User item types: the campaign's item card points at one of these (refId), and the "create a type"
+// dialog on a campaign page is this same constructor. The prefix the campaign uses (/workshop/items) and
+// the workshop screens' own (/items) are two templates of the same actions — no second implementation.
 [Route("items")]
 public class ItemController : BaseController
 {
     // Multipart: "payload" carries the item JSON, "file" an optional icon.
     [HttpPost("")]
+    [HttpPost("/workshop/items")]
     public async Task<IActionResult> CreateItem([FromForm] string payload, [FromForm] IFormFile? file)
     {
         if (WorkshopPayload.Read<CreateWorkshopItemCommand>(payload) is not { } command) return BadRequest();
@@ -96,6 +100,7 @@ public class ItemController : BaseController
     }
 
     [HttpPut("{id:guid}")]
+    [HttpPut("/workshop/items/{id:guid}")]
     public async Task<IActionResult> UpdateItem(Guid id, [FromForm] string payload, [FromForm] IFormFile? file)
     {
         if (WorkshopPayload.Read<UpdateWorkshopItemCommand>(payload) is not { } command) return BadRequest();
@@ -116,10 +121,13 @@ public class ItemController : BaseController
         => HandleResponse(new DeleteWorkshopItemCommand { ItemId = id });
 
     [HttpGet("")]
-    public Task<IActionResult> ListItems([FromQuery] int page = 1, [FromQuery] int pageSize = 100)
-        => HandleResponse(new ListItemsQuery { Page = page, PageSize = pageSize });
+    [HttpGet("/workshop/items")]
+    public Task<IActionResult> ListItems([FromQuery] int page = 1, [FromQuery] int pageSize = 100,
+        [FromQuery] string? scope = null, [FromQuery] string? search = null)
+        => HandleResponse(new ListItemsQuery { Page = page, PageSize = pageSize, Scope = scope, Search = search });
 
     [HttpGet("{id:guid}")]
+    [HttpGet("/workshop/items/{id:guid}")]
     public Task<IActionResult> GetItem(Guid id)
         => HandleResponse(new GetItemByIdQuery { Id = id });
 

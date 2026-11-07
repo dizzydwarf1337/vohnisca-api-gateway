@@ -15,6 +15,8 @@ public class CreateWorkshopItemCommand : UserRequest<CreatedContent>
     public int ValueInCopper { get; set; }
     public string Rarity { get; set; } = "Common";
     public string Visibility { get; set; } = "Private";
+    // Raw property names ("Consumable", "Glowing"), as the workshop's enum spells them.
+    public List<string>? Properties { get; set; }
     public List<Guid>? GrantedSpellIds { get; set; }
     public Dictionary<string, int>? AbilityScoreBonuses { get; set; }
     public int? ArmorClassBonus { get; set; }
