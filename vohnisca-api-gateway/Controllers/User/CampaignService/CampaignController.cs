@@ -7,6 +7,7 @@ using Application.Commands.User.Campaign.Campaign.UpdateMemberRole;
 using Application.Queries.User.Campaign.Campaign.GetCampaign;
 using Application.Queries.User.Campaign.Campaign.ListMembers;
 using Application.Queries.User.Campaign.Campaign.ListMyCampaigns;
+using Application.Queries.User.Campaign.History.ListCampaignHistory;
 using Microsoft.AspNetCore.Mvc;
 
 namespace vohnisca_api_gateway.Controllers.User.CampaignService;
@@ -55,6 +56,26 @@ public class CampaignController : BaseController
             return BadRequest();
 
         return await HandleResponse(new DeleteCampaignCommand { CampaignId = id });
+    }
+
+    [HttpGet]
+    [Route("{id:guid}/history")]
+    public async Task<IActionResult> ListCampaignHistory(Guid id, [FromQuery] string? kind, [FromQuery] Guid? actorId,
+        [FromQuery] DateOnly? from, [FromQuery] DateOnly? to, [FromQuery] int page = 1, [FromQuery] int pageSize = 50)
+    {
+        if (id == Guid.Empty)
+            return BadRequest();
+
+        return await HandleResponse(new ListCampaignHistoryQuery
+        {
+            CampaignId = id,
+            Kind = kind,
+            ActorId = actorId,
+            From = from,
+            To = to,
+            Page = page,
+            PageSize = pageSize,
+        });
     }
 
     [HttpGet]
