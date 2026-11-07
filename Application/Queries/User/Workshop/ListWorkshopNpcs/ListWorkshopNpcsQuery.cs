@@ -9,4 +9,7 @@ public class ListWorkshopNpcsQuery : UserRequest<PaginationResponse<WorkshopNpcR
     public int Page { get; set; } = 1;
     public int PageSize { get; set; } = 50;
     public bool Mine { get; set; }
+    // "all" by default (what the viewer can see); also "mine", "system", "global" — the workshop decides.
+    public string? Scope { get; set; }
+    public string? Search { get; set; }
 }
