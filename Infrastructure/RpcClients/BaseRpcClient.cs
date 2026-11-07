@@ -23,7 +23,9 @@ public abstract class BaseRpcClient
             .ConfigureHttp(opt =>
             {
                 opt.Headers = new List<(string, string)>();
-            });
+            })
+            // The DTOs carry System.Text.Json values (a card's meta); Newtonsoft cannot do those itself.
+            .ConfigureSerializerSettings(settings => settings.Converters.Add(new JsonElementConverter()));
 
         if (!string.IsNullOrEmpty(token))
         {
