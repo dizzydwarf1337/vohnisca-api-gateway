@@ -88,6 +88,7 @@ public record RpcDataResponse<T>(T Data, bool IsSuccess = true, string? Error = 
 
 // ---- Shared catalog DTOs ----
 public record OwnerRef(Guid Id, string UserName, string ProfilePicturePath);
+public record WorkshopMapLevelSaved(Guid MapId, string MapName, Guid LevelId, string LevelName);
 public record CatalogFeatureRef(Guid Id, string Name, string Description);
 public record CatalogItemDto(Guid Id, string Name, string Description, double Weight, int ValueInCopper, string Rarity, string? ImagePath);
 
@@ -346,7 +347,10 @@ public record ItemListRow(
     int ValueInCopper,
     string Visibility,
     OwnerRef? Owner,
-    string? ImagePath);
+    string? ImagePath,
+    // "weapon" | "armor" | "shield" | "gear": what the type is, counted by the workshop from what it was
+    // made as (stage 02 adds it to the row, the character service leaves it null).
+    string? ItemType = null);
 public record ItemSpellRef(Guid Id, string Name, int Level, string School, string? ImagePath);
 public record ItemDetail(
     Guid Id,
@@ -361,7 +365,10 @@ public record ItemDetail(
     string? ImagePath,
     List<ItemSpellRef> GrantedSpells,
     Dictionary<string, int> AbilityScoreBonuses,
-    int ArmorClassBonus);
+    int ArmorClassBonus,
+    // Raw enum names ("Consumable", "Glowing") — the edit form ticks them; and the type, as in a list row.
+    List<string>? Properties = null,
+    string? ItemType = null);
 
 // ---- Spells ----
 public record SpellListRow(

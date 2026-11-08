@@ -57,6 +57,22 @@
 - Форматирование: `dotnet format whitespace vohnisca-api-gateway/vohnisca-api-gateway.sln`.
 - Известный долг: авторизация `AdminRequest`/`SuperadminRequest` в `AuthorizationBehavior` не полна.
 
+## Кампании: карточки и виды
+
+- Карточки: `CampaignCardController` — `GET /campaigns/{id}/cards?kind=&chapterId=` (нет параметра — вся кампания,
+  `chapterId=` — только кампанийные, с id — одна глава), `GET|PUT /campaign-cards/{id}`, видимость, доступ,
+  `PUT /campaign-cards/{id}/chapter`, `POST /campaign-item-cards/{id}/{move,give,pickable,pick}`,
+  `POST /campaigns/{id}/{npc,item,scene,shop}-cards`.
+- История: `GET /campaigns/{id}/history`. Общаки: `StashController` (`/campaigns/{id}/stashes`, `/stashes/{id}`,
+  заявки, казна). Магазины: `ShopController`. Сцены: `SceneController`. Форум: `DiscussionController`
+  (`/campaigns/{id}/threads`, `/chapters/{id}/threads`, `/threads/{id}`, `/posts/{id}`, pin/lock/hide/read).
+- Конструкторы воркшопа из кампании: `POST /workshop/npcs/{bestiary,character,draft}`, `POST /workshop/items`,
+  `POST /workshop/maps`, `POST /workshop/maps/{id}/levels`.
+- Валидаторы написаны и зарегистрированы, но отказ проверки проглатывается конвейером (предсуществующий дефект,
+  воспроизводится и на старых маршрутах) — не считать их защитой.
+- Владельца персонажа проверяет гейтвей (`ICharacterRpcClient.GetCharacterById`) перед вызовами, где сервис
+  кампании не знает о персонажах (заявки на предмет, pick, покупка).
+
 ## Коммит-граница
 Репозиторий `dizzydwarf1337/vohnisca-api-gateway`, дефолтная ветка `main`. Коммиты уходят сюда, не
 в мета-корень. Схема ветвей: `campaign/<что делаем>` от актуального `main`.

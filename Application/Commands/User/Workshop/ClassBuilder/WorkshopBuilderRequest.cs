@@ -6,9 +6,9 @@ using MediatR;
 
 namespace Application.Commands.User.Workshop.ClassBuilder;
 
-// The class builder's calls to the workshop (classes, subclasses, libraries, mechanics): a
-// class with its level table is deep and the workshop checks it, so the request and the
-// answer pass through as JSON (camelCase both ways).
+// The workshop builders' calls (classes, subclasses, libraries, mechanics, and from stage 01 the NPC
+// bestiary/character halves): a builder payload is deep and the workshop checks it, so the request and
+// the answer pass through as JSON (camelCase both ways).
 public class WorkshopBuilderRequest : UserRequest<JsonElement?>
 {
     public string Method { get; init; } = string.Empty;
@@ -19,6 +19,7 @@ public class WorkshopBuilderRequest : UserRequest<JsonElement?>
         "ListClasses", "GetClassById", "CreateClass", "UpdateClass", "SetClassVisibility", "DeleteClass",
         "ListSubclasses", "GetSubclassById", "CreateSubclass", "UpdateSubclass", "SetSubclassVisibility", "DeleteSubclass",
         "ListLibrary", "AddToLibrary", "RemoveFromLibrary", "SetLibraryEnabled", "ListFeatureMechanics",
+        "CreateNpcBestiary", "CreateNpcCharacter",
     ];
 }
 

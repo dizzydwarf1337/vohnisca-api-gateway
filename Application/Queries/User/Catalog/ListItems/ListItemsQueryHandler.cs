@@ -12,7 +12,7 @@ public class ListItemsQueryHandler : IRequestHandler<ListItemsQuery, ApiResponse
 
     public async Task<ApiResponse<PaginationResponse<ItemListRow>>> Handle(ListItemsQuery request, CancellationToken cancellationToken)
     {
-        var result = await _client.ListItems(request.Page, request.PageSize, request.Token!);
+        var result = await _client.ListItems(request.Page, request.PageSize, request.Scope, request.Search, request.Token!);
         return result.ToApiResponse(x => x, "Error listing items");
     }
 }

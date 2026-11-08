@@ -2,6 +2,7 @@ using Application.Commands.User.Workshop.AddNpcAction;
 using Application.Commands.User.Workshop.AddNpcTrait;
 using Application.Commands.User.Workshop.CreateMap;
 using Application.Commands.User.Workshop.CreateNpc;
+using Application.Commands.User.Workshop.SaveMapLevel;
 using Application.Commands.User.Workshop.DeleteMap;
 using Application.Commands.User.Workshop.DeleteNpc;
 using Application.Commands.User.Workshop.MoveMapLevel;
@@ -20,6 +21,7 @@ using Application.Queries.User.Workshop.GetWorkshopMap;
 using Application.Queries.User.Workshop.GetWorkshopNpc;
 using Application.Queries.User.Workshop.ListWorkshopMaps;
 using Application.Queries.User.Workshop.ListWorkshopNpcs;
+using Application.Queries.User.Workshop.RollNpcDraft;
 using Application.Commands.User.Workshop.CreateItem;
 using Application.Commands.User.Workshop.CreateSpell;
 using Application.Commands.User.Workshop.DeleteItem;
@@ -45,7 +47,7 @@ public interface IWorkshopRpcClient
     Task<RpcResult<BackgroundDetail>> GetBackgroundById(Guid id, string token);
     Task<RpcResult<PaginationResponse<FeatureListRow>>> ListFeatures(int page, int pageSize, bool onlySelectableAsFeat, string token);
     Task<RpcResult<FeatureDetail>> GetFeatureById(Guid id, string token);
-    Task<RpcResult<PaginationResponse<ItemListRow>>> ListItems(int page, int pageSize, string token);
+    Task<RpcResult<PaginationResponse<ItemListRow>>> ListItems(int page, int pageSize, string? scope, string? search, string token);
     Task<RpcResult<ItemDetail>> GetItemById(Guid id, string token);
     Task<RpcResult<PaginationResponse<SpellListRow>>> ListSpells(int page, int pageSize, int? level, string token);
     Task<RpcResult<SpellDetail>> GetSpellById(Guid id, string token);
@@ -68,6 +70,7 @@ public interface IWorkshopRpcClient
     Task<RpcResult<bool>> RenameMapLevel(RenameMapLevelCommand request, string token);
     Task<RpcResult<bool>> MoveMapLevel(MoveMapLevelCommand request, string token);
     Task<RpcResult<bool>> RemoveMapLevel(RemoveMapLevelCommand request, string token);
+    Task<RpcResult<WorkshopMapLevelSaved>> SaveMapLevel(SaveMapLevelCommand request, string token);
     Task<RpcResult<CreatedContent>> CreateNpc(CreateNpcCommand request, string token);
     Task<RpcResult<bool>> UpdateNpcDetails(UpdateNpcDetailsCommand request, string token);
     Task<RpcResult<bool>> SetNpcAbilityScores(SetNpcAbilityScoresCommand request, string token);
@@ -83,6 +86,7 @@ public interface IWorkshopRpcClient
     Task<RpcResult<WorkshopMapRow>> GetWorkshopMap(GetWorkshopMapQuery request, string token);
     Task<RpcResult<PaginationResponse<WorkshopNpcRow>>> ListWorkshopNpcs(ListWorkshopNpcsQuery request, string token);
     Task<RpcResult<WorkshopNpcDetail>> GetWorkshopNpc(GetWorkshopNpcQuery request, string token);
+    Task<RpcResult<WorkshopNpcDraft>> RollNpcDraft(RollNpcDraftQuery request, string token);
 
     // The class builder (WorkshopBuilderRequest): JSON in, JSON out.
     Task<RpcResult<System.Text.Json.JsonElement>> Builder(string method, System.Text.Json.JsonElement request, string token);
@@ -99,7 +103,7 @@ public record WorkshopMapRow(Guid Id, string Name, string Description, string Vi
 
 public record WorkshopMapLevel(Guid Id, string Name, int Order, int Cols, int Rows, string ImageUrl, DateTime SavedAt);
 
-public record WorkshopNpcRow(Guid Id, string Name, string CreatureType, double ChallengeRating, string Visibility, OwnerRef? Owner, string? ImagePath);
+public record WorkshopNpcRow(Guid Id, string Name, string CreatureType, double ChallengeRating, string Visibility, OwnerRef? Owner, string? ImagePath, string? Role = null);
 
 public record WorkshopNpcTrait(Guid Id, string Name, string Description);
 
@@ -114,3 +118,45 @@ public record WorkshopNpcDetail(
     List<string> DamageVulnerabilities, List<string> ConditionImmunities, Dictionary<string, int> Senses,
     List<string> Languages, List<WorkshopNpcTrait> Traits, List<WorkshopNpcAction> Actions, OwnerRef? Owner,
     string Visibility, string? ImagePath);
+
+// A rolled NPC draft (RollNpcDraft): the two halves of the constructor filled at random and what
+// neither half holds. Nothing is saved — the form sends back what the master leaves in it.
+// Enums cross as their names (creatureType, size, alignment, damage types, ability scores).
+public record WorkshopNpcDraft(
+    string Name, string Role, WorkshopNpcDraftBestiary? Bestiary, WorkshopNpcDraftCharacter? Character,
+    WorkshopNpcDraftProfile Profile);
+
+public class WorkshopNpcDraftBestiary
+{
+    public string? CreatureType { get; set; }
+    public string? Size { get; set; }
+    public string? Alignment { get; set; }
+    public int? ArmorClass { get; set; }
+    public int? MaxHitPoints { get; set; }
+    public string? HpFormula { get; set; }
+    public bool RollHpOnSpawn { get; set; }
+    public int? Speed { get; set; }
+    public double ChallengeRating { get; set; }
+    public Dictionary<string, int> AbilityScores { get; set; } = new();
+    public List<string> SavingThrowProficiencies { get; set; } = new();
+    public Dictionary<string, int> Senses { get; set; } = new();
+    public List<WorkshopNpcAttack> Attacks { get; set; } = new();
+    public string? ImagePath { get; set; }
+}
+
+public class WorkshopNpcDraftCharacter
+{
+    public Guid? RaceId { get; set; }
+    public Guid? ClassId { get; set; }
+    public int? Level { get; set; }
+    public Guid? SubclassId { get; set; }
+    public string? ImagePath { get; set; }
+}
+
+public record WorkshopNpcDraftProfile(
+    List<string> Resistances, List<string> Immunities, int? ArmorClass = null, int? HitPoints = null,
+    string? HitPointsFormula = null, string? Size = null, Dictionary<string, int>? AbilityScores = null,
+    List<WorkshopNpcAttack>? Actions = null);
+
+public record WorkshopNpcAttack(string Name, string? Description, int? AttackBonus, int? DamageDiceCount,
+    string? DamageDiceType, string? DamageType, int? DamageBonus, string? Range);
