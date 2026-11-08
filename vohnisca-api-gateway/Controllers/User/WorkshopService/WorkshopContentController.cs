@@ -22,6 +22,7 @@ using Application.Queries.User.Workshop.ListWorkshopMaps;
 using Application.Queries.User.Workshop.GetWorkshopMap;
 using Application.Queries.User.Workshop.ListWorkshopNpcs;
 using Application.Queries.User.Workshop.GetWorkshopNpc;
+using Application.Queries.User.Workshop.RollNpcDraft;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using vohnisca_api_gateway.Core.Requests;
@@ -124,6 +125,11 @@ public class NpcController : BaseController
     [HttpPost("/workshop/npcs/character")]
     public Task<IActionResult> CreateNpcCharacter([FromBody] JsonElement body)
         => HandleResponse(new WorkshopBuilderRequest { Method = "CreateNpcCharacter", Body = body });
+
+    // A rolled draft for the same form: nothing is saved until the master sends it to one of the
+    // two create routes above.
+    [HttpPost("/workshop/npcs/draft")]
+    public Task<IActionResult> RollNpcDraft(RollNpcDraftQuery query) => HandleResponse(query);
 
     [HttpGet("{id:guid}")]
     public Task<IActionResult> GetNpc(Guid id) => HandleResponse(new GetWorkshopNpcQuery { Id = id });

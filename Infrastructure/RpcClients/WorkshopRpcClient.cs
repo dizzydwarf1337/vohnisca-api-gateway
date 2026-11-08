@@ -21,6 +21,7 @@ using Application.Queries.User.Workshop.GetWorkshopMap;
 using Application.Queries.User.Workshop.GetWorkshopNpc;
 using Application.Queries.User.Workshop.ListWorkshopMaps;
 using Application.Queries.User.Workshop.ListWorkshopNpcs;
+using Application.Queries.User.Workshop.RollNpcDraft;
 using Application.Commands.User.Workshop.CreateItem;
 using Application.Commands.User.Workshop.CreateSpell;
 using Application.Commands.User.Workshop.DeleteItem;
@@ -197,6 +198,16 @@ public class WorkshopRpcClient : DotnetRpcClient, IWorkshopRpcClient
 
     public Task<RpcResult<WorkshopNpcDetail>> GetWorkshopNpc(GetWorkshopNpcQuery request, string token)
         => SendData<WorkshopNpcDetail>("GetNpcById", new { Id = request.Id }, token);
+
+    // The workshop rolls the draft and saves nothing; the nullable halves go as they came.
+    public Task<RpcResult<WorkshopNpcDraft>> RollNpcDraft(RollNpcDraftQuery request, string token)
+        => SendData<WorkshopNpcDraft>("RollNpcDraft", new
+        {
+            Role = request.Role,
+            RaceId = request.RaceId,
+            ClassId = request.ClassId,
+            Level = request.Level,
+        }, token);
 
     private static object Paged(int page, int pageSize)
         => new { Pagination = new { Page = page, PageSize = pageSize } };
