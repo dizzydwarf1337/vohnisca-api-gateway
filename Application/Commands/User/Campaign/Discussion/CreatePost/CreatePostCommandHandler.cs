@@ -14,7 +14,7 @@ public class CreatePostCommandHandler : IRequestHandler<CreatePostCommand, ApiRe
     public async Task<ApiResponse<PostData>> Handle(CreatePostCommand request, CancellationToken cancellationToken)
     {
         var result = await _campaignRpcClient.PostReply(
-            request.ThreadId, request.Body, request.ReplyToId, request.Token);
+            request.ThreadId, request.Body, request.ReplyToId, request.BodyFormat, request.Token);
         return result.ToApiResponse(x => x.Post, "Error posting reply");
     }
 }

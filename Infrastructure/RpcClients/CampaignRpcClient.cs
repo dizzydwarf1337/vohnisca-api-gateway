@@ -438,15 +438,20 @@ public class CampaignRpcClient : LaravelRpcClient, ICampaignRpcClient
         return Send<ThreadResponse>("CreateThread", p, token);
     }
 
-    public Task<RpcResult<PostResponse>> PostReply(Guid threadId, string body, Guid? replyToId, string token)
+    public Task<RpcResult<PostResponse>> PostReply(Guid threadId, string body, Guid? replyToId, string? bodyFormat, string token)
     {
         var p = new Dictionary<string, object> { { "threadId", threadId }, { "body", body } };
         if (replyToId != null) p["replyToId"] = replyToId;
+        if (bodyFormat != null) p["bodyFormat"] = bodyFormat;
         return Send<PostResponse>("PostReply", p, token);
     }
 
-    public Task<RpcResult<PostResponse>> EditPost(Guid postId, string body, string token)
-        => Send<PostResponse>("EditPost", new() { { "postId", postId }, { "body", body } }, token);
+    public Task<RpcResult<PostResponse>> EditPost(Guid postId, string body, string? bodyFormat, string token)
+    {
+        var p = new Dictionary<string, object> { { "postId", postId }, { "body", body } };
+        if (bodyFormat != null) p["bodyFormat"] = bodyFormat;
+        return Send<PostResponse>("EditPost", p, token);
+    }
 
     public Task<RpcResult<PostResponse>> DeletePost(Guid postId, string token)
         => Send<PostResponse>("DeletePost", new() { { "postId", postId } }, token);

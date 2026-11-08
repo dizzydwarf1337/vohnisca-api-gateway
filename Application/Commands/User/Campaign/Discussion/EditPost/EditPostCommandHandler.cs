@@ -13,7 +13,7 @@ public class EditPostCommandHandler : IRequestHandler<EditPostCommand, ApiRespon
 
     public async Task<ApiResponse<PostData>> Handle(EditPostCommand request, CancellationToken cancellationToken)
     {
-        var result = await _campaignRpcClient.EditPost(request.PostId, request.Body, request.Token);
+        var result = await _campaignRpcClient.EditPost(request.PostId, request.Body, request.BodyFormat, request.Token);
         return result.ToApiResponse(x => x.Post, "Error editing post");
     }
 }

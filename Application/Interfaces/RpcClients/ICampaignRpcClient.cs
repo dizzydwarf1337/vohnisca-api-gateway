@@ -76,8 +76,8 @@ public interface ICampaignRpcClient
     Task<RpcResult<ThreadsResponse>> ListCampaignThreads(Guid campaignId, Guid? chapterId, int page, int pageSize, string token);
     Task<RpcResult<ThreadViewResponse>> GetThread(Guid threadId, int page, int pageSize, string token);
     Task<RpcResult<ThreadResponse>> CreateThread(Guid campaignId, Guid? chapterId, string title, string visibility, string token);
-    Task<RpcResult<PostResponse>> PostReply(Guid threadId, string body, Guid? replyToId, string token);
-    Task<RpcResult<PostResponse>> EditPost(Guid postId, string body, string token);
+    Task<RpcResult<PostResponse>> PostReply(Guid threadId, string body, Guid? replyToId, string? bodyFormat, string token);
+    Task<RpcResult<PostResponse>> EditPost(Guid postId, string body, string? bodyFormat, string token);
     Task<RpcResult<PostResponse>> DeletePost(Guid postId, string token);
     Task<RpcResult<ThreadResponse>> SetThreadPinned(Guid threadId, bool isPinned, string token);
     Task<RpcResult<ThreadResponse>> SetThreadLocked(Guid threadId, bool isLocked, string token);
@@ -294,22 +294,20 @@ public record ThreadData(
     DateTime CreatedAt,
     DateTime UpdatedAt);
 
-// A message of a thread: plain text, the moment it was last edited and its previous versions. A deleted
-// message keeps its place with no text.
+// A message of a thread: plain or rich text (BodyFormat says which) and the moment it was last edited.
+// A deleted message keeps its place with no text.
 public record PostData(
     string Id,
     string ThreadId,
     string AuthorId,
     string? AuthorName,
     string? Body,
+    string? BodyFormat,
     string? ReplyToId,
     bool IsDeleted,
     DateTime? EditedAt,
-    List<PostEditData>? Edits,
     DateTime CreatedAt,
     DateTime UpdatedAt);
-
-public record PostEditData(string Body, DateTime EditedAt);
 
 // One attempt to buy from (or sell to) a shop and where it stands: pending, completed or failed with the
 // reason the player sees.

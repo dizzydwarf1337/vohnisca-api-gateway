@@ -8,4 +8,5 @@ public class EditPostCommand : UserRequest<PostData>
 {
     public Guid PostId { get; set; }
     public string Body { get; set; }
+    public string? BodyFormat { get; set; }
 }
