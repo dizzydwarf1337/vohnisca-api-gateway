@@ -45,6 +45,9 @@ public interface ICampaignRpcClient
     Task<RpcResult<CardsResponse>> ListItemCards(Guid campaignId, Guid? chapterId, Guid? containerId, int page, int pageSize, string token);
     Task<RpcResult<CardResponse>> CreateItemCard(Guid campaignId, Guid? chapterId, Guid refId, int quantity, Guid? containerId, string? title, string? content, string? contentFormat, string token);
     Task<RpcResult<CardResponse>> MoveItemCard(Guid cardId, Guid? containerId, string token);
+    Task<RpcResult<CardResponse>> GiveItemCardToCharacter(Guid cardId, Guid characterId, string token);
+    Task<RpcResult<CardResponse>> SetItemPickable(Guid cardId, Guid[] userIds, string token);
+    Task<RpcResult<CardResponse>> PickItemCard(Guid cardId, Guid characterId, string token);
     Task<RpcResult<HistoryResponse>> ListCampaignHistory(Guid campaignId, string? kind, Guid? actorId, DateOnly? from, DateOnly? to, int page, int pageSize, string token);
 
     Task<RpcResult<StashesResponse>> ListStashes(Guid campaignId, string token);

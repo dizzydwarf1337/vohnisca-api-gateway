@@ -1,10 +1,13 @@
 using Application.Commands.User.Campaign.Card.CreateItemCard;
 using Application.Commands.User.Campaign.Card.CreateNpcCard;
+using Application.Commands.User.Campaign.Card.GiveItemCardToCharacter;
 using Application.Commands.User.Campaign.Card.GrantCampaignCardAccess;
 using Application.Commands.User.Campaign.Card.MoveItemCard;
+using Application.Commands.User.Campaign.Card.PickItemCard;
 using Application.Commands.User.Campaign.Card.ReorderCampaignCards;
 using Application.Commands.User.Campaign.Card.RevokeCampaignCardAccess;
 using Application.Commands.User.Campaign.Card.SetCampaignCardVisibility;
+using Application.Commands.User.Campaign.Card.SetItemPickable;
 using Application.Commands.User.Campaign.Card.UpdateCampaignCard;
 using Application.Queries.User.Campaign.Card.GetCampaignCard;
 using Application.Queries.User.Campaign.Card.ListCampaignCards;
@@ -77,6 +80,46 @@ public class CampaignCardController : BaseController
     [HttpPost]
     [Route("/campaign-item-cards/{id:guid}/move")]
     public async Task<IActionResult> MoveItemCard(Guid id, MoveItemCardCommand command)
+    {
+        if (id == Guid.Empty || command is null)
+            return BadRequest();
+
+        command.CardId = id;
+
+        return await HandleResponse(command);
+    }
+
+    // The game master hands an item to a character; the pick closes for everybody.
+    [HttpPost]
+    [Route("/campaign-item-cards/{id:guid}/give")]
+    public async Task<IActionResult> GiveItemCardToCharacter(Guid id, GiveItemCardToCharacterCommand command)
+    {
+        if (id == Guid.Empty || command is null)
+            return BadRequest();
+
+        command.CardId = id;
+
+        return await HandleResponse(command);
+    }
+
+    // Who the master leaves the item open to; an empty list closes the pick.
+    [HttpPut]
+    [Route("/campaign-item-cards/{id:guid}/pickable")]
+    public async Task<IActionResult> SetItemPickable(Guid id, SetItemPickableCommand command)
+    {
+        if (id == Guid.Empty || command is null)
+            return BadRequest();
+
+        command.CardId = id;
+
+        return await HandleResponse(command);
+    }
+
+    // A player picks the item for their own character: the gateway checks the ownership (the campaign
+    // service cannot see characters) and hands it the checked characterId.
+    [HttpPost]
+    [Route("/campaign-item-cards/{id:guid}/pick")]
+    public async Task<IActionResult> PickItemCard(Guid id, PickItemCardCommand command)
     {
         if (id == Guid.Empty || command is null)
             return BadRequest();

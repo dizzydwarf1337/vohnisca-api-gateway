@@ -244,6 +244,15 @@ public class CampaignRpcClient : LaravelRpcClient, ICampaignRpcClient
         return Send<CardResponse>("MoveItemCard", p, token);
     }
 
+    public Task<RpcResult<CardResponse>> GiveItemCardToCharacter(Guid cardId, Guid characterId, string token)
+        => Send<CardResponse>("GiveItemCardToCharacter", new() { { "cardId", cardId }, { "characterId", characterId } }, token);
+
+    public Task<RpcResult<CardResponse>> SetItemPickable(Guid cardId, Guid[] userIds, string token)
+        => Send<CardResponse>("SetItemPickable", new() { { "cardId", cardId }, { "userIds", userIds } }, token);
+
+    public Task<RpcResult<CardResponse>> PickItemCard(Guid cardId, Guid characterId, string token)
+        => Send<CardResponse>("PickItemCard", new() { { "cardId", cardId }, { "characterId", characterId } }, token);
+
     // The campaign service compares the period by date (whereDate), so the dates go as yyyy-MM-dd.
     public Task<RpcResult<HistoryResponse>> ListCampaignHistory(Guid campaignId, string? kind, Guid? actorId, DateOnly? from, DateOnly? to, int page, int pageSize, string token)
     {
