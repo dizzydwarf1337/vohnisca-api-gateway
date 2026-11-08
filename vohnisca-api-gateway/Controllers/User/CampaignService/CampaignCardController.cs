@@ -6,6 +6,7 @@ using Application.Commands.User.Campaign.Card.MoveItemCard;
 using Application.Commands.User.Campaign.Card.PickItemCard;
 using Application.Commands.User.Campaign.Card.ReorderCampaignCards;
 using Application.Commands.User.Campaign.Card.RevokeCampaignCardAccess;
+using Application.Commands.User.Campaign.Card.SetCampaignCardChapter;
 using Application.Commands.User.Campaign.Card.SetCampaignCardVisibility;
 using Application.Commands.User.Campaign.Card.SetItemPickable;
 using Application.Commands.User.Campaign.Card.UpdateCampaignCard;
@@ -154,6 +155,19 @@ public class CampaignCardController : BaseController
     [HttpPut]
     [Route("{id:guid}/visibility")]
     public async Task<IActionResult> SetCampaignCardVisibility(Guid id, SetCampaignCardVisibilityCommand command)
+    {
+        if (id == Guid.Empty || command is null)
+            return BadRequest();
+
+        command.CardId = id;
+
+        return await HandleResponse(command);
+    }
+
+    // Filing a card under a chapter or taking it back to the campaign itself (a null chapterId unbinds).
+    [HttpPut]
+    [Route("{id:guid}/chapter")]
+    public async Task<IActionResult> SetCampaignCardChapter(Guid id, SetCampaignCardChapterCommand command)
     {
         if (id == Guid.Empty || command is null)
             return BadRequest();

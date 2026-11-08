@@ -495,6 +495,14 @@ public class CampaignRpcClient : LaravelRpcClient, ICampaignRpcClient
     public Task<RpcResult<CardResponse>> SetCampaignCardVisibility(Guid cardId, bool isPublic, string token)
         => Send<CardResponse>("SetCampaignCardVisibility", new() { { "cardId", cardId }, { "isPublic", isPublic } }, token);
 
+    // A missing chapterId reads as null on the service side, which takes the card back to the campaign itself.
+    public Task<RpcResult<CardResponse>> SetCampaignCardChapter(Guid cardId, Guid? chapterId, string token)
+    {
+        var p = new Dictionary<string, object> { { "cardId", cardId } };
+        if (chapterId != null) p["chapterId"] = chapterId;
+        return Send<CardResponse>("SetCampaignCardChapter", p, token);
+    }
+
     public Task<RpcResult<DefaultRpcResponse>> GrantCampaignCardAccess(Guid cardId, Guid targetUserId, string token)
         => Send<DefaultRpcResponse>("GrantCampaignCardAccess", new() { { "cardId", cardId }, { "targetUserId", targetUserId } }, token);
 

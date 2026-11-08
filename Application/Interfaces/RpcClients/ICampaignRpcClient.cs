@@ -89,6 +89,7 @@ public interface ICampaignRpcClient
     Task<RpcResult<UnreadCountsResponse>> GetUnreadCounts(Guid campaignId, string token);
     Task<RpcResult<CardResponse>> UpdateCampaignCard(Guid cardId, string? title, string? content, string? contentFormat, JsonElement? meta, string? backgroundColor, int? order, string token);
     Task<RpcResult<CardResponse>> SetCampaignCardVisibility(Guid cardId, bool isPublic, string token);
+    Task<RpcResult<CardResponse>> SetCampaignCardChapter(Guid cardId, Guid? chapterId, string token);
     Task<RpcResult<DefaultRpcResponse>> GrantCampaignCardAccess(Guid cardId, Guid targetUserId, string token);
     Task<RpcResult<DefaultRpcResponse>> RevokeCampaignCardAccess(Guid cardId, Guid targetUserId, string token);
     Task<RpcResult<DefaultRpcResponse>> ReorderCampaignCards(Guid campaignId, Guid? chapterId, List<string> orderedIds, string token);
