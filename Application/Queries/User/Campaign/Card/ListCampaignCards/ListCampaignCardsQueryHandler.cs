@@ -13,7 +13,7 @@ public class ListCampaignCardsQueryHandler : IRequestHandler<ListCampaignCardsQu
 
     public async Task<ApiResponse<List<CampaignCardData>>> Handle(ListCampaignCardsQuery request, CancellationToken cancellationToken)
     {
-        var result = await _campaignRpcClient.ListCampaignCards(request.CampaignId, request.Kind, request.ChapterId, request.Page, request.PageSize, request.Token);
+        var result = await _campaignRpcClient.ListCampaignCards(request.CampaignId, request.Kind, request.ChapterId, request.AllChapters, request.Page, request.PageSize, request.Token);
         return result.ToApiResponse(x => x.Items, "Error listing campaign cards");
     }
 }

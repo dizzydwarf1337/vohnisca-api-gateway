@@ -28,7 +28,7 @@ public interface ICampaignRpcClient
     Task<RpcResult<DefaultRpcResponse>> SetCurrentChapter(Guid campaignId, Guid chapterId, string token);
     Task<RpcResult<ChaptersResponse>> ListCampaignChapters(Guid campaignId, string token);
 
-    Task<RpcResult<NoteResponse>> CreateNote(Guid chapterId, string title, string? content, string? contentFormat, string token);
+    Task<RpcResult<NoteResponse>> CreateNote(Guid? chapterId, Guid? campaignId, string title, string? content, string? contentFormat, string token);
     Task<RpcResult<NoteResponse>> GetNote(Guid noteId, string token);
     Task<RpcResult<NoteResponse>> UpdateNote(Guid noteId, string title, string? content, string? contentFormat, string token);
     Task<RpcResult<DefaultRpcResponse>> DeleteNote(Guid noteId, string token);
@@ -39,7 +39,7 @@ public interface ICampaignRpcClient
     Task<RpcResult<DefaultRpcResponse>> RevokeNoteAccess(Guid noteId, Guid targetUserId, string token);
     Task<RpcResult<NoteResponse>> SetNoteColor(Guid noteId, string? backgroundColor, string token);
 
-    Task<RpcResult<CardsResponse>> ListCampaignCards(Guid campaignId, string? kind, Guid? chapterId, int page, int pageSize, string token);
+    Task<RpcResult<CardsResponse>> ListCampaignCards(Guid campaignId, string? kind, Guid? chapterId, bool allChapters, int page, int pageSize, string token);
     Task<RpcResult<CardResponse>> GetCampaignCard(Guid cardId, string token);
     Task<RpcResult<CardResponse>> CreateNpcCard(Guid campaignId, Guid? chapterId, Guid refId, string title, string? content, string? contentFormat, string token);
     Task<RpcResult<CardsResponse>> ListItemCards(Guid campaignId, Guid? chapterId, Guid? containerId, int page, int pageSize, string token);

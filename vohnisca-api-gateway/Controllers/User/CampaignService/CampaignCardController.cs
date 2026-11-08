@@ -26,8 +26,13 @@ public class CampaignCardController : BaseController
         if (id == Guid.Empty)
             return BadRequest();
 
+        // The query key tells a chapter filter given as null (the campaign's own cards) from no filter
+        // at all (every card of the campaign), so it cannot be derived from the bound value alone.
         return await HandleResponse(new ListCampaignCardsQuery
-        { CampaignId = id, Kind = kind, ChapterId = chapterId, Page = page, PageSize = pageSize });
+        {
+            CampaignId = id, Kind = kind, ChapterId = chapterId,
+            AllChapters = !Request.Query.ContainsKey("chapterId"), Page = page, PageSize = pageSize
+        });
     }
 
     // A card that points at a workshop NPC (the entity is the workshop's, the card is the campaign's).

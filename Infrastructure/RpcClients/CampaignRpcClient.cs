@@ -129,9 +129,11 @@ public class CampaignRpcClient : LaravelRpcClient, ICampaignRpcClient
     public Task<RpcResult<ChaptersResponse>> ListCampaignChapters(Guid campaignId, string token)
         => Send<ChaptersResponse>("ListCampaignChapters", new() { { "campaignId", campaignId } }, token);
 
-    public Task<RpcResult<NoteResponse>> CreateNote(Guid chapterId, string title, string? content, string? contentFormat, string token)
+    public Task<RpcResult<NoteResponse>> CreateNote(Guid? chapterId, Guid? campaignId, string title, string? content, string? contentFormat, string token)
     {
-        var p = new Dictionary<string, object> { { "chapterId", chapterId }, { "title", title } };
+        var p = new Dictionary<string, object> { { "title", title } };
+        if (chapterId != null) p["chapterId"] = chapterId;
+        if (campaignId != null) p["campaignId"] = campaignId;
         if (content != null) p["content"] = content;
         if (contentFormat != null) p["contentFormat"] = contentFormat;
         return Send<NoteResponse>("CreateNote", p, token);
@@ -173,7 +175,7 @@ public class CampaignRpcClient : LaravelRpcClient, ICampaignRpcClient
         return Send<NoteResponse>("SetNoteColor", p, token);
     }
 
-    public Task<RpcResult<CardsResponse>> ListCampaignCards(Guid campaignId, string? kind, Guid? chapterId, int page, int pageSize, string token)
+    public Task<RpcResult<CardsResponse>> ListCampaignCards(Guid campaignId, string? kind, Guid? chapterId, bool allChapters, int page, int pageSize, string token)
     {
         var p = new Dictionary<string, object>
         {
@@ -182,7 +184,9 @@ public class CampaignRpcClient : LaravelRpcClient, ICampaignRpcClient
             { "pageSize", pageSize },
         };
         if (kind != null) p["kind"] = kind;
-        if (chapterId != null) p["chapterId"] = chapterId;
+        // A chapterId left out asks for every card of the campaign; a chapterId sent as null asks for
+        // the campaign's own cards (the ones filed under no chapter).
+        if (!allChapters) p["chapterId"] = chapterId!;
         return Send<CardsResponse>("ListCampaignCards", p, token);
     }
 
