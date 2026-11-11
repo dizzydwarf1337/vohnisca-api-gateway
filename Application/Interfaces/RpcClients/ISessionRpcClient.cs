@@ -404,7 +404,9 @@ public record SceneData(
     // Breakable walls (players: those the GM showed, and the broken ones).
     List<SceneWallPieceData>? BreakableWalls = null,
     // The workshop map level it came from or was saved to (only the GM gets it).
-    SceneSourceData? Source = null);
+    SceneSourceData? Source = null,
+    // The GM's: the scene came from the campaign's last session and hasn't been kept or changed yet.
+    bool Carried = false);
 
 public record SceneSourceData(Guid MapId, string MapName, Guid LevelId, string LevelName);
 
