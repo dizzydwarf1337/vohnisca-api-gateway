@@ -18,6 +18,7 @@ using Application.Commands.User.Workshop.SetNpcVisibility;
 using Application.Commands.User.Workshop.UpdateMap;
 using Application.Commands.User.Workshop.UpdateNpcDetails;
 using Application.Queries.User.Workshop.GetWorkshopMap;
+using Application.Queries.User.Workshop.GetWorkshopMapLevel;
 using Application.Queries.User.Workshop.GetWorkshopNpc;
 using Application.Queries.User.Workshop.ListWorkshopMaps;
 using Application.Queries.User.Workshop.ListWorkshopNpcs;
@@ -186,6 +187,9 @@ public class WorkshopRpcClient : DotnetRpcClient, IWorkshopRpcClient
 
     public Task<RpcResult<WorkshopMapRow>> GetWorkshopMap(GetWorkshopMapQuery request, string token)
         => SendData<WorkshopMapRow>("GetMapById", new { Id = request.Id }, token);
+
+    public Task<RpcResult<WorkshopMapLevelScene>> GetWorkshopMapLevel(GetWorkshopMapLevelQuery request, string token)
+        => SendData<WorkshopMapLevelScene>("GetMapLevel", new { request.MapId, request.LevelId }, token);
 
     public Task<RpcResult<PaginationResponse<WorkshopNpcRow>>> ListWorkshopNpcs(ListWorkshopNpcsQuery request, string token)
         => SendData<PaginationResponse<WorkshopNpcRow>>("ListNpcs", new
