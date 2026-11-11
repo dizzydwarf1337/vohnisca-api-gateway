@@ -415,7 +415,9 @@ public record SceneWallPieceData(Guid Id, int Col, int Row, int? Ac, int Hp, int
 public record SceneLockData(bool Locked, int? Dc, int? BreakDc, Guid? KeyItemId, string? KeyName);
 
 // As an object: Ac (the GM's to know), Hp of MaxHp (what it takes to break).
-public record SceneDoorData(Guid Id, int Col, int Row, bool Open, bool Broken, SceneLockData? Lock, int? Ac = null, int Hp = 0, int MaxHp = 0);
+// Side: set in that side of its square ("n", "e", "s", "w" — a thin door); Material: its look.
+public record SceneDoorData(Guid Id, int Col, int Row, bool Open, bool Broken, SceneLockData? Lock, int? Ac = null, int Hp = 0, int MaxHp = 0,
+    string? Side = null, string Material = "wood");
 
 // A container (a chest, a pile): what's in it (for players once someone opened it).
 public record ContainedItemData(Guid ItemId, string Name, int Quantity);

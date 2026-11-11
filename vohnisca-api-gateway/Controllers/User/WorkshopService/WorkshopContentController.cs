@@ -20,6 +20,7 @@ using Application.Commands.User.Workshop.SetNpcVisibility;
 using Application.Commands.User.Workshop.DeleteNpc;
 using Application.Queries.User.Workshop.ListWorkshopMaps;
 using Application.Queries.User.Workshop.GetWorkshopMap;
+using Application.Queries.User.Workshop.GetWorkshopMapLevel;
 using Application.Queries.User.Workshop.ListWorkshopNpcs;
 using Application.Queries.User.Workshop.GetWorkshopNpc;
 using Application.Queries.User.Workshop.RollNpcDraft;
@@ -80,6 +81,12 @@ public class MapController : BaseController
 
     [HttpDelete("{id:guid}")]
     public Task<IActionResult> DeleteMap(Guid id) => HandleResponse(new DeleteMapCommand { MapId = id });
+
+    // A level with its scene, for the map editor (the list of maps leaves the scenes out).
+    [HttpGet("{id:guid}/levels/{levelId:guid}")]
+    [HttpGet("/workshop/maps/{id:guid}/levels/{levelId:guid}")]
+    public Task<IActionResult> GetLevel(Guid id, Guid levelId)
+        => HandleResponse(new GetWorkshopMapLevelQuery { MapId = id, LevelId = levelId });
 
     [HttpPut("{id:guid}/levels/{levelId:guid}")]
     public Task<IActionResult> RenameLevel(Guid id, Guid levelId, RenameMapLevelCommand command)

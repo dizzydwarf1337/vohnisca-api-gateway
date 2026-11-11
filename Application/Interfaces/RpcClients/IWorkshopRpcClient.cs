@@ -18,6 +18,7 @@ using Application.Commands.User.Workshop.SetNpcVisibility;
 using Application.Commands.User.Workshop.UpdateMap;
 using Application.Commands.User.Workshop.UpdateNpcDetails;
 using Application.Queries.User.Workshop.GetWorkshopMap;
+using Application.Queries.User.Workshop.GetWorkshopMapLevel;
 using Application.Queries.User.Workshop.GetWorkshopNpc;
 using Application.Queries.User.Workshop.ListWorkshopMaps;
 using Application.Queries.User.Workshop.ListWorkshopNpcs;
@@ -84,6 +85,7 @@ public interface IWorkshopRpcClient
     Task<RpcResult<bool>> DeleteNpc(DeleteNpcCommand request, string token);
     Task<RpcResult<PaginationResponse<WorkshopMapRow>>> ListWorkshopMaps(ListWorkshopMapsQuery request, string token);
     Task<RpcResult<WorkshopMapRow>> GetWorkshopMap(GetWorkshopMapQuery request, string token);
+    Task<RpcResult<WorkshopMapLevelScene>> GetWorkshopMapLevel(GetWorkshopMapLevelQuery request, string token);
     Task<RpcResult<PaginationResponse<WorkshopNpcRow>>> ListWorkshopNpcs(ListWorkshopNpcsQuery request, string token);
     Task<RpcResult<WorkshopNpcDetail>> GetWorkshopNpc(GetWorkshopNpcQuery request, string token);
     Task<RpcResult<WorkshopNpcDraft>> RollNpcDraft(RollNpcDraftQuery request, string token);
@@ -102,6 +104,9 @@ public record NpcTraitAdded(Guid TraitId);
 public record WorkshopMapRow(Guid Id, string Name, string Description, string Visibility, OwnerRef? Owner, bool IsMine, List<WorkshopMapLevel> Levels);
 
 public record WorkshopMapLevel(Guid Id, string Name, int Order, int Cols, int Rows, string ImageUrl, DateTime SavedAt);
+
+// A level with its scene (the session's own scene JSON, as saved). IsMine: the caller may save it back.
+public record WorkshopMapLevelScene(Guid MapId, string MapName, Guid LevelId, string Name, string Scene, int Cols, int Rows, string ImageUrl, bool IsMine);
 
 public record WorkshopNpcRow(Guid Id, string Name, string CreatureType, double ChallengeRating, string Visibility, OwnerRef? Owner, string? ImagePath, string? Role = null);
 

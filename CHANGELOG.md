@@ -5,6 +5,10 @@
 
 ## [Unreleased]
 ### Added
+- Уровень карты воркшопа со сценой: `GET maps/{id}/levels/{levelId}` (и `/workshop/maps/...`) —
+  редактор карт открывает сохранённый уровень.
+- Тонкие двери: у двери сцены `side` и `material`; `PUT sessions/{id}/scene/doors` принимает
+  `side` (`n|e|s|w`) и `material`.
 - CI на GitHub Actions: сборка решения на каждый PR и пуш в `main`.
 - `AGENTS.md` — роутер репозитория для воркспейса Vohnisca.
 - `ARCHITECTURE.md` — слои, поток запроса, RPC-клиенты, контракт `ApiResponse<T>`.
