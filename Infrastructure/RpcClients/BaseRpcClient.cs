@@ -13,7 +13,7 @@ public abstract class BaseRpcClient
         _baseUrl = baseUrl;
     }
 
-    protected RpcClient CreateRpcClient(string? route = null, string? token = null)
+    protected RpcClient CreateRpcClient(string? route = null, string? token = null, string? idempotencyKey = null)
     {
         var url = string.IsNullOrEmpty(route)
             ? _baseUrl
@@ -23,6 +23,8 @@ public abstract class BaseRpcClient
             .ConfigureHttp(opt =>
             {
                 opt.Headers = new List<(string, string)>();
+                // The client's key for a command it may send again: the service tells a repeat by it.
+                if (!string.IsNullOrEmpty(idempotencyKey)) opt.Headers.Add(("Idempotency-Key", idempotencyKey));
             })
             // The DTOs carry System.Text.Json values (a card's meta); Newtonsoft cannot do those itself.
             .ConfigureSerializerSettings(settings => settings.Converters.Add(new JsonElementConverter()));
@@ -41,11 +43,12 @@ public abstract class BaseRpcClient
         string? token = null,
         string? route = null,
         Func<T, string?>? getErrorMessage = null,
-        Func<T, int>? getStatusCode = null)
+        Func<T, int>? getStatusCode = null,
+        string? idempotencyKey = null)
     {
         try
         {
-            var rpcClient = CreateRpcClient(route, token);
+            var rpcClient = CreateRpcClient(route, token, idempotencyKey);
             var rpcParams = BuildParams(parameters);
             var request = new RpcRequest(Guid.NewGuid().ToString(), method, rpcParams);
 

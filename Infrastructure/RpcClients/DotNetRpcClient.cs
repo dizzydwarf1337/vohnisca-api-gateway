@@ -1,5 +1,6 @@
 using System.Reflection;
 using System.Text.Json.Serialization;
+using Application.Core.Mediatr.Requests.UserRequest;
 using Application.Interfaces.RpcClients;
 using EdjCase.JsonRpc.Client;
 
@@ -17,16 +18,19 @@ public abstract class DotnetRpcClient : BaseRpcClient
     // Sends a command whose service-side result is Unit; only success/failure matters.
     protected async Task<RpcResult<bool>> SendCommand(string method, object payload, string token)
     {
-        var result = await SendRpcRequest<DefaultRpcResponse>(method, ToDict(payload), token: token);
+        var result = await SendRpcRequest<DefaultRpcResponse>(method, ToDict(payload), token: token, idempotencyKey: KeyOf(payload));
         return result.IsSuccess
             ? RpcResult<bool>.Success(true)
             : RpcResult<bool>.Failure(result.Error, ToHttpStatus(result.StatusCode));
     }
 
+    // A user's request carries the Idempotency-Key the client sent (AuthorizationBehavior).
+    private static string? KeyOf(object payload) => (payload as IUserRequest)?.IdempotencyKey;
+
     // Sends a request and unwraps the service's RpcResponse<T> envelope.
     protected async Task<RpcResult<T>> SendData<T>(string method, object payload, string token)
     {
-        var result = await SendRpcRequest<RpcDataResponse<T>>(method, ToDict(payload), token: token);
+        var result = await SendRpcRequest<RpcDataResponse<T>>(method, ToDict(payload), token: token, idempotencyKey: KeyOf(payload));
         if (!result.IsSuccess || result.Data is null)
             return RpcResult<T>.Failure(result.Error, ToHttpStatus(result.StatusCode));
         return RpcResult<T>.Success(result.Data.Data);

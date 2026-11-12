@@ -27,6 +27,7 @@ public class AuthorizationBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
 
         userRequest.Token = token;
         userRequest.UserId = _currentUserService.UserId;
+        userRequest.IdempotencyKey = _currentUserService.IdempotencyKey;
 
         return await next(cancellationToken);
     }

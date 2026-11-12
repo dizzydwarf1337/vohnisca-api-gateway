@@ -471,8 +471,11 @@ public class SessionController : BaseController
 
     [HttpPost]
     [Route("sessions/{id:guid}/combat/end-turn")]
-    public Task<IActionResult> EndTurn(Guid id)
-        => HandleResponse(new EndTurnCommand { SessionId = id });
+    public Task<IActionResult> EndTurn(Guid id, EndTurnCommand command)
+    {
+        command.SessionId = id;
+        return HandleResponse(command);
+    }
 
     [HttpPost]
     [Route("sessions/{id:guid}/combat/attack")]

@@ -9,4 +9,6 @@ public interface IUserRequest
     [JsonIgnore] string? Token { get; set; }
 
     [JsonIgnore] Guid? UserId { get; set; }
+
+    [JsonIgnore] string? IdempotencyKey { get; set; }
 }

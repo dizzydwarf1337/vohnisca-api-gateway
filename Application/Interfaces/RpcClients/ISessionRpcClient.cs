@@ -545,7 +545,8 @@ public record DiceRollsData(List<DiceRollData> Rolls);
 public record SessionEncounterData(EncounterData? Encounter);
 
 // Offers: the reactions on offer to this user (their character's; the NPCs' to the GM).
-public record EncounterData(int Round, Guid? CurrentTokenId, List<CombatantData> Order, List<ReactionOfferData> Offers);
+// Id: this fight; TurnId: the turn going on, which ending the turn names (EndTurnCommand.TurnId).
+public record EncounterData(Guid Id, Guid TurnId, int Round, Guid? CurrentTokenId, List<CombatantData> Order, List<ReactionOfferData> Offers);
 
 // A reaction its trigger put on offer: Kind "opportunity" (a blow at an enemy leaving
 // reach) | "spell" (SpellId, cast back at whoever hurt the reactor); Options: how it may be

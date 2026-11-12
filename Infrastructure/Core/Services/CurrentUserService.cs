@@ -26,6 +26,9 @@ public class CurrentUserService : ICurrentUserService
         }
     }
 
+    public string? IdempotencyKey
+        => _httpContextAccessor.HttpContext?.Request.Headers["Idempotency-Key"].FirstOrDefault() is { Length: > 0 and <= 200 } key ? key : null;
+
     public string? Token
     {
         get
