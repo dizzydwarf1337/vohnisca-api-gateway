@@ -23,15 +23,21 @@ public class AuthorizationBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
 
         var token = _currentUserService.Token;
         if (string.IsNullOrEmpty(token))
-        {
-            if (ApiResponse<object>.Failure("Unauthorized", 401) is TResponse r)
-                return r;
-            throw new InvalidOperationException("Unauthorized but cannot create response");
-        }
+            return Unauthorized();
 
         userRequest.Token = token;
         userRequest.UserId = _currentUserService.UserId;
 
         return await next(cancellationToken);
     }
+
+    // The failure in the request's own ApiResponse<T> (a cast from ApiResponse<object> fits
+    // only a request that answers with exactly that, and every other one ended as a 500).
+    private static readonly Func<TResponse>? Refuse = typeof(TResponse) is { IsGenericType: true } type
+        && type.GetGenericTypeDefinition() == typeof(ApiResponse<>)
+        ? () => (TResponse)type.GetMethod(nameof(ApiResponse<object>.Failure))!.Invoke(null, ["Unauthorized", 401])!
+        : null;
+
+    private static TResponse Unauthorized()
+        => Refuse is not null ? Refuse() : throw new UnauthorizedAccessException("Unauthorized");
 }
