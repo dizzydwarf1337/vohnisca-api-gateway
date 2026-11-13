@@ -208,7 +208,12 @@ public record CharacterSheetData(
     int? PactWeaponAttacks,
     Guid? ActiveSessionId,
     string Access,
-    SheetResourceRow[]? Resources = null);
+    SheetResourceRow[]? Resources = null,
+    // Its campaign and the GM's leave for a level (P-06); null out of every campaign.
+    SheetCampaignRow? Campaign = null);
+
+public record SheetCampaignRow(Guid? CampaignId, bool NeedsAdmission, SheetLevelGrantRow? Grant);
+public record SheetLevelGrantRow(int FromLevel, int ToLevel, string HitPoints);
 
 // ---- Creation options (level 1 choices, SRD 5.2) ----
 public record CreationChoiceOption(string Value, string Label, string? Description, string? Group, Guid? SpellId = null, Guid? ItemId = null);

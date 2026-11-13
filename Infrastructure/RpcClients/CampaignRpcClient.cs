@@ -363,6 +363,16 @@ public class CampaignRpcClient : LaravelRpcClient, ICampaignRpcClient
     public Task<RpcResult<DefaultRpcResponse>> RemoveShopGood(Guid goodId, string token)
         => Send<DefaultRpcResponse>("RemoveShopGood", new() { { "goodId", goodId } }, token);
 
+    public Task<RpcResult<CampaignCharactersResponse>> ListCampaignCharacters(Guid campaignId, string token)
+        => Send<CampaignCharactersResponse>("ListCampaignCharacters", new() { { "campaignId", campaignId } }, token);
+
+    public Task<RpcResult<CampaignResponse>> SetHitPointsMode(Guid campaignId, string mode, string token)
+        => Send<CampaignResponse>("SetHitPointsMode", new() { { "campaignId", campaignId }, { "mode", mode } }, token);
+
+    // GrantLevelUp, ReleaseCampaignCharacter, AdmitCampaignCharacter: the same shape, the campaign service decides.
+    public Task<RpcResult<CampaignCharacterResponse>> CampaignCharacterAction(string method, Guid campaignId, Guid characterId, string token)
+        => Send<CampaignCharacterResponse>(method, new() { { "campaignId", campaignId }, { "characterId", characterId } }, token);
+
     public Task<RpcResult<ShopPurchaseResponse>> BuyFromShop(Guid cardId, Guid goodId, int quantity, Guid characterId, string token)
         => Send<ShopPurchaseResponse>("BuyFromShop", new()
         {

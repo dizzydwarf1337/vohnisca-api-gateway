@@ -96,6 +96,11 @@ public interface ICampaignRpcClient
 
     Task<RpcResult<CampaignImageResponse>> UploadCampaignImage(Guid campaignId, string mimeType, string data, string token);
     Task<RpcResult<CampaignImageContentResponse>> GetCampaignImage(Guid imageId, string token);
+
+    // A campaign's characters and its milestone advancement (P-06 / P-07).
+    Task<RpcResult<CampaignCharactersResponse>> ListCampaignCharacters(Guid campaignId, string token);
+    Task<RpcResult<CampaignResponse>> SetHitPointsMode(Guid campaignId, string mode, string token);
+    Task<RpcResult<CampaignCharacterResponse>> CampaignCharacterAction(string method, Guid campaignId, Guid characterId, string token);
 }
 
 public record CampaignResponse(CampaignData Campaign);
@@ -116,6 +121,12 @@ public record ItemRequestResponse(ItemRequestData ItemRequest);
 public record ShopGoodResponse(ShopGoodData ShopGood);
 public record ShopGoodsResponse(List<ShopGoodData> Goods);
 public record ShopPurchaseResponse(ShopPurchaseData ShopPurchase);
+public record CampaignCharacterResponse(CampaignCharacterData Character);
+public record CampaignCharactersResponse(List<CampaignCharacterData> Characters);
+// A campaign's character as character-service last told it (P-06): status member / released / asking /
+// admitted; GrantPending — a level granted and not taken yet; Note — why the last request was refused.
+public record CampaignCharacterData(string CampaignId, string CharacterId, string UserId, string Name, int Level, string Status,
+    bool GrantPending, string? Note, DateTime? UpdatedAt);
 // A scene's composition: how many of an NPC and how many of a workshop item the encounter holds.
 public record SceneNpcEntry(Guid NpcId, int Count);
 public record SceneItemEntry(Guid RefId, int Quantity);
@@ -136,7 +147,9 @@ public record CampaignData(
     string Status,
     DateTime CreatedAt,
     DateTime UpdatedAt,
-    List<MemberData>? Members = null);
+    List<MemberData>? Members = null,
+    // How a level the campaign grants finds its hit points: "fixed" (the default) or "roll" (P-07).
+    string HitPointsMode = "fixed");
 
 public record MemberData(string UserId, string Role, string? Username = null);
 
