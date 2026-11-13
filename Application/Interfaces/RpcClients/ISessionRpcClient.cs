@@ -620,7 +620,9 @@ public record CombatantData(
     bool InnateSorcery = false,
     // Ready: what it readied ("attack" | "move" | "other" | "spell") and its trigger — the GM's and its player's.
     string? ReadiedKind = null,
-    string? ReadiedTrigger = null);
+    string? ReadiedTrigger = null,
+    // A readied move under way: the feet left of its one move (the GM's and its player's).
+    int? ReadyMoveLeft = null);
 
 // An NPC's attack made up by the GM: Damage in dice notation ("1d6+2").
 public record CustomAttackData(string Name, int Bonus, string Damage, string DamageType, int RangeFeet = 5);
