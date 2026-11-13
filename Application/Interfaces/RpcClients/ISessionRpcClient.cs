@@ -45,6 +45,7 @@ using Application.Commands.User.Session.SetSpent;
 using Application.Commands.User.Session.Dash;
 using Application.Commands.User.Session.AnswerReaction;
 using Application.Commands.User.Session.StopMove;
+using Application.Commands.User.Session.RecoverAmmunition;
 using Application.Commands.User.Session.AnnounceSpell;
 using Application.Commands.User.Session.Attack;
 using Application.Queries.User.Session.GetDiceRolls;
@@ -163,6 +164,7 @@ public interface ISessionRpcClient
     Task<RpcResult<CombatResultData>> Attack(AttackCommand request, string token);
     Task<RpcResult<CombatResultData>> AnswerReaction(AnswerReactionCommand request, string token);
     Task<RpcResult<CombatResultData>> StopMove(StopMoveCommand request, string token);
+    Task<RpcResult<CombatResultData>> RecoverAmmunition(RecoverAmmunitionCommand request, string token);
     Task<RpcResult<CombatResultData>> AnnounceSpell(AnnounceSpellCommand request, string token);
 }
 

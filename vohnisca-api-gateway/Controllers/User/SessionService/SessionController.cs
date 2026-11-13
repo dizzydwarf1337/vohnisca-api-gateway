@@ -42,6 +42,7 @@ using Application.Commands.User.Session.SetSpent;
 using Application.Commands.User.Session.Dash;
 using Application.Commands.User.Session.AnswerReaction;
 using Application.Commands.User.Session.StopMove;
+using Application.Commands.User.Session.RecoverAmmunition;
 using Application.Commands.User.Session.AnnounceSpell;
 using Application.Commands.User.Session.Attack;
 using Application.Commands.User.Session.CastSpell;
@@ -495,6 +496,12 @@ public class SessionController : BaseController
         command.OfferId = offerId;
         return HandleResponse(command);
     }
+
+    // The GM, after a fight: half the ammunition fired comes back (Idempotency-Key passes on).
+    [HttpPost]
+    [Route("sessions/{id:guid}/ammunition/recover")]
+    public Task<IActionResult> RecoverAmmunition(Guid id)
+        => HandleResponse(new RecoverAmmunitionCommand { SessionId = id });
 
     // A move waiting on reactions to it: its mover gives up the rest of the way.
     [HttpPost]
