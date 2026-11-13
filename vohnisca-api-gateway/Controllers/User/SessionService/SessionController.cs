@@ -43,6 +43,14 @@ using Application.Commands.User.Session.Dash;
 using Application.Commands.User.Session.AnswerReaction;
 using Application.Commands.User.Session.StopMove;
 using Application.Commands.User.Session.RecoverAmmunition;
+using Application.Commands.User.Session.ReadyAction;
+using Application.Commands.User.Session.TriggerReady;
+using Application.Commands.User.Session.ReadySpell;
+using Application.Commands.User.Session.Search;
+using Application.Commands.User.Session.Study;
+using Application.Commands.User.Session.Utilize;
+using Application.Commands.User.Session.Influence;
+using Application.Commands.User.Session.ResolveInfluence;
 using Application.Commands.User.Session.AnnounceSpell;
 using Application.Commands.User.Session.Attack;
 using Application.Commands.User.Session.CastSpell;
@@ -502,6 +510,86 @@ public class SessionController : BaseController
     [Route("sessions/{id:guid}/ammunition/recover")]
     public Task<IActionResult> RecoverAmmunition(Guid id)
         => HandleResponse(new RecoverAmmunitionCommand { SessionId = id });
+
+    // Ready (SRD 5.2): the action spent on a trigger and an attack, a move or another action ("attack" | "move" | "other").
+    [HttpPost]
+    [Route("sessions/{id:guid}/combat/{tokenId:guid}/ready")]
+    public Task<IActionResult> ReadyAction(Guid id, Guid tokenId, ReadyActionCommand command)
+    {
+        command.SessionId = id;
+        command.TokenId = tokenId;
+        return HandleResponse(command);
+    }
+
+    // The GM: the trigger a creature readied for happens (TriggerTokenId: the creature that set it off).
+    [HttpPost]
+    [Route("sessions/{id:guid}/combat/{tokenId:guid}/ready/trigger")]
+    public Task<IActionResult> TriggerReady(Guid id, Guid tokenId, TriggerReadyCommand command)
+    {
+        command.SessionId = id;
+        command.TokenId = tokenId;
+        return HandleResponse(command);
+    }
+
+    // A spell readied: its slot spent now, held with concentration until the reaction releases it.
+    [HttpPost]
+    [Route("sessions/{id:guid}/characters/{characterId:guid}/ready-spell")]
+    public Task<IActionResult> ReadySpell(Guid id, Guid characterId, ReadySpellCommand command)
+    {
+        command.SessionId = id;
+        command.CharacterId = characterId;
+        return HandleResponse(command);
+    }
+
+    // Search: a Wisdom check (Insight, Medicine, Perception, Survival); Dc and an NPC's Bonus are the GM's.
+    [HttpPost]
+    [Route("sessions/{id:guid}/tokens/{tokenId:guid}/search")]
+    public Task<IActionResult> Search(Guid id, Guid tokenId, SearchCommand command)
+    {
+        command.SessionId = id;
+        command.TokenId = tokenId;
+        return HandleResponse(command);
+    }
+
+    // Study: an Intelligence check (Arcana, History, Investigation, Nature, Religion); Dc and an NPC's Bonus are the GM's.
+    [HttpPost]
+    [Route("sessions/{id:guid}/tokens/{tokenId:guid}/study")]
+    public Task<IActionResult> Study(Guid id, Guid tokenId, StudyCommand command)
+    {
+        command.SessionId = id;
+        command.TokenId = tokenId;
+        return HandleResponse(command);
+    }
+
+    // Utilize: an object used, as the player says.
+    [HttpPost]
+    [Route("sessions/{id:guid}/tokens/{tokenId:guid}/utilize")]
+    public Task<IActionResult> Utilize(Guid id, Guid tokenId, UtilizeCommand command)
+    {
+        command.SessionId = id;
+        command.TokenId = tokenId;
+        return HandleResponse(command);
+    }
+
+    // Influence: a request to a creature; the GM answers by its attitude (ResolveInfluence).
+    [HttpPost]
+    [Route("sessions/{id:guid}/tokens/{tokenId:guid}/influence")]
+    public Task<IActionResult> Influence(Guid id, Guid tokenId, InfluenceCommand command)
+    {
+        command.SessionId = id;
+        command.TokenId = tokenId;
+        return HandleResponse(command);
+    }
+
+    // The GM's answer to an Influence: "willing" | "unwilling" | "hesitant" (the check: DC 15 or the creature's Intelligence).
+    [HttpPost]
+    [Route("sessions/{id:guid}/influences/{attemptId:guid}")]
+    public Task<IActionResult> ResolveInfluence(Guid id, Guid attemptId, ResolveInfluenceCommand command)
+    {
+        command.SessionId = id;
+        command.AttemptId = attemptId;
+        return HandleResponse(command);
+    }
 
     // A move waiting on reactions to it: its mover gives up the rest of the way.
     [HttpPost]

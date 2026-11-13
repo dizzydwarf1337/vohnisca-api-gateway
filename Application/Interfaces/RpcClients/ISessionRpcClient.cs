@@ -46,6 +46,14 @@ using Application.Commands.User.Session.Dash;
 using Application.Commands.User.Session.AnswerReaction;
 using Application.Commands.User.Session.StopMove;
 using Application.Commands.User.Session.RecoverAmmunition;
+using Application.Commands.User.Session.ReadyAction;
+using Application.Commands.User.Session.TriggerReady;
+using Application.Commands.User.Session.ReadySpell;
+using Application.Commands.User.Session.Search;
+using Application.Commands.User.Session.Study;
+using Application.Commands.User.Session.Utilize;
+using Application.Commands.User.Session.Influence;
+using Application.Commands.User.Session.ResolveInfluence;
 using Application.Commands.User.Session.AnnounceSpell;
 using Application.Commands.User.Session.Attack;
 using Application.Queries.User.Session.GetDiceRolls;
@@ -165,6 +173,14 @@ public interface ISessionRpcClient
     Task<RpcResult<CombatResultData>> AnswerReaction(AnswerReactionCommand request, string token);
     Task<RpcResult<CombatResultData>> StopMove(StopMoveCommand request, string token);
     Task<RpcResult<CombatResultData>> RecoverAmmunition(RecoverAmmunitionCommand request, string token);
+    Task<RpcResult<CombatResultData>> ReadyAction(ReadyActionCommand request, string token);
+    Task<RpcResult<CombatResultData>> TriggerReady(TriggerReadyCommand request, string token);
+    Task<RpcResult<CombatResultData>> ReadySpell(ReadySpellCommand request, string token);
+    Task<RpcResult<CombatResultData>> Search(SearchCommand request, string token);
+    Task<RpcResult<CombatResultData>> Study(StudyCommand request, string token);
+    Task<RpcResult<CombatResultData>> Utilize(UtilizeCommand request, string token);
+    Task<RpcResult<CombatResultData>> Influence(InfluenceCommand request, string token);
+    Task<RpcResult<CombatResultData>> ResolveInfluence(ResolveInfluenceCommand request, string token);
     Task<RpcResult<CombatResultData>> AnnounceSpell(AnnounceSpellCommand request, string token);
 }
 
@@ -194,7 +210,11 @@ public record SessionData(
     Dictionary<Guid, List<string>>? Readied = null,
     List<Guid>? Helped = null,
     // Players may join it now (the GM opens and closes it).
-    bool Joinable = true);
+    bool Joinable = true,
+    // Influence requests waiting on the GM's word (the GM's all, a player's own).
+    List<InfluenceAttemptData>? Influences = null);
+
+public record InfluenceAttemptData(Guid Id, Guid ActorTokenId, Guid? CharacterId, Guid TargetTokenId, string Skill, string Request);
 
 // Kind: "spell" | "condition" | "wake"; EndsAt: in game seconds.
 public record SessionClockData(double Seconds, DateTime? At, double Scale, List<SessionTimerData> Timers);
@@ -595,7 +615,10 @@ public record CombatantData(
     bool SteadyAim = false,
     int FlurryLeft = 0,
     bool SacredWeapon = false,
-    bool InnateSorcery = false);
+    bool InnateSorcery = false,
+    // Ready: what it readied ("attack" | "move" | "other" | "spell") and its trigger — the GM's and its player's.
+    string? ReadiedKind = null,
+    string? ReadiedTrigger = null);
 
 // An NPC's attack made up by the GM: Damage in dice notation ("1d6+2").
 public record CustomAttackData(string Name, int Bonus, string Damage, string DamageType, int RangeFeet = 5);

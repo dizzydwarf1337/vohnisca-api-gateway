@@ -43,6 +43,14 @@ using Application.Commands.User.Session.Dash;
 using Application.Commands.User.Session.AnswerReaction;
 using Application.Commands.User.Session.StopMove;
 using Application.Commands.User.Session.RecoverAmmunition;
+using Application.Commands.User.Session.ReadyAction;
+using Application.Commands.User.Session.TriggerReady;
+using Application.Commands.User.Session.ReadySpell;
+using Application.Commands.User.Session.Search;
+using Application.Commands.User.Session.Study;
+using Application.Commands.User.Session.Utilize;
+using Application.Commands.User.Session.Influence;
+using Application.Commands.User.Session.ResolveInfluence;
 using Application.Commands.User.Session.AnnounceSpell;
 using Application.Commands.User.Session.Attack;
 using Application.Commands.User.Session.CastSpell;
@@ -315,6 +323,30 @@ public class SessionRpcClient : DotnetRpcClient, ISessionRpcClient
 
     public Task<RpcResult<CombatResultData>> RecoverAmmunition(RecoverAmmunitionCommand request, string token)
         => SendData<CombatResultData>("RecoverAmmunition", request, token);
+
+    public Task<RpcResult<CombatResultData>> ReadyAction(ReadyActionCommand request, string token)
+        => SendData<CombatResultData>("ReadyAction", request, token);
+
+    public Task<RpcResult<CombatResultData>> TriggerReady(TriggerReadyCommand request, string token)
+        => SendData<CombatResultData>("TriggerReady", request, token);
+
+    public Task<RpcResult<CombatResultData>> ReadySpell(ReadySpellCommand request, string token)
+        => SendData<CombatResultData>("ReadySpell", request, token);
+
+    public Task<RpcResult<CombatResultData>> Search(SearchCommand request, string token)
+        => SendData<CombatResultData>("Search", request, token);
+
+    public Task<RpcResult<CombatResultData>> Study(StudyCommand request, string token)
+        => SendData<CombatResultData>("Study", request, token);
+
+    public Task<RpcResult<CombatResultData>> Utilize(UtilizeCommand request, string token)
+        => SendData<CombatResultData>("Utilize", request, token);
+
+    public Task<RpcResult<CombatResultData>> Influence(InfluenceCommand request, string token)
+        => SendData<CombatResultData>("Influence", request, token);
+
+    public Task<RpcResult<CombatResultData>> ResolveInfluence(ResolveInfluenceCommand request, string token)
+        => SendData<CombatResultData>("ResolveInfluence", request, token);
 
     public Task<RpcResult<CombatResultData>> AnnounceSpell(AnnounceSpellCommand request, string token)
         => SendData<CombatResultData>("AnnounceSpell", request, token);
