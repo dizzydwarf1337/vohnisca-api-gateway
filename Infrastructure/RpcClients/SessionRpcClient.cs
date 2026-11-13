@@ -41,6 +41,7 @@ using Application.Commands.User.Session.EndCombat;
 using Application.Commands.User.Session.SetSpent;
 using Application.Commands.User.Session.Dash;
 using Application.Commands.User.Session.AnswerReaction;
+using Application.Commands.User.Session.StopMove;
 using Application.Commands.User.Session.AnnounceSpell;
 using Application.Commands.User.Session.Attack;
 using Application.Commands.User.Session.CastSpell;
@@ -307,6 +308,9 @@ public class SessionRpcClient : DotnetRpcClient, ISessionRpcClient
 
     public Task<RpcResult<CombatResultData>> AnswerReaction(AnswerReactionCommand request, string token)
         => SendData<CombatResultData>("AnswerReaction", request, token);
+
+    public Task<RpcResult<CombatResultData>> StopMove(StopMoveCommand request, string token)
+        => SendData<CombatResultData>("StopMove", request, token);
 
     public Task<RpcResult<CombatResultData>> AnnounceSpell(AnnounceSpellCommand request, string token)
         => SendData<CombatResultData>("AnnounceSpell", request, token);

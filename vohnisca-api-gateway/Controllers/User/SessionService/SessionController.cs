@@ -41,6 +41,7 @@ using Application.Commands.User.Session.EndCombat;
 using Application.Commands.User.Session.SetSpent;
 using Application.Commands.User.Session.Dash;
 using Application.Commands.User.Session.AnswerReaction;
+using Application.Commands.User.Session.StopMove;
 using Application.Commands.User.Session.AnnounceSpell;
 using Application.Commands.User.Session.Attack;
 using Application.Commands.User.Session.CastSpell;
@@ -494,6 +495,12 @@ public class SessionController : BaseController
         command.OfferId = offerId;
         return HandleResponse(command);
     }
+
+    // A move waiting on reactions to it: its mover gives up the rest of the way.
+    [HttpPost]
+    [Route("sessions/{id:guid}/combat/{tokenId:guid}/stop-move")]
+    public Task<IActionResult> StopMove(Guid id, Guid tokenId)
+        => HandleResponse(new StopMoveCommand { SessionId = id, TokenId = tokenId });
 
     [HttpDelete]
     [Route("sessions/{id:guid}/combat/{tokenId:guid}")]

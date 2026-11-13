@@ -44,6 +44,7 @@ using Application.Commands.User.Session.EndCombat;
 using Application.Commands.User.Session.SetSpent;
 using Application.Commands.User.Session.Dash;
 using Application.Commands.User.Session.AnswerReaction;
+using Application.Commands.User.Session.StopMove;
 using Application.Commands.User.Session.AnnounceSpell;
 using Application.Commands.User.Session.Attack;
 using Application.Queries.User.Session.GetDiceRolls;
@@ -161,6 +162,7 @@ public interface ISessionRpcClient
     Task<RpcResult<SessionEncounterData>> Dash(DashCommand request, string token);
     Task<RpcResult<CombatResultData>> Attack(AttackCommand request, string token);
     Task<RpcResult<CombatResultData>> AnswerReaction(AnswerReactionCommand request, string token);
+    Task<RpcResult<CombatResultData>> StopMove(StopMoveCommand request, string token);
     Task<RpcResult<CombatResultData>> AnnounceSpell(AnnounceSpellCommand request, string token);
 }
 
@@ -546,7 +548,9 @@ public record SessionEncounterData(EncounterData? Encounter);
 
 // Offers: the reactions on offer to this user (their character's; the NPCs' to the GM).
 // Id: this fight; TurnId: the turn going on, which ending the turn names (EndTurnCommand.TurnId).
-public record EncounterData(Guid Id, Guid TurnId, int Round, Guid? CurrentTokenId, List<CombatantData> Order, List<ReactionOfferData> Offers);
+// WaitingMoverId: whose move waits on reactions to it (StopMoveCommand gives up the rest of it).
+public record EncounterData(
+    Guid Id, Guid TurnId, int Round, Guid? CurrentTokenId, List<CombatantData> Order, List<ReactionOfferData> Offers, Guid? WaitingMoverId = null);
 
 // A reaction its trigger put on offer: Kind "opportunity" (a blow at an enemy leaving
 // reach) | "spell" (SpellId, cast back at whoever hurt the reactor); Options: how it may be
