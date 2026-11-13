@@ -350,7 +350,9 @@ public record ItemListRow(
     string? ImagePath,
     // "weapon" | "armor" | "shield" | "gear": what the type is, counted by the workshop from what it was
     // made as (stage 02 adds it to the row, the character service leaves it null).
-    string? ItemType = null);
+    string? ItemType = null,
+    // Pieces a pack of ammunition holds (its price and weight are the pack's); 1 otherwise.
+    int PackSize = 1);
 public record ItemSpellRef(Guid Id, string Name, int Level, string School, string? ImagePath);
 public record ItemDetail(
     Guid Id,
