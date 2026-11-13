@@ -46,6 +46,7 @@ using Application.Commands.User.Session.Dash;
 using Application.Commands.User.Session.AnswerReaction;
 using Application.Commands.User.Session.StopMove;
 using Application.Commands.User.Session.RecoverAmmunition;
+using Application.Commands.User.Session.GiveAway;
 using Application.Commands.User.Session.ReadyAction;
 using Application.Commands.User.Session.TriggerReady;
 using Application.Commands.User.Session.ReadySpell;
@@ -173,6 +174,7 @@ public interface ISessionRpcClient
     Task<RpcResult<CombatResultData>> AnswerReaction(AnswerReactionCommand request, string token);
     Task<RpcResult<CombatResultData>> StopMove(StopMoveCommand request, string token);
     Task<RpcResult<CombatResultData>> RecoverAmmunition(RecoverAmmunitionCommand request, string token);
+    Task<RpcResult<CombatResultData>> GiveAway(GiveAwayCommand request, string token);
     Task<RpcResult<CombatResultData>> ReadyAction(ReadyActionCommand request, string token);
     Task<RpcResult<CombatResultData>> TriggerReady(TriggerReadyCommand request, string token);
     Task<RpcResult<CombatResultData>> ReadySpell(ReadySpellCommand request, string token);

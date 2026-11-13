@@ -43,6 +43,7 @@ using Application.Commands.User.Session.Dash;
 using Application.Commands.User.Session.AnswerReaction;
 using Application.Commands.User.Session.StopMove;
 using Application.Commands.User.Session.RecoverAmmunition;
+using Application.Commands.User.Session.GiveAway;
 using Application.Commands.User.Session.ReadyAction;
 using Application.Commands.User.Session.TriggerReady;
 using Application.Commands.User.Session.ReadySpell;
@@ -323,6 +324,9 @@ public class SessionRpcClient : DotnetRpcClient, ISessionRpcClient
 
     public Task<RpcResult<CombatResultData>> RecoverAmmunition(RecoverAmmunitionCommand request, string token)
         => SendData<CombatResultData>("RecoverAmmunition", request, token);
+
+    public Task<RpcResult<CombatResultData>> GiveAway(GiveAwayCommand request, string token)
+        => SendData<CombatResultData>("GiveAway", request, token);
 
     public Task<RpcResult<CombatResultData>> ReadyAction(ReadyActionCommand request, string token)
         => SendData<CombatResultData>("ReadyAction", request, token);

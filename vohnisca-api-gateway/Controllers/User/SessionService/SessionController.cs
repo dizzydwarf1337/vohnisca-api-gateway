@@ -43,6 +43,7 @@ using Application.Commands.User.Session.Dash;
 using Application.Commands.User.Session.AnswerReaction;
 using Application.Commands.User.Session.StopMove;
 using Application.Commands.User.Session.RecoverAmmunition;
+using Application.Commands.User.Session.GiveAway;
 using Application.Commands.User.Session.ReadyAction;
 using Application.Commands.User.Session.TriggerReady;
 using Application.Commands.User.Session.ReadySpell;
@@ -590,6 +591,12 @@ public class SessionController : BaseController
         command.AttemptId = attemptId;
         return HandleResponse(command);
     }
+
+    // The GM: a hider is heard (a sound louder than a whisper) — no longer hidden.
+    [HttpPost]
+    [Route("sessions/{id:guid}/tokens/{tokenId:guid}/give-away")]
+    public Task<IActionResult> GiveAway(Guid id, Guid tokenId)
+        => HandleResponse(new GiveAwayCommand { SessionId = id, TokenId = tokenId });
 
     // A move waiting on reactions to it: its mover gives up the rest of the way.
     [HttpPost]
