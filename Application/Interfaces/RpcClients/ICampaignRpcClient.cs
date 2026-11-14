@@ -124,9 +124,12 @@ public record ShopPurchaseResponse(ShopPurchaseData ShopPurchase);
 public record CampaignCharacterResponse(CampaignCharacterData Character);
 public record CampaignCharactersResponse(List<CampaignCharacterData> Characters);
 // A campaign's character as character-service last told it (P-06): status member / released / asking /
-// admitted; GrantPending — a level granted and not taken yet; Note — why the last request was refused.
+// admitted; GrantPending — a level granted and not taken yet; Note — why the last request was refused;
+// PendingRequest — the GM's request still waiting for character-service's answer (Sent: false — not
+// out yet, it goes out again by itself).
 public record CampaignCharacterData(string CampaignId, string CharacterId, string UserId, string Name, int Level, string Status,
-    bool GrantPending, string? Note, DateTime? UpdatedAt);
+    bool GrantPending, string? Note, DateTime? UpdatedAt, CampaignCharacterRequestData? PendingRequest = null);
+public record CampaignCharacterRequestData(string Id, string Kind, bool Sent, DateTime? RequestedAt);
 // A scene's composition: how many of an NPC and how many of a workshop item the encounter holds.
 public record SceneNpcEntry(Guid NpcId, int Count);
 public record SceneItemEntry(Guid RefId, int Quantity);
