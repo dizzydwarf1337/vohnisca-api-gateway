@@ -349,6 +349,8 @@ public record SessionResourceData(string Type, string Name, int Current, int Max
 public record SessionHitDiceData(string Die, int Total, int Used);
 
 // Effect: what the spell does to its targets (null when casting only spends what it costs).
+// Sources: the grants that give it, each with its own ability and free uses; with two or more a
+// cast names one (CastSpellCommand.Source).
 public record SessionSpellData(
     Guid Id,
     string Name,
@@ -359,7 +361,10 @@ public record SessionSpellData(
     bool RitualOnly,
     string CastingTime,
     string Range,
-    SpellEffectData? Effect);
+    SpellEffectData? Effect,
+    List<SpellSourceData>? Sources = null);
+
+public record SpellSourceData(string Source, string Ability, int? FreeUsesLeft);
 
 // A spell's mechanics at its own level for the character (a cantrip grown with its level):
 // Attack "melee" | "ranged"; Save: the ability; Damage / Healing in dice notation (+ the

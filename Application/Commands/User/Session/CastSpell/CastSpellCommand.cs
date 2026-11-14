@@ -13,6 +13,9 @@ public class CastSpellCommand : UserRequest<CombatResultData>
     // For a leveled spell (none for a ritual or a free cast).
     public int? SlotLevel { get; set; }
     public bool AsRitual { get; set; }
+    // The grant it's cast from when two or more give the spell (two Magic Initiate takes): its
+    // ability and free uses are that grant's own.
+    public string? Source { get; set; }
     // A token once per dart, ray or beam it takes (once otherwise).
     public List<Guid> TargetTokenIds { get; set; } = [];
     // "normal" | "advantage" | "disadvantage" (a spell attack).
