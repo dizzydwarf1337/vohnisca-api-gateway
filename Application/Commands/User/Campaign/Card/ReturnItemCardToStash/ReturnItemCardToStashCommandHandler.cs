@@ -11,11 +11,13 @@ public class ReturnItemCardToStashCommandHandler : IRequestHandler<ReturnItemCar
 
     private readonly ICampaignRpcClient _campaign;
     private readonly ICharacterRpcClient _characters;
+    private readonly IUserRpcClient _users;
 
-    public ReturnItemCardToStashCommandHandler(ICampaignRpcClient campaign, ICharacterRpcClient characters)
+    public ReturnItemCardToStashCommandHandler(ICampaignRpcClient campaign, ICharacterRpcClient characters, IUserRpcClient users)
     {
         _campaign = campaign;
         _characters = characters;
+        _users = users;
     }
 
     public async Task<ApiResponse<CampaignCardData>> Handle(ReturnItemCardToStashCommand request, CancellationToken cancellationToken)
@@ -40,9 +42,12 @@ public class ReturnItemCardToStashCommandHandler : IRequestHandler<ReturnItemCar
         var character = await _characters.GetCharacterById(holder, request.Token!);
         if (character.IsSuccess && string.Equals(character.Data?.Access, OwnerAccess, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (!Guid.TryParse(campaignId, out var campaign) || request.UserId is not { } me) return false;
+        if (!Guid.TryParse(campaignId, out var campaign)) return false;
+        // The gateway doesn't read the token itself (request.UserId stays empty): the user service says who it is.
+        var me = await _users.GetMe(request.Token!);
+        if (!me.IsSuccess || me.Data?.Data?.Id is not { } myId) return false;
         var members = await _campaign.ListMembers(campaign, request.Token!);
-        return members.IsSuccess && members.Data!.Members.Any(m => m.UserId == me.ToString()
+        return members.IsSuccess && members.Data!.Members.Any(m => string.Equals(m.UserId, myId, StringComparison.OrdinalIgnoreCase)
             && m.Role is "master" or "co_master");
     }
 }
