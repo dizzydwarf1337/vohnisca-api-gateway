@@ -4,6 +4,8 @@ using Application.Commands.User.Character.AddFeatureToCharacter;
 using Application.Commands.User.Character.AddItemToCharacter;
 using Application.Commands.User.Character.ApplyAbilityScoreImprovement;
 using Application.Commands.User.Character.AttuneItem;
+using Application.Commands.User.Character.DestroyItem;
+using Application.Commands.User.Character.ResolveItemStack;
 using Application.Commands.User.Character.ChangeCharacterSubRace;
 using Application.Commands.User.Character.ChooseSubclass;
 using Application.Commands.User.Character.CreateCharacter;
@@ -64,6 +66,8 @@ public interface ICharacterRpcClient
     Task<RpcResult<bool>> EquipItem(EquipItemCommand request, string token);
     Task<RpcResult<bool>> UnequipItem(UnequipItemCommand request, string token);
     Task<RpcResult<bool>> AttuneItem(AttuneItemCommand request, string token);
+    Task<RpcResult<bool>> DestroyItem(DestroyItemCommand request, string token);
+    Task<RpcResult<bool>> ResolveItemStack(ResolveItemStackCommand request, string token);
 
     // Spells
     Task<RpcResult<bool>> LearnSpell(LearnSpellCommand request, string token);
@@ -165,7 +169,12 @@ public record SheetItemRow(
     string? ImagePath,
     int Quantity,
     bool IsEquipped,
-    bool IsAttuned);
+    bool IsAttuned,
+    // A tracked item's own instance (I-03); Unresolved: a stack from before instances, made into them first.
+    Guid? InstanceId = null,
+    bool Unresolved = false,
+    bool RequiresAttunement = false,
+    bool Cursed = false);
 public record SheetItemSpellRow(SheetSpellRow Spell, Guid ItemId, string ItemName);
 public record SheetPendingAsiRow(Guid ClassId, string ClassName, int Level);
 
@@ -210,7 +219,13 @@ public record CharacterSheetData(
     string Access,
     SheetResourceRow[]? Resources = null,
     // Its campaign and the GM's leave for a level (P-06); null out of every campaign.
-    SheetCampaignRow? Campaign = null);
+    SheetCampaignRow? Campaign = null,
+    SheetAttunementsRow? Attunement = null);
+
+// I-03: the bonds — also to items no longer carried (a Short Rest ends them) — and the claims waiting for
+// another creature's bond to end; Max: the limit. AwaySince: the campaign time the item went away.
+public record SheetAttunementsRow(int Max, SheetBondRow[] Bonds, SheetBondRow[] Pending);
+public record SheetBondRow(Guid InstanceId, Guid CatalogItemId, string Name, bool InInventory, bool Cursed, double? AwaySince);
 
 public record SheetCampaignRow(Guid? CampaignId, bool NeedsAdmission, SheetLevelGrantRow? Grant);
 public record SheetLevelGrantRow(int FromLevel, int ToLevel, string HitPoints);

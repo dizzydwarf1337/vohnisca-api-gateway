@@ -4,6 +4,8 @@ using Application.Commands.User.Character.AddFeatureToCharacter;
 using Application.Commands.User.Character.AddItemToCharacter;
 using Application.Commands.User.Character.ApplyAbilityScoreImprovement;
 using Application.Commands.User.Character.AttuneItem;
+using Application.Commands.User.Character.DestroyItem;
+using Application.Commands.User.Character.ResolveItemStack;
 using Application.Commands.User.Character.ChangeCharacterSubRace;
 using Application.Commands.User.Character.ChooseSubclass;
 using Application.Commands.User.Character.CreateCharacter;
@@ -230,6 +232,22 @@ public class CharacterController : BaseController
 
     [HttpPost("{id:guid}/items/attune")]
     public Task<IActionResult> AttuneItem(Guid id, AttuneItemCommand command)
+    {
+        command.CharacterId = id;
+        return HandleResponse(command);
+    }
+
+    // I-03: a tracked item the character carries destroyed (an explicit act).
+    [HttpPost("{id:guid}/items/destroy")]
+    public Task<IActionResult> DestroyItem(Guid id, DestroyItemCommand command)
+    {
+        command.CharacterId = id;
+        return HandleResponse(command);
+    }
+
+    // I-03: an unresolved stack of a tracked item made into its instances.
+    [HttpPost("{id:guid}/items/resolve")]
+    public Task<IActionResult> ResolveItemStack(Guid id, ResolveItemStackCommand command)
     {
         command.CharacterId = id;
         return HandleResponse(command);

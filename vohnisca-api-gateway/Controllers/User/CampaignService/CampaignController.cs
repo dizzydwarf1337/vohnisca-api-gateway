@@ -1,4 +1,7 @@
 using Application.Commands.User.Campaign.Campaign.AddMember;
+using Application.Commands.User.Campaign.Clock.AdvanceCampaignClock;
+using Application.Commands.User.Campaign.Clock.ForceReleaseCampaignClock;
+using Application.Queries.User.Campaign.Clock.GetCampaignClock;
 using Application.Commands.User.Campaign.Campaign.CreateCampaign;
 using Application.Commands.User.Campaign.Campaign.DeleteCampaign;
 using Application.Commands.User.Campaign.Campaign.RemoveMember;
@@ -117,5 +120,38 @@ public class CampaignController : BaseController
         command.TargetUserId = targetUserId;
 
         return await HandleResponse(command);
+    }
+
+    // The campaign's game time (I-03): a session's table moves it while it holds it; out of a session, the GM.
+    [HttpGet]
+    [Route("{id:guid}/clock")]
+    public async Task<IActionResult> GetCampaignClock(Guid id)
+    {
+        if (id == Guid.Empty)
+            return BadRequest();
+
+        return await HandleResponse(new GetCampaignClockQuery { CampaignId = id });
+    }
+
+    [HttpPost]
+    [Route("{id:guid}/clock/advance")]
+    public async Task<IActionResult> AdvanceCampaignClock(Guid id, AdvanceCampaignClockCommand command)
+    {
+        if (id == Guid.Empty || command is null)
+            return BadRequest();
+
+        command.CampaignId = id;
+
+        return await HandleResponse(command);
+    }
+
+    [HttpPost]
+    [Route("{id:guid}/clock/release")]
+    public async Task<IActionResult> ForceReleaseCampaignClock(Guid id)
+    {
+        if (id == Guid.Empty)
+            return BadRequest();
+
+        return await HandleResponse(new ForceReleaseCampaignClockCommand { CampaignId = id });
     }
 }

@@ -1,6 +1,8 @@
 using Application.Commands.User.Campaign.Card.CreateItemCard;
 using Application.Commands.User.Campaign.Card.CreateNpcCard;
+using Application.Commands.User.Campaign.Card.DestroyItemCard;
 using Application.Commands.User.Campaign.Card.GiveItemCardToCharacter;
+using Application.Commands.User.Campaign.Card.ResolveItemCard;
 using Application.Commands.User.Campaign.Card.GrantCampaignCardAccess;
 using Application.Commands.User.Campaign.Card.MoveItemCard;
 using Application.Commands.User.Campaign.Card.PickItemCard;
@@ -101,6 +103,30 @@ public class CampaignCardController : BaseController
         command.CardId = id;
 
         return await HandleResponse(command);
+    }
+
+    // I-03: a card of a tracked item from before instances made into its instances.
+    [HttpPost]
+    [Route("/campaign-item-cards/{id:guid}/resolve")]
+    public async Task<IActionResult> ResolveItemCard(Guid id, ResolveItemCardCommand command)
+    {
+        if (id == Guid.Empty || command is null)
+            return BadRequest();
+
+        command.CardId = id;
+
+        return await HandleResponse(command);
+    }
+
+    // I-03: the item in the card destroyed (the card itself isn't deleted).
+    [HttpPost]
+    [Route("/campaign-item-cards/{id:guid}/destroy")]
+    public async Task<IActionResult> DestroyItemCard(Guid id)
+    {
+        if (id == Guid.Empty)
+            return BadRequest();
+
+        return await HandleResponse(new DestroyItemCardCommand { CardId = id });
     }
 
     // Who the master leaves the item open to; an empty list closes the pick.

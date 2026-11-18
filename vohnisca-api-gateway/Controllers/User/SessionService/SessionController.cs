@@ -69,6 +69,7 @@ using Application.Commands.User.Session.PlaceWorkshopNpc;
 using Application.Commands.User.Session.RevealSceneCells;
 using Application.Commands.User.Session.AddSceneToken;
 using Application.Commands.User.Session.UpdateSceneToken;
+using Application.Commands.User.Session.DestroySceneItem;
 using Application.Commands.User.Session.RemoveSceneToken;
 using Application.Commands.User.Session.RemoveSceneArea;
 using Application.Commands.User.Session.TakeCombatAction;
@@ -289,6 +290,12 @@ public class SessionController : BaseController
     [Route("sessions/{id:guid}/scene/tokens/{tokenId:guid}")]
     public Task<IActionResult> RemoveSceneToken(Guid id, Guid tokenId)
         => HandleResponse(new RemoveSceneTokenCommand { SessionId = id, TokenId = tokenId });
+
+    // I-03: a tracked item at the table destroyed, by its instance (token or container content).
+    [HttpPost]
+    [Route("sessions/{id:guid}/scene/items/{instanceId:guid}/destroy")]
+    public Task<IActionResult> DestroySceneItem(Guid id, Guid instanceId)
+        => HandleResponse(new DestroySceneItemCommand { SessionId = id, InstanceId = instanceId });
 
     [HttpDelete]
     [Route("sessions/{id:guid}/scene/areas/{areaId:guid}")]

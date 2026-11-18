@@ -46,6 +46,11 @@ public interface ICampaignRpcClient
     Task<RpcResult<CardResponse>> CreateItemCard(Guid campaignId, Guid? chapterId, Guid refId, int quantity, Guid? containerId, string? title, string? content, string? contentFormat, string token);
     Task<RpcResult<CardResponse>> MoveItemCard(Guid cardId, Guid? containerId, string token);
     Task<RpcResult<CardResponse>> GiveItemCardToCharacter(Guid cardId, Guid characterId, string token);
+    Task<RpcResult<CardResponse>> ResolveItemCard(Guid cardId, Guid? instanceId, string token);
+    Task<RpcResult<CardResponse>> DestroyItemCard(Guid cardId, string token);
+    Task<RpcResult<CampaignClockResponse>> GetCampaignClock(Guid campaignId, string token);
+    Task<RpcResult<CampaignClockResponse>> AdvanceCampaignClock(Guid campaignId, double seconds, string token);
+    Task<RpcResult<CampaignClockResponse>> ForceReleaseCampaignClock(Guid campaignId, string token);
     Task<RpcResult<CardResponse>> SetItemPickable(Guid cardId, Guid[] userIds, string token);
     Task<RpcResult<CardResponse>> PickItemCard(Guid cardId, Guid characterId, string token);
     Task<RpcResult<HistoryResponse>> ListCampaignHistory(Guid campaignId, string? kind, Guid? actorId, DateOnly? from, DateOnly? to, int page, int pageSize, string token);
@@ -111,6 +116,9 @@ public record ChaptersResponse(List<ChapterData> Chapters);
 public record NoteResponse(NoteData Note);
 public record NotesResponse(List<NoteData> Notes);
 public record CardResponse(CampaignCardData Card);
+public record CampaignClockResponse(CampaignClockData Clock);
+// SessionId: the session holding the clock (its table moves it), none out of a session.
+public record CampaignClockData(string CampaignId, double GameSeconds, long ClockVersion, string? SessionId, int LeaseEpoch);
 // The campaign service answers a list with its paginated payload ({items, page, pageSize, hasNextPage,
 // pagesCount}); the gateway hands the frontend the flat array it reads (Card list, 00).
 public record CardsResponse(List<CampaignCardData> Items);

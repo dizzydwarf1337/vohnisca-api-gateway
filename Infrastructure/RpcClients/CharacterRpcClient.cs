@@ -6,6 +6,8 @@ using Application.Commands.User.Character.AddFeatureToCharacter;
 using Application.Commands.User.Character.AddItemToCharacter;
 using Application.Commands.User.Character.ApplyAbilityScoreImprovement;
 using Application.Commands.User.Character.AttuneItem;
+using Application.Commands.User.Character.DestroyItem;
+using Application.Commands.User.Character.ResolveItemStack;
 using Application.Commands.User.Character.ChangeCharacterSubRace;
 using Application.Commands.User.Character.ChooseSubclass;
 using Application.Commands.User.Character.CreateCharacter;
@@ -93,6 +95,12 @@ public class CharacterRpcClient : DotnetRpcClient, ICharacterRpcClient
 
     public Task<RpcResult<bool>> AttuneItem(AttuneItemCommand request, string token)
         => SendCommand("AttuneItem", request, token);
+
+    public Task<RpcResult<bool>> DestroyItem(DestroyItemCommand request, string token)
+        => SendCommand("DestroyItem", request, token);
+
+    public Task<RpcResult<bool>> ResolveItemStack(ResolveItemStackCommand request, string token)
+        => SendCommand("ResolveItemStack", request, token);
 
     public Task<RpcResult<bool>> LearnSpell(LearnSpellCommand request, string token)
         => SendCommand("LearnSpell", request, token);

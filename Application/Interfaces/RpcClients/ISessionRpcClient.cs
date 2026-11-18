@@ -69,6 +69,7 @@ using Application.Commands.User.Session.SetSceneFog;
 using Application.Commands.User.Session.RevealSceneCells;
 using Application.Commands.User.Session.AddSceneToken;
 using Application.Commands.User.Session.UpdateSceneToken;
+using Application.Commands.User.Session.DestroySceneItem;
 using Application.Commands.User.Session.RemoveSceneToken;
 using Application.Commands.User.Session.RemoveSceneArea;
 using Application.Commands.User.Session.TakeCombatAction;
@@ -153,6 +154,7 @@ public interface ISessionRpcClient
     Task<RpcResult<SessionSceneData>> AddSceneToken(AddSceneTokenCommand request, string token);
     Task<RpcResult<SessionSceneData>> UpdateSceneToken(UpdateSceneTokenCommand request, string token);
     Task<RpcResult<SessionSceneData>> RemoveSceneToken(RemoveSceneTokenCommand request, string token);
+    Task<RpcResult<SessionSceneData>> DestroySceneItem(DestroySceneItemCommand request, string token);
     Task<RpcResult<SessionSceneData>> RemoveSceneArea(RemoveSceneAreaCommand request, string token);
     Task<RpcResult<CombatResultData>> TakeCombatAction(TakeCombatActionCommand request, string token);
     Task<RpcResult<SessionSceneData>> MoveSceneToken(MoveSceneTokenCommand request, string token);
@@ -305,15 +307,22 @@ public record SessionCharacterData(
     List<string>? Metamagic = null,
     // Brutal Strike: the effects it may pick, and how many at once.
     List<string>? BrutalStrike = null,
-    int BrutalEffects = 0);
+    int BrutalEffects = 0,
+    List<BondRowData>? Bonds = null);
 
 // What a character carries. Kind: "weapon" | "armor" | "shield" | "gear"; Slot: where it's
 // worn ("mainHand", "offHand", "armor", "shield", "accessory"; null in the pack); Throw: what
 // throwing it does ("acid", "fire", "holy", "net", "oil", "caltrops", "bearings"; "item": it
 // just lands; null: a weapon thrown with an attack); Use: "heal" (a Potion of Healing).
+// ItemId: what actions name the row by — a tracked item's instance (I-03), else the catalog item.
 public record InventoryRowData(
     Guid ItemId, string Name, string Kind, int Quantity, string? Slot, bool Light, bool TwoHanded, bool Wearable,
-    string? Throw, int ThrowRange, string? Use);
+    string? Throw, int ThrowRange, string? Use, Guid? InstanceId = null, Guid? CatalogItemId = null, bool Attuned = false,
+    bool Unresolved = false);
+
+// I-03: a bond, also to an item no longer carried (a Short Rest ends it); Pending: a claim waiting for
+// another creature's bond to end.
+public record BondRowData(Guid InstanceId, string Name, bool InInventory, bool Cursed, bool Pending);
 
 // Rule: "all" (change any), "one" (replace one this rest), "levelUp" (changes on a level up).
 public record PrepClassData(Guid ClassId, string ClassName, string Rule, int Max, int Prepared, List<PrepSpellData> Spells);
@@ -453,7 +462,7 @@ public record SceneDoorData(Guid Id, int Col, int Row, bool Open, bool Broken, S
     string? Side = null, string Material = "wood");
 
 // A container (a chest, a pile): what's in it (for players once someone opened it).
-public record ContainedItemData(Guid ItemId, string Name, int Quantity);
+public record ContainedItemData(Guid ItemId, string Name, int Quantity, Guid? InstanceId = null);
 
 public record SceneContainerData(List<ContainedItemData>? Contents, bool Opened, bool Pile, SceneLockData? Lock, bool Broken = false, int? Ac = null, int Hp = 0, int MaxHp = 0);
 
@@ -526,7 +535,9 @@ public record SceneTokenData(
     string? Team = null,
     // The light it sheds: bright, then dim, in feet.
     int LightBright = 0,
-    int LightDim = 0);
+    int LightDim = 0,
+    // A tracked item lying here (I-03): what the GM destroys it by.
+    Guid? InstanceId = null);
 
 // An NPC's sheet: saving throw bonuses, damage resistances / immunities /
 // vulnerabilities, condition immunities, and what lasts on it (spells, the GM's notes).

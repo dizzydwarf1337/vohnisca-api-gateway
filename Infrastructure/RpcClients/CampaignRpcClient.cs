@@ -247,6 +247,25 @@ public class CampaignRpcClient : LaravelRpcClient, ICampaignRpcClient
     public Task<RpcResult<CardResponse>> GiveItemCardToCharacter(Guid cardId, Guid characterId, string token)
         => Send<CardResponse>("GiveItemCardToCharacter", new() { { "cardId", cardId }, { "characterId", characterId } }, token);
 
+    public Task<RpcResult<CardResponse>> ResolveItemCard(Guid cardId, Guid? instanceId, string token)
+    {
+        var p = new Dictionary<string, object> { { "cardId", cardId } };
+        if (instanceId is { } instance) p["instanceId"] = instance;
+        return Send<CardResponse>("ResolveItemCard", p, token);
+    }
+
+    public Task<RpcResult<CardResponse>> DestroyItemCard(Guid cardId, string token)
+        => Send<CardResponse>("DestroyItemCard", new() { { "cardId", cardId } }, token);
+
+    public Task<RpcResult<CampaignClockResponse>> GetCampaignClock(Guid campaignId, string token)
+        => Send<CampaignClockResponse>("GetCampaignClock", new() { { "campaignId", campaignId } }, token);
+
+    public Task<RpcResult<CampaignClockResponse>> AdvanceCampaignClock(Guid campaignId, double seconds, string token)
+        => Send<CampaignClockResponse>("AdvanceCampaignClock", new() { { "campaignId", campaignId }, { "seconds", seconds } }, token);
+
+    public Task<RpcResult<CampaignClockResponse>> ForceReleaseCampaignClock(Guid campaignId, string token)
+        => Send<CampaignClockResponse>("ForceReleaseCampaignClock", new() { { "campaignId", campaignId } }, token);
+
     public Task<RpcResult<CardResponse>> SetItemPickable(Guid cardId, Guid[] userIds, string token)
         => Send<CardResponse>("SetItemPickable", new() { { "cardId", cardId }, { "userIds", userIds } }, token);
 
