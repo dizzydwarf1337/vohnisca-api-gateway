@@ -25,6 +25,7 @@ using Application.Commands.User.Session.SetLongRest;
 using Application.Commands.User.Session.EquipSessionItem;
 using Application.Commands.User.Session.UnequipSessionItem;
 using Application.Commands.User.Session.DropItem;
+using Application.Commands.User.Session.UseItemCharges;
 using Application.Commands.User.Session.PickUpItem;
 using Application.Commands.User.Session.UseItem;
 using Application.Commands.User.Session.ThrowItem;
@@ -374,6 +375,16 @@ public class SessionController : BaseController
     [HttpPost]
     [Route("sessions/{id:guid}/characters/{characterId:guid}/gear/drop")]
     public Task<IActionResult> DropItem(Guid id, Guid characterId, DropItemCommand command)
+    {
+        command.SessionId = id;
+        command.CharacterId = characterId;
+        return HandleResponse(command);
+    }
+
+    // I-08: a magic item's charges spent at the table.
+    [HttpPost]
+    [Route("sessions/{id:guid}/characters/{characterId:guid}/gear/charges")]
+    public Task<IActionResult> UseItemCharges(Guid id, Guid characterId, UseItemChargesCommand command)
     {
         command.SessionId = id;
         command.CharacterId = characterId;

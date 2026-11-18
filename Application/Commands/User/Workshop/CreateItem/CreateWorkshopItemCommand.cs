@@ -23,6 +23,8 @@ public class CreateWorkshopItemCommand : UserRequest<CreatedContent>
     // I-03: a magic item that needs attunement (one instance a piece); cursed: its bond can't be ended at will.
     public bool? RequiresAttunement { get; set; }
     public bool? Cursed { get; set; }
+    // I-08: its charges (null: none);
+    public ItemChargesData? Charges { get; set; }
     public byte[]? Image { get; set; }
     public string? ImageContentType { get; set; }
 }

@@ -7,6 +7,7 @@ using Application.Commands.User.Character.AddItemToCharacter;
 using Application.Commands.User.Character.ApplyAbilityScoreImprovement;
 using Application.Commands.User.Character.AttuneItem;
 using Application.Commands.User.Character.DestroyItem;
+using Application.Commands.User.Character.ExpendCharges;
 using Application.Commands.User.Character.ResolveItemStack;
 using Application.Commands.User.Character.ChangeCharacterSubRace;
 using Application.Commands.User.Character.ChooseSubclass;
@@ -98,6 +99,9 @@ public class CharacterRpcClient : DotnetRpcClient, ICharacterRpcClient
 
     public Task<RpcResult<bool>> DestroyItem(DestroyItemCommand request, string token)
         => SendCommand("DestroyItem", request, token);
+
+    public Task<RpcResult<bool>> ExpendCharges(ExpendChargesCommand request, string token)
+        => SendCommand("ExpendCharges", request, token);
 
     public Task<RpcResult<bool>> ResolveItemStack(ResolveItemStackCommand request, string token)
         => SendCommand("ResolveItemStack", request, token);

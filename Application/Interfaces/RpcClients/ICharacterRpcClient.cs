@@ -5,6 +5,7 @@ using Application.Commands.User.Character.AddItemToCharacter;
 using Application.Commands.User.Character.ApplyAbilityScoreImprovement;
 using Application.Commands.User.Character.AttuneItem;
 using Application.Commands.User.Character.DestroyItem;
+using Application.Commands.User.Character.ExpendCharges;
 using Application.Commands.User.Character.ResolveItemStack;
 using Application.Commands.User.Character.ChangeCharacterSubRace;
 using Application.Commands.User.Character.ChooseSubclass;
@@ -67,6 +68,7 @@ public interface ICharacterRpcClient
     Task<RpcResult<bool>> UnequipItem(UnequipItemCommand request, string token);
     Task<RpcResult<bool>> AttuneItem(AttuneItemCommand request, string token);
     Task<RpcResult<bool>> DestroyItem(DestroyItemCommand request, string token);
+    Task<RpcResult<bool>> ExpendCharges(ExpendChargesCommand request, string token);
     Task<RpcResult<bool>> ResolveItemStack(ResolveItemStackCommand request, string token);
 
     // Spells
@@ -176,7 +178,17 @@ public record SheetItemRow(
     bool RequiresAttunement = false,
     bool Cursed = false,
     // I-04: false when the item requires attunement the character lacks — its magic doesn't work.
-    bool EffectsActive = true);
+    bool EffectsActive = true,
+    // I-08: its charges (null: it has none).
+    ChargesData? Charges = null);
+// I-08: an instance's charges and its item's rule. Inert: its magic is gone; Uses: what they're spent on and what that
+// costs ("magic" | "bonus" | "reaction" | "free"); Limitations: what the server doesn't do, in the SRD's words.
+public record ChargesData(int Current, int Max, bool Inert, string RechargeOn, string? RechargeDice, List<ChargeUseData> Uses, List<string> Limitations);
+public record ChargeUseData(string Name, int Charges, int? MaxCharges, string Activation);
+// I-08: an item's charge rule as the workshop keeps it. Face 0 of LastCharge with LastChargeDie 0: always.
+public record ItemChargesData(int Max, string? MaxDice, string RechargeOn, string? RechargeDice, int LastChargeDie,
+    List<LastChargeOutcomeData> LastCharge, List<ChargeUseData> Uses, List<string> Limitations);
+public record LastChargeOutcomeData(int Face, string Effect, string? Dice, string? Note);
 public record SheetItemSpellRow(SheetSpellRow Spell, Guid ItemId, string ItemName);
 public record SheetPendingAsiRow(Guid ClassId, string ClassName, int Level);
 
@@ -395,7 +407,8 @@ public record ItemDetail(
     string? ItemType = null,
     // I-03: it needs attunement; cursed: a bond to it can't be ended at will.
     bool RequiresAttunement = false,
-    bool Cursed = false);
+    bool Cursed = false,
+    ItemChargesData? Charges = null);
 
 // ---- Spells ----
 public record SpellListRow(

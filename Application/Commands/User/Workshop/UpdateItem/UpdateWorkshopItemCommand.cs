@@ -20,6 +20,9 @@ public class UpdateWorkshopItemCommand : UserRequest<bool>
     // I-03: a magic item that needs attunement (one instance a piece); cursed: its bond can't be ended at will.
     public bool? RequiresAttunement { get; set; }
     public bool? Cursed { get; set; }
+    // I-08: its charges (null: none); RemoveCharges: take them off.
+    public ItemChargesData? Charges { get; set; }
+    public bool RemoveCharges { get; set; }
     public bool RemoveImage { get; set; }
     public byte[]? Image { get; set; }
     public string? ImageContentType { get; set; }

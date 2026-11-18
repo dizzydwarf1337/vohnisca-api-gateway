@@ -25,6 +25,7 @@ using Application.Commands.User.Session.SetLongRest;
 using Application.Commands.User.Session.EquipSessionItem;
 using Application.Commands.User.Session.UnequipSessionItem;
 using Application.Commands.User.Session.DropItem;
+using Application.Commands.User.Session.UseItemCharges;
 using Application.Commands.User.Session.PickUpItem;
 using Application.Commands.User.Session.UseItem;
 using Application.Commands.User.Session.ThrowItem;
@@ -111,6 +112,7 @@ public interface ISessionRpcClient
     Task<RpcResult<SessionData>> EquipSessionItem(EquipSessionItemCommand request, string token);
     Task<RpcResult<SessionData>> UnequipSessionItem(UnequipSessionItemCommand request, string token);
     Task<RpcResult<SessionData>> DropItem(DropItemCommand request, string token);
+    Task<RpcResult<SessionData>> UseItemCharges(UseItemChargesCommand request, string token);
     Task<RpcResult<SessionData>> PickUpItem(PickUpItemCommand request, string token);
     Task<RpcResult<SessionSceneData>> SetSceneVision(SetSceneVisionCommand request, string token);
     Task<RpcResult<SessionData>> SetVisionGroups(SetVisionGroupsCommand request, string token);
@@ -326,7 +328,9 @@ public record InventoryRowData(
     // I-04: false when the item requires attunement the character lacks — its magic doesn't work.
     bool Unresolved = false, bool EffectsActive = true,
     // Every slot the row is in: a pair of one stack (two daggers) in both hands.
-    List<string>? Slots = null);
+    List<string>? Slots = null,
+    // I-08: its charges (null: it has none).
+    ChargesData? Charges = null);
 
 // I-03: a bond, also to an item no longer carried (a Short Rest ends it); Pending: a claim waiting for
 // another creature's bond to end.

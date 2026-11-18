@@ -5,6 +5,7 @@ using Application.Commands.User.Character.AddItemToCharacter;
 using Application.Commands.User.Character.ApplyAbilityScoreImprovement;
 using Application.Commands.User.Character.AttuneItem;
 using Application.Commands.User.Character.DestroyItem;
+using Application.Commands.User.Character.ExpendCharges;
 using Application.Commands.User.Character.ResolveItemStack;
 using Application.Commands.User.Character.ChangeCharacterSubRace;
 using Application.Commands.User.Character.ChooseSubclass;
@@ -240,6 +241,14 @@ public class CharacterController : BaseController
     // I-03: a tracked item the character carries destroyed (an explicit act).
     [HttpPost("{id:guid}/items/destroy")]
     public Task<IActionResult> DestroyItem(Guid id, DestroyItemCommand command)
+    {
+        command.CharacterId = id;
+        return HandleResponse(command);
+    }
+
+    // I-08: charges spent from a magic item the character carries, out of a session.
+    [HttpPost("{id:guid}/items/charges")]
+    public Task<IActionResult> ExpendCharges(Guid id, ExpendChargesCommand command)
     {
         command.CharacterId = id;
         return HandleResponse(command);
