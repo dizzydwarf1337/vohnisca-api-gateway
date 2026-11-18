@@ -86,6 +86,7 @@ public interface ICharacterRpcClient
     // workshop service's (IWorkshopRpcClient).
     Task<RpcResult<CatalogSpellInfo>> GetSpellInfo(Guid spellId, Guid? characterId, string token);
     Task<RpcResult<CatalogItemInfo>> GetItemInfo(Guid itemId, string token);
+    Task<RpcResult<InstanceChargesData>> GetInstanceCharges(Guid instanceId, Guid itemId, string token);
 }
 
 // Wraps the character service's RpcResponse<T> envelope ({ IsSuccess, Data, Error, StatusCode }).
@@ -183,11 +184,15 @@ public record SheetItemRow(
     ChargesData? Charges = null);
 // I-08: an instance's charges and its item's rule. Inert: its magic is gone; Uses: what they're spent on and what that
 // costs ("magic" | "bonus" | "reaction" | "free"); Limitations: what the server doesn't do, in the SRD's words.
-public record ChargesData(int Current, int Max, bool Inert, string RechargeOn, string? RechargeDice, List<ChargeUseData> Uses, List<string> Limitations);
+// Awaiting: a last charge whose outcome waits for the GM's decision (what is to be decided).
+public record ChargesData(int Current, int Max, bool Inert, string RechargeOn, string? RechargeDice, List<ChargeUseData> Uses, List<string> Limitations,
+    string? Awaiting = null);
 public record ChargeUseData(string Name, int Charges, int? MaxCharges, string Activation);
 // I-08: an item's charge rule as the workshop keeps it. Face 0 of LastCharge with LastChargeDie 0: always.
 public record ItemChargesData(int Max, string? MaxDice, string RechargeOn, string? RechargeDice, int LastChargeDie,
     List<LastChargeOutcomeData> LastCharge, List<ChargeUseData> Uses, List<string> Limitations);
+// I-08: one instance's charges as the registry has them (the card shows its rule from refData).
+public record InstanceChargesData(int Current, int Max, bool Inert, string? Awaiting);
 public record LastChargeOutcomeData(int Face, string Effect, string? Dice, string? Note);
 public record SheetItemSpellRow(SheetSpellRow Spell, Guid ItemId, string ItemName);
 public record SheetPendingAsiRow(Guid ClassId, string ClassName, int Level);

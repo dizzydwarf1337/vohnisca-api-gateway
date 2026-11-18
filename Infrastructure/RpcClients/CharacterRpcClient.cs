@@ -156,6 +156,9 @@ public class CharacterRpcClient : DotnetRpcClient, ICharacterRpcClient
     public Task<RpcResult<CatalogItemInfo>> GetItemInfo(Guid itemId, string token)
         => SendData<CatalogItemInfo>("GetItemInfo", new { ItemId = itemId }, token);
 
+    public Task<RpcResult<InstanceChargesData>> GetInstanceCharges(Guid instanceId, Guid itemId, string token)
+        => SendData<InstanceChargesData>("GetInstanceCharges", new { InstanceId = instanceId, ItemId = itemId }, token);
+
     private static object Paged(int page, int pageSize)
         => new { Pagination = new { Page = page, PageSize = pageSize } };
 }

@@ -26,6 +26,7 @@ using Application.Commands.User.Session.EquipSessionItem;
 using Application.Commands.User.Session.UnequipSessionItem;
 using Application.Commands.User.Session.DropItem;
 using Application.Commands.User.Session.UseItemCharges;
+using Application.Commands.User.Session.ResolveLastCharge;
 using Application.Commands.User.Session.PickUpItem;
 using Application.Commands.User.Session.UseItem;
 using Application.Commands.User.Session.ThrowItem;
@@ -385,6 +386,16 @@ public class SessionController : BaseController
     [HttpPost]
     [Route("sessions/{id:guid}/characters/{characterId:guid}/gear/charges")]
     public Task<IActionResult> UseItemCharges(Guid id, Guid characterId, UseItemChargesCommand command)
+    {
+        command.SessionId = id;
+        command.CharacterId = characterId;
+        return HandleResponse(command);
+    }
+
+    // I-08: the GM's decision on a last charge left to the table.
+    [HttpPost]
+    [Route("sessions/{id:guid}/characters/{characterId:guid}/gear/charges/decide")]
+    public Task<IActionResult> ResolveLastCharge(Guid id, Guid characterId, ResolveLastChargeCommand command)
     {
         command.SessionId = id;
         command.CharacterId = characterId;

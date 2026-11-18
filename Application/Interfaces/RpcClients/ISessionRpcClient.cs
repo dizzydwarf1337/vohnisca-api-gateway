@@ -26,6 +26,7 @@ using Application.Commands.User.Session.EquipSessionItem;
 using Application.Commands.User.Session.UnequipSessionItem;
 using Application.Commands.User.Session.DropItem;
 using Application.Commands.User.Session.UseItemCharges;
+using Application.Commands.User.Session.ResolveLastCharge;
 using Application.Commands.User.Session.PickUpItem;
 using Application.Commands.User.Session.UseItem;
 using Application.Commands.User.Session.ThrowItem;
@@ -113,6 +114,7 @@ public interface ISessionRpcClient
     Task<RpcResult<SessionData>> UnequipSessionItem(UnequipSessionItemCommand request, string token);
     Task<RpcResult<SessionData>> DropItem(DropItemCommand request, string token);
     Task<RpcResult<SessionData>> UseItemCharges(UseItemChargesCommand request, string token);
+    Task<RpcResult<SessionData>> ResolveLastCharge(ResolveLastChargeCommand request, string token);
     Task<RpcResult<SessionData>> PickUpItem(PickUpItemCommand request, string token);
     Task<RpcResult<SessionSceneData>> SetSceneVision(SetSceneVisionCommand request, string token);
     Task<RpcResult<SessionData>> SetVisionGroups(SetVisionGroupsCommand request, string token);

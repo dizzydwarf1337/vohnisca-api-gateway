@@ -134,6 +134,11 @@ public class ItemController : BaseController
     [HttpGet("{id:guid}/info")]
     public Task<IActionResult> GetItemInfo(Guid id)
         => HandleResponse(new GetItemInfoQuery { ItemId = id });
+
+    // I-08: one instance's charges (a campaign card's), the registry's state.
+    [HttpGet("/item-instances/{instanceId:guid}/charges")]
+    public Task<IActionResult> GetInstanceCharges(Guid instanceId, [FromQuery] Guid itemId)
+        => HandleResponse(new Application.Queries.User.Catalog.GetInstanceCharges.GetInstanceChargesQuery { InstanceId = instanceId, ItemId = itemId });
 }
 
 [Route("spells")]
