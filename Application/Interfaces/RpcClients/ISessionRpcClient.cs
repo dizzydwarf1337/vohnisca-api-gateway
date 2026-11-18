@@ -324,7 +324,9 @@ public record InventoryRowData(
     Guid ItemId, string Name, string Kind, int Quantity, string? Slot, bool Light, bool TwoHanded, bool Wearable,
     string? Throw, int ThrowRange, string? Use, Guid? InstanceId = null, Guid? CatalogItemId = null, bool Attuned = false,
     // I-04: false when the item requires attunement the character lacks — its magic doesn't work.
-    bool Unresolved = false, bool EffectsActive = true);
+    bool Unresolved = false, bool EffectsActive = true,
+    // Every slot the row is in: a pair of one stack (two daggers) in both hands.
+    List<string>? Slots = null);
 
 // I-03: a bond, also to an item no longer carried (a Short Rest ends it); Pending: a claim waiting for
 // another creature's bond to end.
@@ -644,7 +646,12 @@ public record CombatantData(
     string? ReadiedKind = null,
     string? ReadiedTrigger = null,
     // A readied move under way: the feet left of its one move (the GM's and its player's).
-    int? ReadyMoveLeft = null);
+    int? ReadyMoveLeft = null,
+    // I-06, on its own turn: what handling a weapon, an object and a shield costs now — the service's word.
+    GearCostData? Gear = null);
+
+// "attack" (a handling of the Attack action under way) | "free" (the turn's free interaction) | "utilize" | "none".
+public record GearCostData(string Weapon, string Object, string Shield, bool AttackCanBegin, int WeaponHandlingsLeft);
 
 // An NPC's attack made up by the GM: Damage in dice notation ("1d6+2").
 public record CustomAttackData(string Name, int Bonus, string Damage, string DamageType, int RangeFeet = 5);

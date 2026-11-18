@@ -10,4 +10,6 @@ public class DropItemCommand : UserRequest<SessionData>
     public Guid CharacterId { get; set; }
     public Guid ItemId { get; set; }
     public int Quantity { get; set; } = 1;
+    // I-06: a weapon in hand dropped as part of the Attack action.
+    public bool AsAttack { get; set; }
 }
