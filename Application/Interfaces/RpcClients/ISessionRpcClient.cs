@@ -216,7 +216,12 @@ public record SessionData(
     // Players may join it now (the GM opens and closes it).
     bool Joinable = true,
     // Influence requests waiting on the GM's word (the GM's all, a player's own).
-    List<InfluenceAttemptData>? Influences = null);
+    List<InfluenceAttemptData>? Influences = null,
+    // I-03: what each character's rest is focused on, by character — it takes when the rest ends (a player's own).
+    Dictionary<Guid, RestFocusData>? RestFocus = null);
+
+// ItemId: the inventory row (an instance) or a bond's instance; Attune false: ending the bond.
+public record RestFocusData(Guid ItemId, bool Attune);
 
 public record InfluenceAttemptData(Guid Id, Guid ActorTokenId, Guid? CharacterId, Guid TargetTokenId, string Skill, string Request);
 
