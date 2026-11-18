@@ -174,7 +174,9 @@ public record SheetItemRow(
     Guid? InstanceId = null,
     bool Unresolved = false,
     bool RequiresAttunement = false,
-    bool Cursed = false);
+    bool Cursed = false,
+    // I-04: false when the item requires attunement the character lacks — its magic doesn't work.
+    bool EffectsActive = true);
 public record SheetItemSpellRow(SheetSpellRow Spell, Guid ItemId, string ItemName);
 public record SheetPendingAsiRow(Guid ClassId, string ClassName, int Level);
 

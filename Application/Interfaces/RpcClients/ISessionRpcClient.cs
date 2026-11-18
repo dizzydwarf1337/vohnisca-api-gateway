@@ -323,7 +323,8 @@ public record SessionCharacterData(
 public record InventoryRowData(
     Guid ItemId, string Name, string Kind, int Quantity, string? Slot, bool Light, bool TwoHanded, bool Wearable,
     string? Throw, int ThrowRange, string? Use, Guid? InstanceId = null, Guid? CatalogItemId = null, bool Attuned = false,
-    bool Unresolved = false);
+    // I-04: false when the item requires attunement the character lacks — its magic doesn't work.
+    bool Unresolved = false, bool EffectsActive = true);
 
 // I-03: a bond, also to an item no longer carried (a Short Rest ends it); Pending: a claim waiting for
 // another creature's bond to end.
