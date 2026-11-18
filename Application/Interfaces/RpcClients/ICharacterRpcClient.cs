@@ -413,7 +413,9 @@ public record ItemDetail(
     // I-03: it needs attunement; cursed: a bond to it can't be ended at will.
     bool RequiresAttunement = false,
     bool Cursed = false,
-    ItemChargesData? Charges = null);
+    ItemChargesData? Charges = null,
+    // I-09: its capabilities as the workshop keeps them (passed on as they are; the workshop checks them).
+    System.Text.Json.Nodes.JsonArray? Capabilities = null);
 
 // ---- Spells ----
 public record SpellListRow(

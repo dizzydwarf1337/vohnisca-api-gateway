@@ -23,6 +23,8 @@ public class UpdateWorkshopItemCommand : UserRequest<bool>
     // I-08: its charges (null: none); RemoveCharges: take them off.
     public ItemChargesData? Charges { get; set; }
     public bool RemoveCharges { get; set; }
+    // I-09: what it gives and lets its holder do (ItemCapability list, the workshop's to check) — null leaves them.
+    public System.Text.Json.Nodes.JsonArray? Capabilities { get; set; }
     public bool RemoveImage { get; set; }
     public byte[]? Image { get; set; }
     public string? ImageContentType { get; set; }
