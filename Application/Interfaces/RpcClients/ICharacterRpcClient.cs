@@ -390,7 +390,10 @@ public record ItemDetail(
     int ArmorClassBonus,
     // Raw enum names ("Consumable", "Glowing") — the edit form ticks them; and the type, as in a list row.
     List<string>? Properties = null,
-    string? ItemType = null);
+    string? ItemType = null,
+    // I-03: it needs attunement; cursed: a bond to it can't be ended at will.
+    bool RequiresAttunement = false,
+    bool Cursed = false);
 
 // ---- Spells ----
 public record SpellListRow(

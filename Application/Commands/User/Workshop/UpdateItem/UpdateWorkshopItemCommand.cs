@@ -17,6 +17,9 @@ public class UpdateWorkshopItemCommand : UserRequest<bool>
     public List<Guid>? GrantedSpellIds { get; set; }
     public Dictionary<string, int>? AbilityScoreBonuses { get; set; }
     public int? ArmorClassBonus { get; set; }
+    // I-03: a magic item that needs attunement (one instance a piece); cursed: its bond can't be ended at will.
+    public bool? RequiresAttunement { get; set; }
+    public bool? Cursed { get; set; }
     public bool RemoveImage { get; set; }
     public byte[]? Image { get; set; }
     public string? ImageContentType { get; set; }
