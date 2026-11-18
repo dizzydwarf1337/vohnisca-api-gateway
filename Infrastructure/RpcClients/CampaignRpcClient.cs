@@ -254,6 +254,9 @@ public class CampaignRpcClient : LaravelRpcClient, ICampaignRpcClient
         return Send<CardResponse>("ResolveItemCard", p, token);
     }
 
+    public Task<RpcResult<CardResponse>> ReturnItemToStash(Guid cardId, string token)
+        => Send<CardResponse>("ReturnItemToStash", new() { { "cardId", cardId } }, token);
+
     public Task<RpcResult<CardResponse>> DestroyItemCard(Guid cardId, string token)
         => Send<CardResponse>("DestroyItemCard", new() { { "cardId", cardId } }, token);
 

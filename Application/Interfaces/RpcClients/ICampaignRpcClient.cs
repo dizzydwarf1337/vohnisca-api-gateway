@@ -48,6 +48,7 @@ public interface ICampaignRpcClient
     Task<RpcResult<CardResponse>> GiveItemCardToCharacter(Guid cardId, Guid characterId, string token);
     Task<RpcResult<CardResponse>> ResolveItemCard(Guid cardId, Guid? instanceId, string token);
     Task<RpcResult<CardResponse>> DestroyItemCard(Guid cardId, string token);
+    Task<RpcResult<CardResponse>> ReturnItemToStash(Guid cardId, string token);
     Task<RpcResult<CampaignClockResponse>> GetCampaignClock(Guid campaignId, string token);
     Task<RpcResult<CampaignClockResponse>> AdvanceCampaignClock(Guid campaignId, double seconds, string token);
     Task<RpcResult<CampaignClockResponse>> ForceReleaseCampaignClock(Guid campaignId, string token);

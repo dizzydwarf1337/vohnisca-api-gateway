@@ -3,6 +3,7 @@ using Application.Commands.User.Campaign.Card.CreateNpcCard;
 using Application.Commands.User.Campaign.Card.DestroyItemCard;
 using Application.Commands.User.Campaign.Card.GiveItemCardToCharacter;
 using Application.Commands.User.Campaign.Card.ResolveItemCard;
+using Application.Commands.User.Campaign.Card.ReturnItemCardToStash;
 using Application.Commands.User.Campaign.Card.GrantCampaignCardAccess;
 using Application.Commands.User.Campaign.Card.MoveItemCard;
 using Application.Commands.User.Campaign.Card.PickItemCard;
@@ -116,6 +117,17 @@ public class CampaignCardController : BaseController
         command.CardId = id;
 
         return await HandleResponse(command);
+    }
+
+    // An item a character holds goes back to its stash: the holder's player or the campaign's master.
+    [HttpPost]
+    [Route("/campaign-item-cards/{id:guid}/return")]
+    public async Task<IActionResult> ReturnItemCardToStash(Guid id)
+    {
+        if (id == Guid.Empty)
+            return BadRequest();
+
+        return await HandleResponse(new ReturnItemCardToStashCommand { CardId = id });
     }
 
     // I-03: the item in the card destroyed (the card itself isn't deleted).
