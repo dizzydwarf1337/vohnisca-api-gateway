@@ -23,4 +23,6 @@ public class ActivateItemCapabilityCommand : UserRequest<CombatResultData>
     public double? AimRow { get; set; }
     // The player agrees the GM plays the part the table doesn't (refused without it, nothing spent).
     public bool ConfirmManual { get; set; }
+    // A Sorcerer's Metamagic on a spell it casts: "quickened", "distant", "careful"...
+    public List<string>? Metamagic { get; set; }
 }
