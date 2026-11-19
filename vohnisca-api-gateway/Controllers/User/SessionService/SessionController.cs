@@ -26,6 +26,7 @@ using Application.Commands.User.Session.EquipSessionItem;
 using Application.Commands.User.Session.UnequipSessionItem;
 using Application.Commands.User.Session.DropItem;
 using Application.Commands.User.Session.UseItemCharges;
+using Application.Commands.User.Session.ActivateItemCapability;
 using Application.Commands.User.Session.ResolveLastCharge;
 using Application.Commands.User.Session.PickUpItem;
 using Application.Commands.User.Session.UseItem;
@@ -389,6 +390,18 @@ public class SessionController : BaseController
     {
         command.SessionId = id;
         command.CharacterId = characterId;
+        return HandleResponse(command);
+    }
+
+    // I-09: an item's activated capability used at the table.
+    [HttpPost]
+    [Route("sessions/{id:guid}/characters/{characterId:guid}/items/{itemId:guid}/capabilities/{capabilityId:guid}/activate")]
+    public Task<IActionResult> ActivateItemCapability(Guid id, Guid characterId, Guid itemId, Guid capabilityId, ActivateItemCapabilityCommand command)
+    {
+        command.SessionId = id;
+        command.CharacterId = characterId;
+        command.ItemId = itemId;
+        command.CapabilityId = capabilityId;
         return HandleResponse(command);
     }
 

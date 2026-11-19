@@ -26,6 +26,7 @@ using Application.Commands.User.Session.EquipSessionItem;
 using Application.Commands.User.Session.UnequipSessionItem;
 using Application.Commands.User.Session.DropItem;
 using Application.Commands.User.Session.UseItemCharges;
+using Application.Commands.User.Session.ActivateItemCapability;
 using Application.Commands.User.Session.ResolveLastCharge;
 using Application.Commands.User.Session.PickUpItem;
 using Application.Commands.User.Session.UseItem;
@@ -207,6 +208,9 @@ public class SessionRpcClient : DotnetRpcClient, ISessionRpcClient
 
     public Task<RpcResult<SessionData>> UseItemCharges(UseItemChargesCommand request, string token)
         => SendData<SessionData>("UseItemCharges", request, token);
+
+    public Task<RpcResult<CombatResultData>> ActivateItemCapability(ActivateItemCapabilityCommand request, string token)
+        => SendData<CombatResultData>("ActivateItemCapability", request, token);
 
     public Task<RpcResult<SessionData>> ResolveLastCharge(ResolveLastChargeCommand request, string token)
         => SendData<SessionData>("ResolveLastCharge", request, token);

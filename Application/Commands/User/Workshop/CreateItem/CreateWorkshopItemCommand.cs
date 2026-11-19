@@ -26,7 +26,7 @@ public class CreateWorkshopItemCommand : UserRequest<CreatedContent>
     // I-08: its charges (null: none);
     public ItemChargesData? Charges { get; set; }
     // I-09: what it gives and lets its holder do (ItemCapability list, the workshop's to check).
-    public System.Text.Json.Nodes.JsonArray? Capabilities { get; set; }
+    public System.Text.Json.JsonElement? Capabilities { get; set; }
     public byte[]? Image { get; set; }
     public string? ImageContentType { get; set; }
 }
