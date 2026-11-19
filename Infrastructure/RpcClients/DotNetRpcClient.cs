@@ -2,7 +2,6 @@ using System.Reflection;
 using System.Text.Json.Serialization;
 using Application.Core.Mediatr.Requests.UserRequest;
 using Application.Interfaces.RpcClients;
-using EdjCase.JsonRpc.Client;
 
 namespace Infrastructure.RpcClients;
 
@@ -10,10 +9,8 @@ public abstract class DotnetRpcClient : BaseRpcClient
 {
     protected DotnetRpcClient(string baseUrl) : base(baseUrl) { }
 
-    protected override RpcParameters BuildParams(Dictionary<string, object>? parameters) =>
-        parameters == null
-            ? RpcParameters.Empty
-            : new RpcParameters(new Dictionary<string, object> { { "request", parameters } });
+    protected override object BuildParams(Dictionary<string, object>? parameters) =>
+        parameters == null ? base.BuildParams(null) : new Dictionary<string, object> { { "request", parameters } };
 
     // Sends a command whose service-side result is Unit; only success/failure matters.
     protected async Task<RpcResult<bool>> SendCommand(string method, object payload, string token)

@@ -5,7 +5,7 @@ using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
 namespace Infrastructure.RpcClients;
 
-// EdjCase deserializes through Newtonsoft, which has no support for System.Text.Json types: a JSON-RPC
+// The RPC client (BaseRpcClient) serializes through Newtonsoft, which has no support for System.Text.Json types: a JSON-RPC
 // `meta` would come back as an unusable JsonElement and would be sent out as {"ValueKind":1}.
 public class JsonElementConverter : JsonConverter
 {
