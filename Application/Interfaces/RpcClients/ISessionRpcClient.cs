@@ -324,17 +324,27 @@ public record SessionCharacterData(
 // What a character carries. Kind: "weapon" | "armor" | "shield" | "gear"; Slot: where it's
 // worn ("mainHand", "offHand", "armor", "shield", "accessory"; null in the pack); Throw: what
 // throwing it does ("acid", "fire", "holy", "net", "oil", "caltrops", "bearings"; "item": it
-// just lands; null: a weapon thrown with an attack); Use: "heal" (a Potion of Healing).
+// just lands; null: a weapon thrown with an attack).
 // ItemId: what actions name the row by — a tracked item's instance (I-03), else the catalog item.
 public record InventoryRowData(
     Guid ItemId, string Name, string Kind, int Quantity, string? Slot, bool Light, bool TwoHanded, bool Wearable,
-    string? Throw, int ThrowRange, string? Use, Guid? InstanceId = null, Guid? CatalogItemId = null, bool Attuned = false,
+    string? Throw, int ThrowRange, Guid? InstanceId = null, Guid? CatalogItemId = null, bool Attuned = false,
     // I-04: false when the item requires attunement the character lacks — its magic doesn't work.
     bool Unresolved = false, bool EffectsActive = true,
     // Every slot the row is in: a pair of one stack (two daggers) in both hands.
     List<string>? Slots = null,
     // I-08: its charges (null: it has none).
-    ChargesData? Charges = null);
+    ChargesData? Charges = null,
+    // I-09: what using it does — its activated capabilities (null: none).
+    List<CapabilityData>? Capabilities = null);
+
+// I-09: an activated capability as the table offers it (session-service's CharacterView.CapabilityView): Cost "action" |
+// "bonus" | "reaction" | "none" | "long"; Target "self" | "creature" | "effect"; Resource "none" | "charges" | "consume" |
+// "uses"; Does: what the table plays; Manual: what the GM plays; Spell: the spell it casts, at SpellLevel; WhyNot: why
+// it can't be used now.
+public record CapabilityData(
+    Guid Id, string Name, string Cost, string Target, int RangeFeet, string Resource, int MinCharges, int? MaxCharges, int? UsesLeft,
+    List<string> Does, List<string> Manual, SessionSpellData? Spell, int SpellLevel, int LevelPerExtraCharge, string? WhyNot);
 
 // I-03: a bond, also to an item no longer carried (a Short Rest ends it); Pending: a claim waiting for
 // another creature's bond to end.
@@ -677,8 +687,8 @@ public record SpellInfoData(
 
 // An item's details: Kind "weapon" | "armor" | "shield" | "gear"; Damage, Range,
 // Properties, Mastery for a weapon; ArmorClass, StrengthNeeded, StealthDisadvantage for
-// armor; Magic: what makes it more than mundane; Throw / Use: what they do at the table.
+// armor; Magic: what makes it more than mundane (its capabilities among it); Throw: what throwing it does.
 public record ItemInfoData(
     Guid Id, string Name, string Kind, string? Category, string Rarity, double Weight, string Value, string Description, string Source,
     string? Damage, string? Range, List<string> Properties, string? Mastery, string? ArmorClass, int? StrengthNeeded, bool StealthDisadvantage,
-    List<string> Magic, string? Throw, string? Use);
+    List<string> Magic, string? Throw);
