@@ -356,8 +356,8 @@ public record PrepClassData(Guid ClassId, string ClassName, string Rule, int Max
 public record PrepSpellData(Guid Id, string Name, int Level, string School, bool Prepared, bool Concentration, bool Ritual);
 
 // An attack the character can make (CombatRules.AttackOption): damage is DiceCount dice of
-// DieFaces + DamageBonus (DamageMin: a die below it counts as it); Reach in feet for
-// melee, RangeNormal / RangeLong for ranged; BonusAction: the two-weapon extra attack.
+// DieFaces + DamageBonus (DamageMin: a die below it counts as it); Ranged: a ranged attack; Reach
+// in feet for melee, RangeNormal / RangeLong for ranged; BonusAction: the two-weapon extra attack.
 public record AttackOptionData(
     string Id,
     string Name,
@@ -373,7 +373,9 @@ public record AttackOptionData(
     int? RangeLong,
     bool BonusAction,
     // A Strength attack (Rage, Reckless Attack, Brutal Strike).
-    bool UsesStrength = false);
+    bool UsesStrength = false,
+    // I-10: the weapon thrown (Ranged: the attack is a ranged one; a melee weapon with Thrown has both).
+    bool Thrown = false);
 
 public record SessionSpellRef(Guid Id, string Name);
 
