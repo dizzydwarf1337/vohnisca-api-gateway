@@ -25,6 +25,8 @@ public class UpdateWorkshopItemCommand : UserRequest<bool>
     public bool RemoveCharges { get; set; }
     // I-09: what it gives and lets its holder do (ItemCapability list, the workshop's to check) — null leaves them.
     public System.Text.Json.JsonElement? Capabilities { get; set; }
+    // F-02: what it is to a spellcaster — left out, as it is; an empty one takes it away.
+    public System.Text.Json.JsonElement? Spellcasting { get; set; }
     public bool RemoveImage { get; set; }
     public byte[]? Image { get; set; }
     public string? ImageContentType { get; set; }

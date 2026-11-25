@@ -27,6 +27,8 @@ public class CreateWorkshopItemCommand : UserRequest<CreatedContent>
     public ItemChargesData? Charges { get; set; }
     // I-09: what it gives and lets its holder do (ItemCapability list, the workshop's to check).
     public System.Text.Json.JsonElement? Capabilities { get; set; }
+    // F-02: what it is to a spellcaster (focus kinds, held or worn, a component pouch, material tags; the workshop's to check).
+    public System.Text.Json.JsonElement? Spellcasting { get; set; }
     public byte[]? Image { get; set; }
     public string? ImageContentType { get; set; }
 }

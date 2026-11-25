@@ -346,7 +346,9 @@ public record InventoryRowData(
     // I-08: its charges (null: it has none).
     ChargesData? Charges = null,
     // I-09: what using it does — its activated capabilities (null: none).
-    List<CapabilityData>? Capabilities = null);
+    List<CapabilityData>? Capabilities = null,
+    // F-02: a Spellcasting Focus for the focus slot — "held" | "worn"; null: not one.
+    string? Focus = null);
 
 // I-09: an activated capability as the table offers it (session-service's CharacterView.CapabilityView): Cost "action" |
 // "bonus" | "reaction" | "none" | "long"; Target "self" | "creature" | "effect"; Resource "none" | "charges" | "consume" |

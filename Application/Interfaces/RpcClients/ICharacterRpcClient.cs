@@ -419,7 +419,9 @@ public record ItemDetail(
     bool Cursed = false,
     ItemChargesData? Charges = null,
     // I-09: its capabilities as the workshop keeps them (passed on as they are; the workshop checks them).
-    System.Text.Json.JsonElement? Capabilities = null);
+    System.Text.Json.JsonElement? Capabilities = null,
+    // F-02: what it is to a spellcaster, as the workshop keeps it.
+    System.Text.Json.JsonElement? Spellcasting = null);
 
 // ---- Spells ----
 public record SpellListRow(
