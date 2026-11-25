@@ -5,6 +5,7 @@ using Application.Queries.User.Campaign.Clock.GetCampaignClock;
 using Application.Commands.User.Campaign.Campaign.CreateCampaign;
 using Application.Commands.User.Campaign.Campaign.DeleteCampaign;
 using Application.Commands.User.Campaign.Campaign.RemoveMember;
+using Application.Commands.User.Campaign.Campaign.SetCampaignSessionSettings;
 using Application.Commands.User.Campaign.Campaign.UpdateCampaign;
 using Application.Commands.User.Campaign.Campaign.UpdateMemberRole;
 using Application.Queries.User.Campaign.Campaign.GetCampaign;
@@ -118,6 +119,19 @@ public class CampaignController : BaseController
 
         command.CampaignId = id;
         command.TargetUserId = targetUserId;
+
+        return await HandleResponse(command);
+    }
+
+    // What the campaign's next session opens with (I-12).
+    [HttpPut]
+    [Route("{id:guid}/session-settings")]
+    public async Task<IActionResult> SetCampaignSessionSettings(Guid id, SetCampaignSessionSettingsCommand command)
+    {
+        if (id == Guid.Empty || command is null)
+            return BadRequest();
+
+        command.CampaignId = id;
 
         return await HandleResponse(command);
     }

@@ -266,6 +266,9 @@ public class CampaignRpcClient : LaravelRpcClient, ICampaignRpcClient
     public Task<RpcResult<CampaignClockResponse>> AdvanceCampaignClock(Guid campaignId, double seconds, string token)
         => Send<CampaignClockResponse>("AdvanceCampaignClock", new() { { "campaignId", campaignId }, { "seconds", seconds } }, token);
 
+    public Task<RpcResult<CampaignResponse>> SetCampaignSessionSettings(Guid campaignId, bool carryingAffectsMovement, string token)
+        => Send<CampaignResponse>("SetCampaignSessionSettings", new() { { "campaignId", campaignId }, { "carryingAffectsMovement", carryingAffectsMovement } }, token);
+
     public Task<RpcResult<CampaignClockResponse>> ForceReleaseCampaignClock(Guid campaignId, string token)
         => Send<CampaignClockResponse>("ForceReleaseCampaignClock", new() { { "campaignId", campaignId } }, token);
 
