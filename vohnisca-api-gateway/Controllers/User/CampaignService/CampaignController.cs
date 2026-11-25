@@ -123,7 +123,7 @@ public class CampaignController : BaseController
         return await HandleResponse(command);
     }
 
-    // What the campaign's next session opens with (I-12).
+    // What the campaign's next session opens with (I-12, F-02).
     [HttpPut]
     [Route("{id:guid}/session-settings")]
     public async Task<IActionResult> SetCampaignSessionSettings(Guid id, SetCampaignSessionSettingsCommand command)

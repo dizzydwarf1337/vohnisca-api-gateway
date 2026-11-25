@@ -3,7 +3,7 @@ using Application.Interfaces.RpcClients;
 
 namespace Application.Commands.User.Session.EquipSessionItem;
 
-// A character puts on or takes up an item (in a fight: the action; armor not at all). Hand: "main" | "off" for a weapon.
+// A character puts on or takes up an item (in a fight: the action; armor not at all). Hand: "main" | "off" for a weapon, "focus" for a Spellcasting Focus (F-02).
 public class EquipSessionItemCommand : UserRequest<SessionData>
 {
     public Guid SessionId { get; set; }

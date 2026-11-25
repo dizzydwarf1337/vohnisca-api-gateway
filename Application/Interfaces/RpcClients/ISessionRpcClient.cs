@@ -108,6 +108,7 @@ public interface ISessionRpcClient
     Task<RpcResult<SessionData>> StartSession(StartSessionCommand request, string token);
     Task<RpcResult<SessionData>> SetSessionJoinable(SetSessionJoinableCommand request, string token);
     Task<RpcResult<SessionData>> SetCarryingAffectsMovement(Application.Commands.User.Session.SetCarryingAffectsMovement.SetCarryingAffectsMovementCommand request, string token);
+    Task<RpcResult<SessionData>> SetRequireSpellComponents(Application.Commands.User.Session.SetRequireSpellComponents.SetRequireSpellComponentsCommand request, string token);
     Task<RpcResult<SessionData>> ApplySessionAction(ApplySessionActionCommand request, string token);
     Task<RpcResult<bool>> EndSession(EndSessionCommand request, string token);
     Task<RpcResult<SessionData>> SetShortRest(SetShortRestCommand request, string token);
@@ -227,7 +228,9 @@ public record SessionData(
     // I-03: what each character's rest is focused on, by character — it takes when the rest ends (a player's own).
     Dictionary<Guid, RestFocusData>? RestFocus = null,
     // I-12: what the characters carry bears on their Speed (the GM's setting).
-    bool CarryingAffectsMovement = true);
+    bool CarryingAffectsMovement = true,
+    // F-02: spells' Material components are required (the GM's setting).
+    bool RequireSpellComponents = false);
 
 // I-12: what a character carries (SRD 5.2.1): Weight, Capacity and DragLimit in pounds; State "within" | "overCarry" | "overDrag".
 public record LoadData(double Weight, double Capacity, double DragLimit, string State);

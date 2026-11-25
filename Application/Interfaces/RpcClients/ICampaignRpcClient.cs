@@ -51,7 +51,7 @@ public interface ICampaignRpcClient
     Task<RpcResult<CardResponse>> ReturnItemToStash(Guid cardId, string token);
     Task<RpcResult<CampaignClockResponse>> GetCampaignClock(Guid campaignId, string token);
     Task<RpcResult<CampaignClockResponse>> AdvanceCampaignClock(Guid campaignId, double seconds, string token);
-    Task<RpcResult<CampaignResponse>> SetCampaignSessionSettings(Guid campaignId, bool carryingAffectsMovement, string token);
+    Task<RpcResult<CampaignResponse>> SetCampaignSessionSettings(Guid campaignId, bool? carryingAffectsMovement, bool? requireSpellComponents, string token);
     Task<RpcResult<CampaignClockResponse>> ForceReleaseCampaignClock(Guid campaignId, string token);
     Task<RpcResult<CardResponse>> SetItemPickable(Guid cardId, Guid[] userIds, string token);
     Task<RpcResult<CardResponse>> PickItemCard(Guid cardId, Guid characterId, string token);
@@ -163,10 +163,10 @@ public record CampaignData(
     List<MemberData>? Members = null,
     // How a level the campaign grants finds its hit points: "fixed" (the default) or "roll" (P-07).
     string HitPointsMode = "fixed",
-    // What the campaign's next session opens with (I-12).
+    // What the campaign's next session opens with (I-12, F-02).
     SessionSettingsData? SessionSettings = null);
 
-public record SessionSettingsData(bool CarryingAffectsMovement = true);
+public record SessionSettingsData(bool CarryingAffectsMovement = true, bool RequireSpellComponents = false);
 
 public record MemberData(string UserId, string Role, string? Username = null);
 

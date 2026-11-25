@@ -174,6 +174,15 @@ public class SessionController : BaseController
         return HandleResponse(command);
     }
 
+    // F-02: Require Spell Components (the GM's).
+    [HttpPost]
+    [Route("sessions/{id:guid}/require-spell-components")]
+    public Task<IActionResult> SetRequireSpellComponents(Guid id, Application.Commands.User.Session.SetRequireSpellComponents.SetRequireSpellComponentsCommand command)
+    {
+        command.SessionId = id;
+        return HandleResponse(command);
+    }
+
     [HttpPost]
     [Route("sessions/{id:guid}/characters/{characterId:guid}/actions")]
     public Task<IActionResult> ApplySessionAction(Guid id, Guid characterId, ApplySessionActionCommand command)

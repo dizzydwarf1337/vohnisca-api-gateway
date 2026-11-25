@@ -12,6 +12,6 @@ public class SetCampaignSessionSettingsCommandHandler : IRequestHandler<SetCampa
         => _campaignRpcClient = campaignRpcClient;
 
     public async Task<ApiResponse<CampaignData>> Handle(SetCampaignSessionSettingsCommand request, CancellationToken cancellationToken)
-        => (await _campaignRpcClient.SetCampaignSessionSettings(request.CampaignId, request.CarryingAffectsMovement, request.Token))
+        => (await _campaignRpcClient.SetCampaignSessionSettings(request.CampaignId, request.CarryingAffectsMovement, request.RequireSpellComponents, request.Token))
             .ToApiResponse(x => x.Campaign, "Error setting the campaign's session settings");
 }

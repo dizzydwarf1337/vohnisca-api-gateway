@@ -266,8 +266,14 @@ public class CampaignRpcClient : LaravelRpcClient, ICampaignRpcClient
     public Task<RpcResult<CampaignClockResponse>> AdvanceCampaignClock(Guid campaignId, double seconds, string token)
         => Send<CampaignClockResponse>("AdvanceCampaignClock", new() { { "campaignId", campaignId }, { "seconds", seconds } }, token);
 
-    public Task<RpcResult<CampaignResponse>> SetCampaignSessionSettings(Guid campaignId, bool carryingAffectsMovement, string token)
-        => Send<CampaignResponse>("SetCampaignSessionSettings", new() { { "campaignId", campaignId }, { "carryingAffectsMovement", carryingAffectsMovement } }, token);
+    // A setting left out (null) is not sent: the campaign service keeps it.
+    public Task<RpcResult<CampaignResponse>> SetCampaignSessionSettings(Guid campaignId, bool? carryingAffectsMovement, bool? requireSpellComponents, string token)
+    {
+        var parameters = new Dictionary<string, object> { { "campaignId", campaignId } };
+        if (carryingAffectsMovement is { } carrying) parameters["carryingAffectsMovement"] = carrying;
+        if (requireSpellComponents is { } components) parameters["requireSpellComponents"] = components;
+        return Send<CampaignResponse>("SetCampaignSessionSettings", parameters, token);
+    }
 
     public Task<RpcResult<CampaignClockResponse>> ForceReleaseCampaignClock(Guid campaignId, string token)
         => Send<CampaignClockResponse>("ForceReleaseCampaignClock", new() { { "campaignId", campaignId } }, token);
