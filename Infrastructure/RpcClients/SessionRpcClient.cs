@@ -135,6 +135,9 @@ public class SessionRpcClient : DotnetRpcClient, ISessionRpcClient
     public Task<RpcResult<SessionData>> SetSessionJoinable(SetSessionJoinableCommand request, string token)
         => SendData<SessionData>("SetSessionJoinable", request, token);
 
+    public Task<RpcResult<SessionData>> SetCarryingAffectsMovement(Application.Commands.User.Session.SetCarryingAffectsMovement.SetCarryingAffectsMovementCommand request, string token)
+        => SendData<SessionData>("SetCarryingAffectsMovement", request, token);
+
     // The action goes as its JSON text (the RPC client doesn't serialize a JsonElement).
     public Task<RpcResult<SessionData>> ApplySessionAction(ApplySessionActionCommand request, string token)
         => SendData<SessionData>("ApplySessionAction",

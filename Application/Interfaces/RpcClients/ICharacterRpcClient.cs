@@ -239,7 +239,11 @@ public record CharacterSheetData(
     SheetResourceRow[]? Resources = null,
     // Its campaign and the GM's leave for a level (P-06); null out of every campaign.
     SheetCampaignRow? Campaign = null,
-    SheetAttunementsRow? Attunement = null);
+    SheetAttunementsRow? Attunement = null,
+    // I-12: what it carries, worked out by the character service (the sheet shows it as is).
+    SheetLoadRow? Load = null);
+
+public record SheetLoadRow(double Weight, double Capacity, double DragLimit, string State);
 
 // I-03: the bonds — also to items no longer carried (a Short Rest ends them) — and the claims waiting for
 // another creature's bond to end; Max: the limit. AwaySince: the campaign time the item went away.

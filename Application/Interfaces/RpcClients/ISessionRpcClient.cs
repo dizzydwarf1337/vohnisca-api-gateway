@@ -107,6 +107,7 @@ public interface ISessionRpcClient
     Task<RpcResult<SessionData>> SetSessionReady(SetSessionReadyCommand request, string token);
     Task<RpcResult<SessionData>> StartSession(StartSessionCommand request, string token);
     Task<RpcResult<SessionData>> SetSessionJoinable(SetSessionJoinableCommand request, string token);
+    Task<RpcResult<SessionData>> SetCarryingAffectsMovement(Application.Commands.User.Session.SetCarryingAffectsMovement.SetCarryingAffectsMovementCommand request, string token);
     Task<RpcResult<SessionData>> ApplySessionAction(ApplySessionActionCommand request, string token);
     Task<RpcResult<bool>> EndSession(EndSessionCommand request, string token);
     Task<RpcResult<SessionData>> SetShortRest(SetShortRestCommand request, string token);
@@ -224,7 +225,12 @@ public record SessionData(
     // Influence requests waiting on the GM's word (the GM's all, a player's own).
     List<InfluenceAttemptData>? Influences = null,
     // I-03: what each character's rest is focused on, by character — it takes when the rest ends (a player's own).
-    Dictionary<Guid, RestFocusData>? RestFocus = null);
+    Dictionary<Guid, RestFocusData>? RestFocus = null,
+    // I-12: what the characters carry bears on their Speed (the GM's setting).
+    bool CarryingAffectsMovement = true);
+
+// I-12: what a character carries (SRD 5.2.1): Weight, Capacity and DragLimit in pounds; State "within" | "overCarry" | "overDrag".
+public record LoadData(double Weight, double Capacity, double DragLimit, string State);
 
 // ItemId: the inventory row (an instance) or a bond's instance; Attune false: ending the bond.
 public record RestFocusData(Guid ItemId, bool Attune);
@@ -319,7 +325,8 @@ public record SessionCharacterData(
     // Brutal Strike: the effects it may pick, and how many at once.
     List<string>? BrutalStrike = null,
     int BrutalEffects = 0,
-    List<BondRowData>? Bonds = null);
+    List<BondRowData>? Bonds = null,
+    LoadData? Load = null);
 
 // What a character carries. Kind: "weapon" | "armor" | "shield" | "gear"; Slot: where it's
 // worn ("mainHand", "offHand", "armor", "shield", "accessory"; null in the pack); Throw: what

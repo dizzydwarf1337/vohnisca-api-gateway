@@ -165,6 +165,15 @@ public class SessionController : BaseController
         return HandleResponse(command);
     }
 
+    // I-12: Carrying Capacity Affects Movement (the GM's).
+    [HttpPost]
+    [Route("sessions/{id:guid}/carrying-affects-movement")]
+    public Task<IActionResult> SetCarryingAffectsMovement(Guid id, Application.Commands.User.Session.SetCarryingAffectsMovement.SetCarryingAffectsMovementCommand command)
+    {
+        command.SessionId = id;
+        return HandleResponse(command);
+    }
+
     [HttpPost]
     [Route("sessions/{id:guid}/characters/{characterId:guid}/actions")]
     public Task<IActionResult> ApplySessionAction(Guid id, Guid characterId, ApplySessionActionCommand command)
