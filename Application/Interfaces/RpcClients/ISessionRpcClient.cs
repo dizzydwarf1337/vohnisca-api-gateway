@@ -256,7 +256,8 @@ public record SceneVisionData(bool Auto, string Light, int? RangeFeet);
 
 // Character: the whole sheet in play (the user's own, or every one for the GM); Member:
 // what the table sees of it.
-public record SessionPlayerData(Guid UserId, string Username, bool Ready, SessionCharacterData? Character, SessionMemberData? Member);
+// FearOf (F-06): the tokens its character is Frightened of that the viewer may see — to its player and the GM.
+public record SessionPlayerData(Guid UserId, string Username, bool Ready, SessionCharacterData? Character, SessionMemberData? Member, List<Guid>? FearOf = null);
 
 public record SessionMemberData(
     Guid Id,
@@ -581,7 +582,9 @@ public record SceneTokenData(
     // A tracked item lying here (I-03): what the GM destroys it by.
     Guid? InstanceId = null,
     // The GM's cover mark: "half" or "threeQuarters".
-    string? Cover = null);
+    string? Cover = null,
+    // An NPC's sources of fear on the map (F-06), to the GM.
+    List<Guid>? FrightenedOf = null);
 
 // An NPC's sheet: saving throw bonuses, damage resistances / immunities /
 // vulnerabilities, condition immunities, and what lasts on it (spells, the GM's notes).
