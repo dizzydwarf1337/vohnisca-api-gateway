@@ -43,6 +43,7 @@ using Application.Commands.User.Session.EndTurn;
 using Application.Commands.User.Session.EndCombat;
 using Application.Commands.User.Session.SetSpent;
 using Application.Commands.User.Session.Dash;
+using Application.Commands.User.Session.FrightenSceneToken;
 using Application.Commands.User.Session.AnswerReaction;
 using Application.Commands.User.Session.StopMove;
 using Application.Commands.User.Session.RecoverAmmunition;
@@ -701,6 +702,16 @@ public class SessionController : BaseController
     [Route("sessions/{id:guid}/combat/{tokenId:guid}/dash")]
     public Task<IActionResult> Dash(Guid id, Guid tokenId)
         => HandleResponse(new DashCommand { SessionId = id, TokenId = tokenId });
+
+    // F-06: the GM frightens a creature by hand, of a creature on the map or of no one known.
+    [HttpPost]
+    [Route("sessions/{id:guid}/scene/tokens/{tokenId:guid}/frighten")]
+    public Task<IActionResult> FrightenSceneToken(Guid id, Guid tokenId, FrightenSceneTokenCommand command)
+    {
+        command.SessionId = id;
+        command.TokenId = tokenId;
+        return HandleResponse(command);
+    }
 
     [HttpPost]
     [Route("sessions/{id:guid}/combat/{tokenId:guid}/action")]

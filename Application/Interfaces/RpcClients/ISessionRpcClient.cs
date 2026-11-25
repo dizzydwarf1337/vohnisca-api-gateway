@@ -46,6 +46,7 @@ using Application.Commands.User.Session.EndTurn;
 using Application.Commands.User.Session.EndCombat;
 using Application.Commands.User.Session.SetSpent;
 using Application.Commands.User.Session.Dash;
+using Application.Commands.User.Session.FrightenSceneToken;
 using Application.Commands.User.Session.AnswerReaction;
 using Application.Commands.User.Session.StopMove;
 using Application.Commands.User.Session.RecoverAmmunition;
@@ -180,6 +181,7 @@ public interface ISessionRpcClient
     Task<RpcResult<bool>> EndCombat(EndCombatCommand request, string token);
     Task<RpcResult<SessionEncounterData>> SetSpent(SetSpentCommand request, string token);
     Task<RpcResult<SessionEncounterData>> Dash(DashCommand request, string token);
+    Task<RpcResult<CombatResultData>> FrightenSceneToken(FrightenSceneTokenCommand request, string token);
     Task<RpcResult<CombatResultData>> Attack(AttackCommand request, string token);
     Task<RpcResult<CombatResultData>> AnswerReaction(AnswerReactionCommand request, string token);
     Task<RpcResult<CombatResultData>> StopMove(StopMoveCommand request, string token);

@@ -43,6 +43,7 @@ using Application.Commands.User.Session.EndTurn;
 using Application.Commands.User.Session.EndCombat;
 using Application.Commands.User.Session.SetSpent;
 using Application.Commands.User.Session.Dash;
+using Application.Commands.User.Session.FrightenSceneToken;
 using Application.Commands.User.Session.AnswerReaction;
 using Application.Commands.User.Session.StopMove;
 using Application.Commands.User.Session.RecoverAmmunition;
@@ -334,6 +335,9 @@ public class SessionRpcClient : DotnetRpcClient, ISessionRpcClient
 
     public Task<RpcResult<SessionEncounterData>> Dash(DashCommand request, string token)
         => SendData<SessionEncounterData>("Dash", request, token);
+
+    public Task<RpcResult<CombatResultData>> FrightenSceneToken(FrightenSceneTokenCommand request, string token)
+        => SendData<CombatResultData>("FrightenToken", request, token);
 
     public Task<RpcResult<CombatResultData>> Attack(AttackCommand request, string token)
         => SendData<CombatResultData>("Attack", request, token);
