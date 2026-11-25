@@ -577,7 +577,9 @@ public record SceneTokenData(
     int LightBright = 0,
     int LightDim = 0,
     // A tracked item lying here (I-03): what the GM destroys it by.
-    Guid? InstanceId = null);
+    Guid? InstanceId = null,
+    // The GM's cover mark: "half" or "threeQuarters".
+    string? Cover = null);
 
 // An NPC's sheet: saving throw bonuses, damage resistances / immunities /
 // vulnerabilities, condition immunities, and what lasts on it (spells, the GM's notes).

@@ -40,4 +40,6 @@ public class UpdateSceneTokenCommand : UserRequest<SessionSceneData>
     public bool? DeathSaves { get; set; }
     // Its creature type ("Undead", "Fiend"...; "" clears it).
     public string? CreatureType { get; set; }
+    // The GM's cover mark: "none", "half" or "threeQuarters".
+    public string? Cover { get; set; }
 }
