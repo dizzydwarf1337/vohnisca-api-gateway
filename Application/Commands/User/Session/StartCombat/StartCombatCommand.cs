@@ -8,4 +8,6 @@ public class StartCombatCommand : UserRequest<SessionEncounterData>
 {
     public Guid SessionId { get; set; }
     public List<Guid> TokenIds { get; set; } = new();
+    // F-14: those of TokenIds the GM marks as surprised by the fight starting (Disadvantage on their initiative).
+    public List<Guid>? SurprisedTokenIds { get; set; }
 }
