@@ -46,6 +46,7 @@ using Application.Commands.User.Session.Dash;
 using Application.Commands.User.Session.FrightenSceneToken;
 using Application.Commands.User.Session.SetHeroicInspiration;
 using Application.Commands.User.Session.GiveHeroicInspiration;
+using Application.Commands.User.Session.DecideHeroicInspiration;
 using Application.Commands.User.Session.AnswerReaction;
 using Application.Commands.User.Session.StopMove;
 using Application.Commands.User.Session.RecoverAmmunition;
@@ -731,6 +732,15 @@ public class SessionController : BaseController
     {
         command.SessionId = id;
         command.CharacterId = characterId;
+        return HandleResponse(command);
+    }
+
+    // F-12: keep the held roll or reroll one of its dice with Heroic Inspiration.
+    [HttpPost]
+    [Route("sessions/{id:guid}/heroic-inspiration/decide")]
+    public Task<IActionResult> DecideHeroicInspiration(Guid id, DecideHeroicInspirationCommand command)
+    {
+        command.SessionId = id;
         return HandleResponse(command);
     }
 

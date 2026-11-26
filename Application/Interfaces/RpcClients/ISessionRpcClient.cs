@@ -49,6 +49,7 @@ using Application.Commands.User.Session.Dash;
 using Application.Commands.User.Session.FrightenSceneToken;
 using Application.Commands.User.Session.SetHeroicInspiration;
 using Application.Commands.User.Session.GiveHeroicInspiration;
+using Application.Commands.User.Session.DecideHeroicInspiration;
 using Application.Commands.User.Session.AnswerReaction;
 using Application.Commands.User.Session.StopMove;
 using Application.Commands.User.Session.RecoverAmmunition;
@@ -186,6 +187,7 @@ public interface ISessionRpcClient
     Task<RpcResult<CombatResultData>> FrightenSceneToken(FrightenSceneTokenCommand request, string token);
     Task<RpcResult<SessionData>> SetHeroicInspiration(SetHeroicInspirationCommand request, string token);
     Task<RpcResult<SessionData>> GiveHeroicInspiration(GiveHeroicInspirationCommand request, string token);
+    Task<RpcResult<SessionData>> DecideHeroicInspiration(DecideHeroicInspirationCommand request, string token);
     Task<RpcResult<CombatResultData>> Attack(AttackCommand request, string token);
     Task<RpcResult<CombatResultData>> AnswerReaction(AnswerReactionCommand request, string token);
     Task<RpcResult<CombatResultData>> StopMove(StopMoveCommand request, string token);
@@ -236,7 +238,16 @@ public record SessionData(
     // I-12: what the characters carry bears on their Speed (the GM's setting).
     bool CarryingAffectsMovement = true,
     // F-02: spells' Material components are required (the GM's setting).
-    bool RequireSpellComponents = false);
+    bool RequireSpellComponents = false,
+    // F-12: a command waits on a Heroic Inspiration decision.
+    SessionHeldData? Held = null);
+
+// F-12: the roll a held command waits on — to its player and the GM as rolled (no DC, AC or outcome); to anyone else
+// Waiting alone. Step: which roll of the command (a decision names it); CanReroll: the viewer is its player; Reserved: the
+// characters whose inspiration a reroll earlier in the command has reserved (the GM's all, a player's own).
+public record SessionHeldData(
+    bool Waiting, Guid? Id = null, int? Step = null, Guid? CharacterId = null, string? CharacterName = null, string? Purpose = null,
+    string? Expression = null, int? Total = null, List<DiceTermData>? Terms = null, bool CanReroll = false, List<Guid>? Reserved = null);
 
 // I-12: what a character carries (SRD 5.2.1): Weight, Capacity and DragLimit in pounds; State "within" | "overCarry" | "overDrag".
 public record LoadData(double Weight, double Capacity, double DragLimit, string State);

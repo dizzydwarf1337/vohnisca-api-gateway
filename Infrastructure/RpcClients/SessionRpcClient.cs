@@ -46,6 +46,7 @@ using Application.Commands.User.Session.Dash;
 using Application.Commands.User.Session.FrightenSceneToken;
 using Application.Commands.User.Session.SetHeroicInspiration;
 using Application.Commands.User.Session.GiveHeroicInspiration;
+using Application.Commands.User.Session.DecideHeroicInspiration;
 using Application.Commands.User.Session.AnswerReaction;
 using Application.Commands.User.Session.StopMove;
 using Application.Commands.User.Session.RecoverAmmunition;
@@ -346,6 +347,9 @@ public class SessionRpcClient : DotnetRpcClient, ISessionRpcClient
 
     public Task<RpcResult<SessionData>> GiveHeroicInspiration(GiveHeroicInspirationCommand request, string token)
         => SendData<SessionData>("GiveHeroicInspiration", request, token);
+
+    public Task<RpcResult<SessionData>> DecideHeroicInspiration(DecideHeroicInspirationCommand request, string token)
+        => SendData<SessionData>("DecideHeroicInspiration", request, token);
 
     public Task<RpcResult<CombatResultData>> Attack(AttackCommand request, string token)
         => SendData<CombatResultData>("Attack", request, token);
