@@ -332,7 +332,11 @@ public record SessionCharacterData(
     List<string>? BrutalStrike = null,
     int BrutalEffects = 0,
     List<BondRowData>? Bonds = null,
-    LoadData? Load = null);
+    LoadData? Load = null,
+    // F-07: the concentration saves it owes, first to roll first; Waiting: the damage of that one's hit isn't all in.
+    List<ConcentrationRowData>? ConcentrationChecks = null);
+
+public record ConcentrationRowData(int Dc, bool Waiting);
 
 // What a character carries. Kind: "weapon" | "armor" | "shield" | "gear"; Slot: where it's
 // worn ("mainHand", "offHand", "armor", "shield", "accessory"; null in the pack); Throw: what
