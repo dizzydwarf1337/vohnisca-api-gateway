@@ -39,6 +39,8 @@ public abstract class DotnetRpcClient : BaseRpcClient
     protected static int ToHttpStatus(int code) => code switch
     {
         >= 400 and <= 599 => code,
+        // F-12: the command waits on a Heroic Inspiration decision (nothing of it done yet).
+        202 => 202,
         0 => 400,
         -32601 => 404,
         -32602 => 422,
