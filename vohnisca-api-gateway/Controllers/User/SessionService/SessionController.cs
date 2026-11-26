@@ -44,6 +44,8 @@ using Application.Commands.User.Session.EndCombat;
 using Application.Commands.User.Session.SetSpent;
 using Application.Commands.User.Session.Dash;
 using Application.Commands.User.Session.FrightenSceneToken;
+using Application.Commands.User.Session.SetHeroicInspiration;
+using Application.Commands.User.Session.GiveHeroicInspiration;
 using Application.Commands.User.Session.AnswerReaction;
 using Application.Commands.User.Session.StopMove;
 using Application.Commands.User.Session.RecoverAmmunition;
@@ -710,6 +712,25 @@ public class SessionController : BaseController
     {
         command.SessionId = id;
         command.TokenId = tokenId;
+        return HandleResponse(command);
+    }
+
+    // F-12: the GM gives or takes Heroic Inspiration; a spare one goes to a party member or is let go.
+    [HttpPost]
+    [Route("sessions/{id:guid}/characters/{characterId:guid}/inspiration")]
+    public Task<IActionResult> SetHeroicInspiration(Guid id, Guid characterId, SetHeroicInspirationCommand command)
+    {
+        command.SessionId = id;
+        command.CharacterId = characterId;
+        return HandleResponse(command);
+    }
+
+    [HttpPost]
+    [Route("sessions/{id:guid}/characters/{characterId:guid}/inspiration/give")]
+    public Task<IActionResult> GiveHeroicInspiration(Guid id, Guid characterId, GiveHeroicInspirationCommand command)
+    {
+        command.SessionId = id;
+        command.CharacterId = characterId;
         return HandleResponse(command);
     }
 

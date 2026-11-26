@@ -47,6 +47,8 @@ using Application.Commands.User.Session.EndCombat;
 using Application.Commands.User.Session.SetSpent;
 using Application.Commands.User.Session.Dash;
 using Application.Commands.User.Session.FrightenSceneToken;
+using Application.Commands.User.Session.SetHeroicInspiration;
+using Application.Commands.User.Session.GiveHeroicInspiration;
 using Application.Commands.User.Session.AnswerReaction;
 using Application.Commands.User.Session.StopMove;
 using Application.Commands.User.Session.RecoverAmmunition;
@@ -182,6 +184,8 @@ public interface ISessionRpcClient
     Task<RpcResult<SessionEncounterData>> SetSpent(SetSpentCommand request, string token);
     Task<RpcResult<SessionEncounterData>> Dash(DashCommand request, string token);
     Task<RpcResult<CombatResultData>> FrightenSceneToken(FrightenSceneTokenCommand request, string token);
+    Task<RpcResult<SessionData>> SetHeroicInspiration(SetHeroicInspirationCommand request, string token);
+    Task<RpcResult<SessionData>> GiveHeroicInspiration(GiveHeroicInspirationCommand request, string token);
     Task<RpcResult<CombatResultData>> Attack(AttackCommand request, string token);
     Task<RpcResult<CombatResultData>> AnswerReaction(AnswerReactionCommand request, string token);
     Task<RpcResult<CombatResultData>> StopMove(StopMoveCommand request, string token);
@@ -257,7 +261,8 @@ public record SceneVisionData(bool Auto, string Light, int? RangeFeet);
 // Character: the whole sheet in play (the user's own, or every one for the GM); Member:
 // what the table sees of it.
 // FearOf (F-06): the tokens its character is Frightened of that the viewer may see — to its player and the GM.
-public record SessionPlayerData(Guid UserId, string Username, bool Ready, SessionCharacterData? Character, SessionMemberData? Member, List<Guid>? FearOf = null);
+// SpareInspiration (F-12): it holds a Heroic Inspiration to give away — to its player and the GM.
+public record SessionPlayerData(Guid UserId, string Username, bool Ready, SessionCharacterData? Character, SessionMemberData? Member, List<Guid>? FearOf = null, bool SpareInspiration = false);
 
 public record SessionMemberData(
     Guid Id,
@@ -272,7 +277,9 @@ public record SessionMemberData(
     List<string> Conditions,
     string? Concentration,
     List<string> Effects,
-    Dictionary<string, string>? EffectChoices = null);
+    Dictionary<string, string>? EffectChoices = null,
+    // F-12: the table sees who holds Heroic Inspiration — whom a spare one may go to.
+    bool HasInspiration = false);
 
 // Kind "combat": what an attack or a spell did (Text may run over several lines).
 public record SessionLogData(DateTime At, Guid UserId, Guid? CharacterId, string Text, string? Kind);
@@ -334,7 +341,9 @@ public record SessionCharacterData(
     List<BondRowData>? Bonds = null,
     LoadData? Load = null,
     // F-07: the concentration saves it owes, first to roll first; Waiting: the damage of that one's hit isn't all in.
-    List<ConcentrationRowData>? ConcentrationChecks = null);
+    List<ConcentrationRowData>? ConcentrationChecks = null,
+    // F-12: Heroic Inspiration.
+    bool HasInspiration = false);
 
 public record ConcentrationRowData(int Dc, bool Waiting);
 
